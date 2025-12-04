@@ -5,7 +5,6 @@ import { useProducts } from "@/hooks/useProducts";
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
 
@@ -52,7 +51,7 @@ function SearchBar() {
   }, [open, closing]);
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-xl">
+    <div ref={containerRef} className="relative w-[300px]">
       <InputGroup>
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
