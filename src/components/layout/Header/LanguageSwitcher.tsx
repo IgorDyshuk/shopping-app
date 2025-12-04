@@ -48,13 +48,13 @@ function LanguageSwitcher() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-fit justify-between"
+          className="w-[120px] justify-between"
         >
           <span>{t(activeLanguage.labelKey)}</span>
           <ChevronsUpDown className="size-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[220px] p-0" align="start">
+      <PopoverContent className="w-[120px] p-0" align="center">
         <Command>
           <CommandList>
             <CommandGroup heading={t("language.label")}>
