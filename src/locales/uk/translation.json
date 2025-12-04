@@ -1,0 +1,11 @@
+{
+  "welcome": "Ласкаво просимо до React та react-i18next",
+  "cta": "Натисни мене",
+  "language": {
+    "label": "Мова",
+    "selectPlaceholder": "Оберіть мову..."  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
+  }
+}

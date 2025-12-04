@@ -1,0 +1,12 @@
+{
+  "welcome": "Welcome to React and react-i18next",
+  "cta": "Click me",
+  "language": {
+    "label": "Language",
+    "selectPlaceholder": "Select language..."
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Ukrainian"
+  }
+}
