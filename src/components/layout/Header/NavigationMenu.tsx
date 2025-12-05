@@ -1,12 +1,15 @@
+"use client";
+
+import * as React from "react";
+
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
@@ -69,9 +72,14 @@ const creators = [
   },
 ];
 
-function NavigationMenuDemo() {
+export function NavigationMenuComplete() {
+  const isMobile = useIsMobile();
+
   return (
-    <NavigationMenu className="justify-start text-foreground">
+    <NavigationMenu
+      viewport={isMobile}
+      className="justify-start text-foreground"
+    >
       <NavigationMenuList className="flex-wrap">
         <NavigationMenuItem>
           <NavigationMenuTrigger>Дропы</NavigationMenuTrigger>
@@ -101,7 +109,6 @@ function NavigationMenuDemo() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuTrigger>Каталог</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -114,7 +121,6 @@ function NavigationMenuDemo() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuTrigger>Блогеры</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -127,7 +133,6 @@ function NavigationMenuDemo() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuLink
             href="#sell"
@@ -136,7 +141,6 @@ function NavigationMenuDemo() {
             Продать вещь
           </NavigationMenuLink>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuLink
             href="#support"
@@ -145,10 +149,7 @@ function NavigationMenuDemo() {
             FAQ & Поддержка
           </NavigationMenuLink>
         </NavigationMenuItem>
-
-        <NavigationMenuIndicator />
       </NavigationMenuList>
-      <NavigationMenuViewport />
     </NavigationMenu>
   );
 }
@@ -161,14 +162,14 @@ function ListItem({
 }: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
   return (
     <li {...props}>
-      <NavigationMenuLink href={href} className="block">
-        <div className="text-sm leading-none font-medium">{title}</div>
-        <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-          {children}
-        </p>
+      <NavigationMenuLink asChild>
+        <a href={href}>
+          <div className="text-sm leading-none font-medium">{title}</div>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+            {children}
+          </p>
+        </a>
       </NavigationMenuLink>
     </li>
   );
 }
-
-export { NavigationMenuDemo };
