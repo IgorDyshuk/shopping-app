@@ -9,7 +9,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 867px)");
+    const mql = window.matchMedia("(max-width: 1044px)");
     const handleChange = (event: MediaQueryListEvent) => {
       setShowSidebar(event.matches);
     };

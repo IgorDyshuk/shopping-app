@@ -24,8 +24,10 @@ function Header({ showSidebar = false }: HeaderProps) {
               <div className="hidden flex-1 items-center gap-4 min-[867px]:flex">
                 <NavigationMenuComplete />
               </div>
-              <div className="hidden min-[1516px]:flex items-center gap-3">
-                <SearchBar className="w-[460px]" />
+              <div className="hidden min-[1044px]:flex items-center gap-3">
+                <div className="hidden min-[1516px]:flex items-center gap-3">
+                  <SearchBar className="w-[460px]" />
+                </div>
                 <LogIn />
                 <SignUp />
               </div>
