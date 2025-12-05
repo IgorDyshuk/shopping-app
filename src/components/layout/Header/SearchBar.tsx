@@ -51,7 +51,7 @@ function SearchBar() {
   }, [open, closing]);
 
   return (
-    <div ref={containerRef} className="relative w-[300px]">
+    <div ref={containerRef} className="relative w-[400px]">
       <InputGroup>
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
