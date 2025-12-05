@@ -4,14 +4,23 @@ import { LoginForm } from "@/components/login-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-export default function LogIn() {
+import { cn } from "@/lib/utils";
+
+type LogInProps = {
+  className?: string;
+};
+
+export default function LogIn({ className }: LogInProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground"
+          className={cn(
+            "rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground",
+            className
+          )}
         >
           Login
         </Button>

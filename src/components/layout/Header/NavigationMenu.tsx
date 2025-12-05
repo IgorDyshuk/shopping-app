@@ -80,7 +80,7 @@ export function NavigationMenuComplete() {
       viewport={isMobile}
       className="justify-start text-foreground"
     >
-      <NavigationMenuList className="flex-wrap">
+      <NavigationMenuList className="flex-wrap z-100">
         <NavigationMenuItem>
           <NavigationMenuTrigger>Дропы</NavigationMenuTrigger>
           <NavigationMenuContent>

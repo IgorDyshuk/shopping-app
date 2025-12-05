@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, X } from "lucide-react";
 
 import { useProducts } from "@/hooks/useProducts";
 import {
@@ -7,10 +7,16 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
 
-function SearchBar() {
+type SearchBarProps = {
+  className?: string;
+};
+
+function SearchBar({ className }: SearchBarProps) {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [query, setQuery] = useState("");
   const { data: products, isLoading } = useProducts();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -51,7 +57,10 @@ function SearchBar() {
   }, [open, closing]);
 
   return (
-    <div ref={containerRef} className="relative w-[400px]">
+    <div
+      ref={containerRef}
+      className={cn("relative w-full max-w-xl", className)}
+    >
       <InputGroup>
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
@@ -63,12 +72,17 @@ function SearchBar() {
             setQuery(event.target.value);
             setOpen(true);
             setClosing(false);
+            setFocused(true);
           }}
           onFocus={() => {
             setOpen(true);
             setClosing(false);
+            setFocused(true);
           }}
-          onBlur={() => setTimeout(() => startClose(), 120)}
+          onBlur={() => {
+            setTimeout(() => startClose(), 120);
+            setTimeout(() => setFocused(false), 120);
+          }}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               startClose();
@@ -78,11 +92,30 @@ function SearchBar() {
           placeholder="Search products..."
           aria-expanded={showSuggestions}
         />
+        {focused && (
+          <InputGroupAddon align="inline-end" className="sm:hidden">
+            <button
+              type="button"
+              aria-label="Close search"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
+              onMouseDown={(event) => {
+                event.preventDefault();
+                setQuery("");
+                setOpen(false);
+                setClosing(false);
+                setFocused(false);
+                inputRef.current?.blur();
+              }}
+            >
+              <X className="size-4" />
+            </button>
+          </InputGroupAddon>
+        )}
       </InputGroup>
 
       {showSuggestions && (
         <div
-          className={`absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg ${
+          className={`absolute left-0 right-0 top-full z-0 mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg ${
             closing
               ? "animate-out fade-out-0 zoom-out-95 duration-150"
               : "animate-in fade-in-0 zoom-in-95 duration-150"

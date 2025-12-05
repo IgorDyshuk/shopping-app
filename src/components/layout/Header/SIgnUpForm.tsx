@@ -3,15 +3,23 @@ import { GalleryVerticalEnd } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { SignupForm } from "@/components/signup-form";
+import { cn } from "@/lib/utils";
 
-export default function SignUp() {
+type SignUpProps = {
+  className?: string;
+};
+
+export default function SignUp({ className }: SignUpProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full border border-input bg-card-foreground px-4 text-popover shadow-none hover:bg-accent hover:text-foreground"
+          className={cn(
+            "rounded-full border border-input bg-card-foreground px-4 text-popover shadow-none hover:bg-accent hover:text-foreground",
+            className
+          )}
         >
           Sign up
         </Button>
