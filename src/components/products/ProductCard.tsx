@@ -1,3 +1,9 @@
+import { useState } from "react";
+
+import { Heart } from "lucide-react";
+import { toast } from "sonner";
+
+import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
 
 type ProductCardProps = {
@@ -6,6 +12,15 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product, bordered = false }: ProductCardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleFavoriteToggle = (next: boolean) => {
+    setIsFavorite(next);
+    toast.success(next ? "Added to favorites" : "Removed from favorites", {
+      description: product.title,
+    });
+  };
+
   return (
     <article
       className={`group flex h-full flex-col gap-0.5 sm:gap-1 rounded-lg bg-card p-3 sm:p-4 hover:cursor-pointer ${
@@ -13,6 +28,16 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
       }`}
     >
       <div className="relative mb-0 xl:mb-1 w-full rounded-md bg-white">
+        <Toggle
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          pressed={isFavorite}
+          onPressedChange={handleFavoriteToggle}
+          variant="outline"
+          size="sm"
+          className="absolute right-1 top-1 z-10 rounded-full bg-white/90 hover:bg-white data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer"
+        >
+          <Heart className="size-4" />
+        </Toggle>
         <img
           src={product.image}
           alt={product.title}

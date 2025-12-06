@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/layout/Header/SideBar/app-sidebar";
 import { Header } from "@/components/layout/Header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Home from "@/pages/Home";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -29,6 +30,7 @@ function App() {
             <Home />
           </main>
         </div>
+        <Toaster richColors theme="light" position="top-right" />
       </SidebarInset>
     </SidebarProvider>
   );

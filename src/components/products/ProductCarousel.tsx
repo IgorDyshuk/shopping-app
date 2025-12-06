@@ -97,7 +97,7 @@ export function ItemsCarousel<T>({
   );
   const autoplayPlugin = autoplay ? Autoplay({ delay: autoplayDelay }) : null;
   const slidesToScroll = clampCount(columns);
-  const contentClass = peekNext ? "pr-6" : "";
+  const contentClass = peekNext ? "pr-2" : "";
 
   return (
     <div className="relative">
@@ -114,7 +114,7 @@ export function ItemsCarousel<T>({
             </div>
           )}
         </div>
-        <CarouselContent className={`-ml-0 ${contentClass}`}>
+        <CarouselContent className={`ml-0 ${contentClass}`}>
           {items.map((item, index) => (
             <CarouselItem
               key={getItemKey ? getItemKey(item, index) : index}
