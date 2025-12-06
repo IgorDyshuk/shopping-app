@@ -11,7 +11,7 @@ type HeaderProps = {
 
 function Header({ showSidebar = false }: HeaderProps) {
   return (
-    <header className="border-b bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex w-full max-w-[1800px] flex-col gap-3 px-2 md:px-4 py-3">
         <div className="relative z-20 flex items-center gap-3">
           <div className="flex items-center gap-2">

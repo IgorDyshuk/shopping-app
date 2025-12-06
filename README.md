@@ -20,8 +20,10 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/components/layout/Header/Navigation.tsx` — навигация под маркетплейс (дропы, каталог, создатели, продать вещь, FAQ) на Radix Navigation Menu.
 - `src/components/layout/Header/SearchBar.tsx` — InputGroup с подсказками (фильтр по товарам, открытия по вводу, закрытие по Esc/клику вне, анимация появления/исчезновения).
 - `src/components/ui/navigation-menu.tsx` — UI-компоненты навигационного меню.
-- `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары.
-- `src/App.tsx` — обёртка лейаута и страниц.
+- `src/components/layout/Header/SideBar/*` — мобильный сайдбар (иконка, кнопки входа/регистрации, аватар в свернутом состоянии).
+- `src/components/products/ProductCard.tsx` — карточка товара.
+- `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары в карусели (Embla + Autoplay).
+- `src/App.tsx` — обёртка лейаута и страниц; SidebarProvider с адаптивным состоянием.
 
 ## Запуск
 - Установка: `npm install` (или `npm ci`).
@@ -31,3 +33,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 ## Переключение API
 - `VITE_API_URL` — другой бэкенд (по умолчанию `https://fakestoreapi.com`).
 - `VITE_API_TIMEOUT` — таймаут запросов в мс.
+
+## Дополнительно
+- GH Pages: `npm run deploy` (используется `homepage` в `package.json`).
+- CSP: избегайте инлайн-скриптов; все скрипты должны быть модульными (`src/main.tsx`), favicon — с того же origin или добавить домен в `img-src`.

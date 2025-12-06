@@ -13,4 +13,6 @@ export type Product = {
 };
 
 export type ProductCreatePayload = Omit<Product, "id" | "rating">;
-export type ProductUpdatePayload = Partial<ProductCreatePayload> & { id: number };
+export type ProductUpdatePayload = Partial<ProductCreatePayload> & {
+  id: number;
+};
