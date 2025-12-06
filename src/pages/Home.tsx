@@ -7,7 +7,7 @@ function Home() {
   const { data: products, isLoading, isError } = useProducts();
 
   return (
-    <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 mt-6 md:mt-8 xl:mt-10 2xl:mt-12 px-3">
+    <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 my-6 md:my-8 xl:my-10 2xl:my-12 px-3">
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
         {isLoading ? (
           <HomeSkeleton />
@@ -20,6 +20,7 @@ function Home() {
               items={products ?? []}
               getItemKey={(product) => product.id}
               autoplay
+              loop
               perRow={{ base: 1 }}
               controlsInline={false}
               renderItem={(product) => (
@@ -31,8 +32,9 @@ function Home() {
               title="Popular picks"
               items={products ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, sm: 2, md: 3, lg: 4, xl: 6 }}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
               peekNext={true}
+              viewAllLink="#"
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
@@ -42,7 +44,9 @@ function Home() {
               items={products ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, sm: 2, md: 2, lg: 2, xl: 2 }}
+              viewAllLink="#"
               controlsInline
+              loop
               renderItem={(product) => <ProductCard product={product} />}
             />
 
@@ -52,6 +56,7 @@ function Home() {
               getItemKey={(product) => product.id}
               perRow={{ base: 2, sm: 2, md: 3, lg: 4, xl: 6 }}
               peekNext={true}
+              viewAllLink="#"
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
