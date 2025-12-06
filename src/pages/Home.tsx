@@ -1,15 +1,16 @@
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
+import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
 
 function Home() {
   const { data: products, isLoading, isError } = useProducts();
 
   return (
     <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 mt-6 md:mt-8 xl:mt-10 2xl:mt-12 px-3">
-      <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-[4.5rem] 2xl:gap-20">
+      <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
         {isLoading ? (
-          <p className="text-muted-foreground">Loading products...</p>
+          <HomeSkeleton />
         ) : isError ? (
           <p className="text-destructive">Failed to load products.</p>
         ) : (
