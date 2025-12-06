@@ -10,7 +10,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1044px)");
+    const mql = window.matchMedia("(max-width: 1100px)");
     const handleChange = (event: MediaQueryListEvent) => {
       setShowSidebar(event.matches);
     };
@@ -26,7 +26,7 @@ function App() {
       <SidebarInset>
         <div className="min-h-svh bg-background text-foreground">
           <Header showSidebar={showSidebar} />
-          <main>
+          <main className="mt-20 sm:mt-22 md:mt-24 lg:mt-26 xl:mt-28 2xl:mt-30">
             <Home />
           </main>
         </div>

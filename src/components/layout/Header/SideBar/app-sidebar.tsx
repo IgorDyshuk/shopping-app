@@ -14,6 +14,7 @@ import {
 
 import { NavMain } from "@/components/layout/Header/SideBar/nav-main";
 import { NavUser } from "@/components/layout/Header/SideBar/nav-user";
+import { NavLanguage } from "@/components/layout/Header/SideBar/nav-language";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -152,7 +153,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter items={data.navFooter} />
+      <SidebarFooter items={data.navFooter}>
+        <div className="mt-3 flex w-full justify-center">
+          <NavLanguage />
+        </div>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

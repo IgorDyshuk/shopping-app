@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { SearchIcon, X } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
 import { useProducts } from "@/hooks/useProducts";
 import {
@@ -11,12 +11,17 @@ import { cn } from "@/lib/utils";
 
 type SearchBarProps = {
   className?: string;
+  autoFocus?: boolean;
+  onRequestClose?: () => void;
 };
 
-function SearchBar({ className }: SearchBarProps) {
+function SearchBar({
+  className,
+  autoFocus = false,
+  onRequestClose,
+}: SearchBarProps) {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [focused, setFocused] = useState(false);
   const [query, setQuery] = useState("");
   const { data: products, isLoading } = useProducts();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,12 +61,20 @@ function SearchBar({ className }: SearchBarProps) {
     };
   }, [open, closing]);
 
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      setOpen(true);
+      setClosing(false);
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
+
   return (
     <div
       ref={containerRef}
       className={cn("relative w-full max-w-xl", className)}
     >
-      <InputGroup>
+      <InputGroup className="bg-background">
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
         </InputGroupAddon>
@@ -72,45 +85,24 @@ function SearchBar({ className }: SearchBarProps) {
             setQuery(event.target.value);
             setOpen(true);
             setClosing(false);
-            setFocused(true);
           }}
           onFocus={() => {
             setOpen(true);
             setClosing(false);
-            setFocused(true);
           }}
           onBlur={() => {
             setTimeout(() => startClose(), 120);
-            setTimeout(() => setFocused(false), 120);
           }}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               startClose();
+              onRequestClose?.();
               setTimeout(() => inputRef.current?.blur(), 0);
             }
           }}
           placeholder="Search products..."
           aria-expanded={showSuggestions}
         />
-        {focused && (
-          <InputGroupAddon align="inline-end" className="sm:hidden">
-            <button
-              type="button"
-              aria-label="Close search"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
-              onMouseDown={(event) => {
-                event.preventDefault();
-                setQuery("");
-                setOpen(false);
-                setClosing(false);
-                setFocused(false);
-                inputRef.current?.blur();
-              }}
-            >
-              <X className="size-4" />
-            </button>
-          </InputGroupAddon>
-        )}
       </InputGroup>
 
       {showSuggestions && (
