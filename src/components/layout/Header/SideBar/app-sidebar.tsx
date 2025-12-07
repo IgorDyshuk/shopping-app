@@ -154,7 +154,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter items={data.navFooter}>
-        <div className="mt-3 flex w-full justify-center">
+        <div className="flex w-full justify-center">
           <NavLanguage />
         </div>
       </SidebarFooter>

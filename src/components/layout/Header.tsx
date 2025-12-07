@@ -7,6 +7,7 @@ import LogIn from "./Header/LogInForm";
 import SignUp from "./Header/SIgnUpForm";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { LanguageSwitcher } from "./Header/LanguageSwitcher";
 
 type HeaderProps = {
   showSidebar?: boolean;
@@ -142,6 +143,7 @@ function Header({ showSidebar = false }: HeaderProps) {
                   <>
                     <LogIn />
                     <SignUp />
+                    <LanguageSwitcher />
                   </>
                 )}
               </div>

@@ -16,7 +16,7 @@ function Home() {
         ) : (
           <>
             <ItemsCarousel
-              title="Products"
+              title="Our popular bloggers"
               items={products ?? []}
               getItemKey={(product) => product.id}
               autoplay
@@ -47,6 +47,15 @@ function Home() {
               viewAllLink="#"
               controlsInline
               loop
+              renderItem={(product) => <ProductCard product={product} />}
+            />
+
+            <ItemsCarousel
+              title="How it works"
+              items={products ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 1, sm: 1, md: 1, lg: 1, xl: 1 }}
+              controlsInline={false}
               renderItem={(product) => <ProductCard product={product} />}
             />
 

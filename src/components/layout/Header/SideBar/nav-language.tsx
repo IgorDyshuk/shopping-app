@@ -36,7 +36,7 @@ export function NavLanguage() {
   };
 
   const compactButton = (
-    <SidebarMenuButton className="justify-center px-0">
+    <SidebarMenuButton className="justify-center">
       <EarthIcon />
     </SidebarMenuButton>
   );
@@ -50,7 +50,7 @@ export function NavLanguage() {
               compactButton
             ) : (
               <SidebarMenuButton
-                size="lg"
+                size="default"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <EarthIcon />

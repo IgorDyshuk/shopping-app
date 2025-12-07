@@ -13,7 +13,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1100px)");
+    const mql = window.matchMedia("(max-width: 1110px)");
     const handleChange = (event: MediaQueryListEvent) => {
       setShowSidebar(event.matches);
     };
