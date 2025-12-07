@@ -32,7 +32,7 @@ function Home() {
               title="Popular picks"
               items={products ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
               peekNext={true}
               viewAllLink="#"
               controlsInline
