@@ -7,7 +7,7 @@ function Home() {
   const { data: products, isLoading, isError } = useProducts();
 
   return (
-    <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 my-6 md:my-8 xl:my-10 2xl:my-12 px-3">
+    <section className="flex w-full flex-col gap-8">
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
         {isLoading ? (
           <HomeSkeleton />

@@ -9,9 +9,32 @@ export const useProducts = () =>
     queryFn: productApi.list,
   });
 
-export const useProduct = (id?: number) =>
-  useQuery<Product>({
-    queryKey: ["products", id],
-    queryFn: () => productApi.getById(id as number),
-    enabled: Boolean(id),
+export const useProduct = (id?: number) => {
+  const fallbackId = id && id > 0 ? id : 1;
+  return useQuery<Product>({
+    queryKey: ["products", fallbackId],
+    queryFn: () => productApi.getById(fallbackId),
+    enabled: true,
   });
+};
+
+export const useFilteredProduct = (filter?: string) => {
+  return useQuery<Product[]>({
+    queryKey: ["products", "filter", filter],
+    queryFn: async () => {
+      const products = await productApi.list();
+      const q = filter?.trim().toLowerCase();
+      if (!q) return products;
+      const words = q.split(/\s+/).filter(Boolean);
+
+      return products.filter((p) => {
+        const haystack = JSON.stringify(p).toLowerCase();
+        return words.every((word) =>
+          new RegExp(
+            `\\b${word.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}\\b`
+          ).test(haystack)
+        );
+      });
+    },
+  });
+};

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { SearchIcon, X } from "lucide-react";
 
+import { Link } from "react-router-dom";
+
 import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMenu";
 import { SearchBar } from "@/components/layout/Header/SearchBar";
 import LogIn from "./Header/LogInForm";
@@ -98,7 +100,9 @@ function Header({ showSidebar = false }: HeaderProps) {
           <div className="relative z-20 flex items-center gap-3">
             <div className="flex items-center gap-2">
               {showSidebar && <SidebarTrigger />}
-              <div className="text-lg font-semibold text-nowrap">Test Shop</div>
+              <Link to="/" className="text-lg font-semibold text-nowrap">
+                Test Shop
+              </Link>
             </div>
 
             <div className="flex flex-1 items-center gap-4">

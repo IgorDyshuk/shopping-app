@@ -29,7 +29,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="grid flex-1 grid-cols-2 gap-6 sm:grid-cols-3 justify-end">
+          <div className="grid flex-1 grid-cols-2 gap-6 md:grid-cols-3 justify-end">
             <FooterColumn title="Marketplace" links={footerLinks.marketplace} />
             <FooterColumn title="Support" links={footerLinks.support} />
             <FooterColumn title="Company" links={footerLinks.company} />

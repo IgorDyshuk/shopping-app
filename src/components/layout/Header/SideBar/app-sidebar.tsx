@@ -5,6 +5,7 @@ import {
   Boxes,
   CircleDollarSign,
   GalleryVerticalEnd,
+  Home,
   LifeBuoy,
   Send,
   Sparkles,
@@ -47,6 +48,11 @@ const data = {
   ],
   navMain: [
     {
+      title: "Главная",
+      url: "/",
+      icon: Home,
+    },
+    {
       title: "Дропы",
       url: "#drops",
       icon: Sparkles,
@@ -68,10 +74,14 @@ const data = {
     },
     {
       title: "Каталог",
-      url: "#catalog",
+      url: "/catalog",
       icon: Boxes,
       isActive: true,
       items: [
+        {
+          title: "Весь каталог",
+          url: "/catalog",
+        },
         {
           title: "Одежда",
           url: "#catalog-clothes",

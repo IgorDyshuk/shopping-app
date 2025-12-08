@@ -12,6 +12,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Link, useNavigate } from "react-router-dom";
 
 const drops = [
   {
@@ -74,6 +75,7 @@ const creators = [
 
 export function NavigationMenuComplete() {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   return (
     <NavigationMenu
@@ -86,10 +88,10 @@ export function NavigationMenuComplete() {
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
+              <NavigationMenuLink asChild>
+                  <Link
                     className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                    href="#drops"
+                    to="#drops"
                   >
                     <div className="mb-2 text-lg font-medium sm:mt-4">
                       Эксклюзивные дропы
@@ -98,7 +100,7 @@ export function NavigationMenuComplete() {
                       Следи за расписанием релизов и забирай редкие вещи
                       блогеров первым.
                     </p>
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
               {drops.map((item) => (
@@ -110,7 +112,9 @@ export function NavigationMenuComplete() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Каталог</NavigationMenuTrigger>
+          <NavigationMenuTrigger onClick={() => navigate("/catalog")}>
+            Каталог
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {catalog.map((item) => (
@@ -133,20 +137,14 @@ export function NavigationMenuComplete() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink
-            href="#sell"
-            className={navigationMenuTriggerStyle()}
-          >
-            Продать вещь
+      <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link to="#sell">Продать вещь</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink
-            href="#support"
-            className={navigationMenuTriggerStyle()}
-          >
-            FAQ & Поддержка
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link to="#support">FAQ & Поддержка</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
