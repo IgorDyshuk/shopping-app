@@ -29,9 +29,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <SidebarInset>
         <div className="min-h-svh bg-background text-foreground">
           <Header showSidebar={showSidebar} />
-          <main className="my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30 mx-auto max-w-7xl px-3">
-            {children}
-          </main>
+          <main className="mx-auto max-w-7xl px-3">{children}</main>
           <Footer />
         </div>
       </SidebarInset>

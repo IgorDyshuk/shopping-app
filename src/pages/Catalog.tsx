@@ -1,68 +1,104 @@
-import { useFilteredProduct, useProduct } from "@/hooks/useProducts";
+import { Link } from "react-router-dom";
+
+import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
+import { ProductCard } from "@/components/products/ProductCard";
+import { ItemsCarousel } from "@/components/products/ProductCarousel";
+import { useFilteredProduct } from "@/hooks/useProducts";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 function Catalog() {
   const {
-    data: product,
+    data: menClothes,
     isLoading,
     isError,
   } = useFilteredProduct("men's clothing");
+  const { data: womenClothes } = useFilteredProduct("women's clothing");
+  const { data: electronics } = useFilteredProduct("electronics");
+  const { data: jewelery } = useFilteredProduct("jewelery");
 
   return (
-    <section className="flex w-full flex-col gap-6 ">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold">Catalog</h1>
-        <p className="text-muted-foreground">
-          Parsed product JSON with full details for the first item.
-        </p>
-      </div>
+    <section className=" w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Catalog</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-      {isLoading ? (
-        <p className="text-muted-foreground">Loading product...</p>
-      ) : isError ? (
-        <p className="text-destructive">Failed to load product.</p>
-      ) : !product ? (
-        <p className="text-muted-foreground">No products found.</p>
-      ) : (
-        // <div className="flex flex-col gap-6">
-        //   <div className="flex flex-col gap-4 rounded-lg border bg-card p-4 shadow-sm">
-        //     <div className="flex items-center justify-center rounded-md bg-white p-4">
-        //       <img
-        //         src={product.image}
-        //         alt={product.title}
-        //         className="h-56 w-full max-w-xs object-contain"
-        //       />
-        //     </div>
-        //     <div className="space-y-2">
-        //       <h2 className="text-xl font-semibold">{product.title}</h2>
-        //       <p className="text-sm text-muted-foreground line-clamp-1">
-        //         {/* {product.description} */}
-        //       </p>
-        //       <div className="flex flex-wrap gap-3 text-sm">
-        //         <span className="rounded-full bg-muted px-3 py-1">
-        //           {product.category}
-        //         </span>
-        //         <span className="font-semibold">
-        //           ${product.price.toFixed(2)}
-        //         </span>
-        //         {product.rating && (
-        //           <span className="text-muted-foreground">
-        //             Rating: {product.rating.rate} ({product.rating.count})
-        //           </span>
-        //         )}
-        //       </div>
-        //     </div>
-        //   </div>
-
-        <div className="rounded-lg border bg-card p-4 shadow-sm">
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground ">
-            Raw JSON
-          </h3>
-          <pre className="max-h-[480px] overflow-auto rounded bg-muted p-3 text-xs leading-relaxed">
-            {JSON.stringify(product, null, 2)}
-          </pre>
+      <div className="flex flex-col gap-8 my-7.5 ">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-semibold">Catalog</h1>
+          <p className="text-muted-foreground">All we have</p>
         </div>
-        // </div>
-      )}
+
+        {isLoading ? (
+          <HomeSkeleton />
+        ) : isError ? (
+          <p className="text-destructive">Failed to load product.</p>
+        ) : !menClothes ? (
+          <p className="text-muted-foreground">No products found.</p>
+        ) : (
+          <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
+            <ItemsCarousel
+              title="Men's clothing"
+              items={menClothes ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              peekNext={true}
+              viewAllLink="#"
+              controlsInline
+              renderItem={(product) => <ProductCard product={product} />}
+            />
+            <ItemsCarousel
+              title="Women's clothing"
+              items={womenClothes ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              peekNext={true}
+              viewAllLink="#"
+              controlsInline
+              renderItem={(product) => <ProductCard product={product} />}
+            />
+            <ItemsCarousel
+              title="Electronics"
+              items={electronics ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              peekNext={true}
+              viewAllLink="#"
+              controlsInline
+              renderItem={(product) => <ProductCard product={product} />}
+            />
+            <ItemsCarousel
+              title="Jewelerys"
+              items={jewelery ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              peekNext={true}
+              viewAllLink="#"
+              controlsInline
+              renderItem={(product) => <ProductCard product={product} />}
+            />
+            {/* <pre className="max-h-[480px] overflow-auto rounded bg-muted p-3 text-xs leading-relaxed">
+            {JSON.stringify(products, null, 2)}
+          </pre> */}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
