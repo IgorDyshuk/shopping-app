@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import {
@@ -119,12 +120,12 @@ export function ItemsCarousel<T>({
           {(viewAllLink || (controlsInline && !hideControls)) && (
             <div className="flex items-center gap-3">
               {viewAllLink && (
-                <a
-                  href={viewAllLink}
+                <Link
+                  to={viewAllLink}
                   className="text-xs sm:text-sm text-primary hover:underline"
                 >
                   Show more
-                </a>
+                </Link>
               )}
 
               {controlsInline && !hideControls && (

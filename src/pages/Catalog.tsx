@@ -14,17 +14,22 @@ import {
 } from "@/components/ui/breadcrumb";
 
 function Catalog() {
+  const menCategory = "men's clothing";
+  const womenCategory = "women's clothing";
+  const electronicsCategory = "electronics";
+  const jeweleryCategory = "jewelery";
+
   const {
     data: menClothes,
     isLoading,
     isError,
-  } = useFilteredProduct("men's clothing");
-  const { data: womenClothes } = useFilteredProduct("women's clothing");
-  const { data: electronics } = useFilteredProduct("electronics");
-  const { data: jewelery } = useFilteredProduct("jewelery");
+  } = useFilteredProduct(menCategory);
+  const { data: womenClothes } = useFilteredProduct(womenCategory);
+  const { data: electronics } = useFilteredProduct(electronicsCategory);
+  const { data: jewelery } = useFilteredProduct(jeweleryCategory);
 
   return (
-    <section className=" w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
+    <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -39,7 +44,7 @@ function Catalog() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-col gap-8 my-7.5 ">
+      <div className="flex flex-col gap-8 my-7.5">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold">Catalog</h1>
           <p className="text-muted-foreground">All we have</p>
@@ -59,7 +64,7 @@ function Catalog() {
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
               peekNext={true}
-              viewAllLink="#"
+              viewAllLink={`/category/${encodeURIComponent(menCategory)}`}
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
@@ -69,7 +74,7 @@ function Catalog() {
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
               peekNext={true}
-              viewAllLink="#"
+              viewAllLink={`/category/${encodeURIComponent(womenCategory)}`}
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
@@ -79,7 +84,9 @@ function Catalog() {
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
               peekNext={true}
-              viewAllLink="#"
+              viewAllLink={`/category/${encodeURIComponent(
+                electronicsCategory
+              )}`}
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
@@ -89,7 +96,7 @@ function Catalog() {
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
               peekNext={true}
-              viewAllLink="#"
+              viewAllLink={`/category/${encodeURIComponent(jeweleryCategory)}`}
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />

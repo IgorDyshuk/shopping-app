@@ -24,7 +24,7 @@ const languages = [
 
 export function NavLanguage() {
   const { t, i18n } = useTranslation();
-  const { isMobile, state } = useSidebar();
+  const { isMobile, state, closeSidebar } = useSidebar();
 
   const currentLanguage = (i18n.resolvedLanguage ??
     i18n.language ??
@@ -33,6 +33,7 @@ export function NavLanguage() {
   const handleSelect = (value: string) => {
     if (value === currentLanguage) return;
     void i18n.changeLanguage(value);
+    closeSidebar();
   };
 
   const compactButton = (

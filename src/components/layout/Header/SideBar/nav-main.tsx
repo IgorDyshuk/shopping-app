@@ -15,6 +15,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 
 export function NavMain({
@@ -31,6 +32,10 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const { closeSidebar } = useSidebar()
+  const normalizeTo = (url: string) =>
+    url.startsWith("#") ? `/${url}` : url
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -51,10 +56,10 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                          <SidebarMenuSubButton asChild onClick={closeSidebar}>
+                            <Link to={normalizeTo(subItem.url)}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -63,8 +68,12 @@ export function NavMain({
                 </div>
               </Collapsible>
             ) : (
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <Link to={item.url}>
+              <SidebarMenuButton
+                asChild
+                tooltip={item.title}
+                onClick={closeSidebar}
+              >
+                <Link to={normalizeTo(item.url)}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

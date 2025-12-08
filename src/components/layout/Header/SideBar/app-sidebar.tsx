@@ -84,19 +84,19 @@ const data = {
         },
         {
           title: "Одежда",
-          url: "#catalog-clothes",
+          url: `/category/${encodeURIComponent("men's clothing")}`,
         },
         {
           title: "Обувь",
-          url: "#catalog-sneakers",
+          url: `/category/${encodeURIComponent("women's clothing")}`,
         },
         {
           title: "Аксессуары",
-          url: "#catalog-accessories",
+          url: `/category/${encodeURIComponent("jewelery")}`,
         },
         {
           title: "Гаджеты",
-          url: "#catalog-gadgets",
+          url: `/category/${encodeURIComponent("electronics")}`,
         },
       ],
     },
