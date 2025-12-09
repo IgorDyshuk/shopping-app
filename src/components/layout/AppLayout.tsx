@@ -1,35 +1,31 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 
 import { AppSidebar } from "@/components/layout/Header/SideBar/app-sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SidebarInset } from "@/components/ui/sidebar";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 type AppLayoutProps = {
   children: ReactNode;
 };
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const showSidebar = useMediaQuery("(max-width: 1110px)");
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1110px)");
-    const handleChange = (event: MediaQueryListEvent) => {
-      setShowSidebar(event.matches);
-    };
-
-    setShowSidebar(mql.matches);
-    mql.addEventListener("change", handleChange);
-    return () => mql.removeEventListener("change", handleChange);
-  }, []);
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
       {showSidebar && <AppSidebar />}
       <SidebarInset>
-        <div className="min-h-svh bg-background text-foreground">
+        <div className="min-h-svh bg-background text-foreground flex flex-col">
           <Header showSidebar={showSidebar} />
-          <main className="mx-auto max-w-7xl px-3">{children}</main>
+          <main className="mx-auto max-w-7xl px-3 flex-1 w-full">{children}</main>
           <Footer />
         </div>
       </SidebarInset>
