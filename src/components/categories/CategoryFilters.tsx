@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 
-type FilterOption = {
+export type FilterOption = {
   id: string;
   label: string;
 };
