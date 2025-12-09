@@ -23,7 +23,7 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
 
   return (
     <article
-      className={`group flex h-full flex-col gap-0.5 sm:gap-1 rounded-lg bg-card p-3 sm:p-4 hover:cursor-pointer ${
+      className={`group flex h-full flex-col gap-0.5 sm:gap-1 rounded-lg bg-card p-3 sm:p-4 hover:cursor-pointer  ${
         bordered ? "border" : ""
       }`}
     >
