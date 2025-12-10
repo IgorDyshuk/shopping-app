@@ -12,7 +12,7 @@ type AppLayoutProps = {
 };
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const showSidebar = useMediaQuery("(max-width: 1110px)");
+  const showSidebar = useMediaQuery("(max-width: 1131px)");
   const { pathname } = useLocation();
 
   useEffect(() => {

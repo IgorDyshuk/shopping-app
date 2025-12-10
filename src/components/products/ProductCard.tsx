@@ -23,18 +23,18 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
 
   return (
     <article
-      className={`group flex h-full flex-col gap-0.5 sm:gap-1 rounded-lg bg-card p-3 sm:p-4 hover:cursor-pointer  ${
+      className={`group flex h-full flex-col gap-0.5 sm:gap-1 rounded-lg bg-card p-3 sm:p-4 hover:cursor-pointer ${
         bordered ? "border" : ""
       }`}
     >
-      <div className="relative mb-0 xl:mb-1 w-full rounded-md bg-white">
+      <div className="relative mb-0 xl:mb-1 w-full rounded-md bg-card">
         <Toggle
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           pressed={isFavorite}
           onPressedChange={handleFavoriteToggle}
           variant="outline"
           size="sm"
-          className="absolute right-1 top-1 z-10 rounded-full bg-white/90 hover:bg-white data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer"
+          className="absolute right-1 top-1 z-10 rounded-full bg-muted/90 hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer transition-colors duration-150"
         >
           <Heart className="size-4" />
         </Toggle>

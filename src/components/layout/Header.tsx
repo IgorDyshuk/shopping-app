@@ -7,6 +7,7 @@ import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMen
 import { SearchBar } from "@/components/layout/Header/SearchBar";
 import LogIn from "./Header/LogInForm";
 import SignUp from "./Header/SIgnUpForm";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { LanguageSwitcher } from "./Header/LanguageSwitcher";
@@ -38,7 +39,7 @@ function Header({ showSidebar = false }: HeaderProps) {
     showSidebar && isTabletUp ? (isSidebarOpen ? "255px" : "47px") : "0px";
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1521px)");
+    const mql = window.matchMedia("(max-width: 1555px)");
     const update = () => setIsCompactSearch(mql.matches);
     update();
     mql.addEventListener("change", update);
@@ -119,28 +120,31 @@ function Header({ showSidebar = false }: HeaderProps) {
                   </div>
                 )}
                 {isCompactSearch && (
-                  <Button
-                    ref={toggleRef}
-                    variant="ghost"
-                    size="icon"
-                    onClick={() =>
-                      setShowSearchBar((prev) => {
-                        if (prev) {
-                          startHide();
-                          return prev;
-                        }
-                        return true;
-                      })
-                    }
-                    aria-expanded={showSearchBar}
-                    aria-label="Search"
-                  >
-                    {showSearchBar ? (
-                      <X className="size-5" />
-                    ) : (
-                      <SearchIcon className="size-5" />
-                    )}
-                  </Button>
+                  <>
+                    <Button
+                      ref={toggleRef}
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        setShowSearchBar((prev) => {
+                          if (prev) {
+                            startHide();
+                            return prev;
+                          }
+                          return true;
+                        })
+                      }
+                      aria-expanded={showSearchBar}
+                      aria-label="Search"
+                    >
+                      {showSearchBar ? (
+                        <X className="size-5" />
+                      ) : (
+                        <SearchIcon className="size-5" />
+                      )}
+                    </Button>
+                    <ModeToggle />
+                  </>
                 )}
 
                 {!showSidebar && (
@@ -148,16 +152,11 @@ function Header({ showSidebar = false }: HeaderProps) {
                     <LogIn />
                     <SignUp />
                     <LanguageSwitcher />
+                    {!isCompactSearch && <ModeToggle />}
                   </>
                 )}
               </div>
             </div>
-
-            {!showSidebar && (
-              <div className="ml-auto shrink-0">
-                {/* Language switcher hidden when sidebar is shown */}
-              </div>
-            )}
           </div>
         </div>
 

@@ -14,12 +14,10 @@ export default function SignUp({ className }: SignUpProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          variant="outline"
+          variant="default"
           size="sm"
-          className={cn(
-            "rounded-full border border-input bg-card-foreground px-4 text-popover shadow-none hover:bg-accent hover:text-foreground",
-            className
-          )}
+          type="submit"
+          className={cn("rounded-full px-4", className)}
         >
           Sign up
         </Button>

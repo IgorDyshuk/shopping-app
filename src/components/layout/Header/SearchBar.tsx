@@ -74,7 +74,7 @@ function SearchBar({
       ref={containerRef}
       className={cn("relative w-full max-w-xl", className)}
     >
-      <InputGroup className="bg-background">
+      <InputGroup className="bg-card dark:bg-card border border-input shadow-sm rounded-md">
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
         </InputGroupAddon>
@@ -102,12 +102,13 @@ function SearchBar({
           }}
           placeholder="Search products..."
           aria-expanded={showSuggestions}
+          className="bg-transparent"
         />
       </InputGroup>
 
       {showSuggestions && (
         <div
-          className={`absolute left-0 right-0 top-full z-0 mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg ${
+          className={`absolute left-0 right-0 top-full z-0 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg ${
             closing
               ? "animate-out fade-out-0 zoom-out-95 duration-150"
               : "animate-in fade-in-0 zoom-in-95 duration-150"

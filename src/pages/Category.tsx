@@ -66,6 +66,7 @@ function Category() {
     isLoading,
     isError,
   } = useFilteredProduct(decodedCategory);
+
   const presetKey = useMemo(() => {
     const lower = decodedCategory.toLowerCase();
     if (lower.includes("cloth")) return "clothing";
@@ -119,6 +120,7 @@ function Category() {
     if (presetKey === "accessories") return accessorySizeOptions;
     return defaultSizeOptions;
   }, [presetKey]);
+
   const [sortBy, setSortBy] = useState("popularity");
   const [layout, setLayout] = useState<"dense" | "spacious">("dense");
   const [activeCategoryFilters, setActiveCategoryFilters] = useState<
@@ -361,7 +363,7 @@ function Category() {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-8">
+            <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
               {!isFilterDrawer && (
                 <CategoryFilters
                   categoryOptions={categoryOptions}
@@ -398,15 +400,15 @@ function Category() {
                     })
                   }
                   onPriceChange={updatePriceRange}
-                  className="self-start lg:sticky lg:top-24"
+                  className="self-start md:sticky md:top-24"
                 />
               )}
               <div className="space-y-4">
                 <div
-                  className={`grid grid-cols-2 gap-4 ${
+                  className={`grid grid-cols-2 gap-0 md:gap-1.5 md:gap-2 ${
                     layout === "dense"
-                      ? "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-                      : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                      ? "md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                      : "md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
                   }`}
                 >
                   {sortedProducts.length === 0 ? (
@@ -419,6 +421,10 @@ function Category() {
                     ))
                   )}
                 </div>
+
+                {/* <pre className="max-h-[480px] overflow-auto rounded bg-muted p-3 text-xs leading-relaxed">
+                  {JSON.stringify(products, null, 2)}
+                </pre> */}
               </div>
             </div>
           </div>

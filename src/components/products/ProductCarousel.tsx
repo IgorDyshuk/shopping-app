@@ -96,6 +96,7 @@ export function ItemsCarousel<T>({
   }, [perRow.base, perRow.xs, perRow.sm, perRow.md, perRow.lg, perRow.xl]);
 
   const hideControls = isMobile && isSmallScreen;
+  // const itemClasses = "pl-1.5 md:pl-2 xl:pl-3";
   const itemClasses = "pl-0";
   const peekOffsetPx = peekNext ? 16 : 0;
   const itemStyle = useMemo(
@@ -137,7 +138,10 @@ export function ItemsCarousel<T>({
             </div>
           )}
         </div>
-        <CarouselContent className={`ml-0 ${contentClass}`}>
+        <CarouselContent
+          // className={`-ml-1.5 md:-ml-1.5 xl:-ml-3 ${contentClass}`}
+          className={`ml-0 ${contentClass}`}
+        >
           {items.map((item, index) => (
             <CarouselItem
               key={getItemKey ? getItemKey(item, index) : index}

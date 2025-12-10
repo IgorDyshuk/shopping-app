@@ -44,7 +44,7 @@ export function CategoryFilters({
   return (
     <aside
       className={cn(
-        "space-y-5 rounded-xl border bg-card/80 p-4 shadow-sm",
+        "space-y-5 rounded-xl border bg-sidebar/50 p-4 shadow-sm",
         className
       )}
     >
