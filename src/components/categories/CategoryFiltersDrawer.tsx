@@ -5,16 +5,16 @@ import {
   Sheet,
   SheetContent,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import type { FilterOption } from "./CategoryFilters";
 import { CategoryFilters } from "./CategoryFilters";
+import { FilterChips } from "./FilterChips";
+import { useFilterChips } from "@/hooks/categoty-hooks/use-filter-chips";
 import { Funnel } from "lucide-react";
 
 type CategoryFiltersDrawerProps = {
-  label: string[];
+  label: [string, string];
   open: boolean;
   onOpenChange: (open: boolean) => void;
   categoryOptions: FilterOption[];
@@ -98,8 +98,36 @@ export function CategoryFiltersDrawer({
     onOpenChange(false);
   };
 
-  const displayLabel = Array.isArray(label) ? label[0] ?? "Filters" : label;
-  const descLabel = Array.isArray(label) ? label[1] ?? "" : "";
+  const chips = useFilterChips({
+    categoryOptions,
+    sizeOptions,
+    conditionOptions,
+    categorySet: tempCategoryFilters,
+    sizeSet: tempSizeFilters,
+    conditionSet: tempConditionFilters,
+    priceRange: tempPriceRange,
+    minPrice,
+    maxPrice,
+    onClearPrice: () => setTempPriceRange([minPrice, maxPrice]),
+    makeClearCategory: (id) => () =>
+      setTempCategoryFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+    makeClearSize: (id) => () =>
+      setTempSizeFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+    makeClearCondition: (id) => () =>
+      setTempConditionFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+  });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -111,16 +139,25 @@ export function CategoryFiltersDrawer({
         >
           <Funnel className="size-5 lg:size-6 text-primary" strokeWidth={2.5} />
           <div className="flex flex-col items-start leading-tight">
-            <span className="">Filters {displayLabel}</span>
-            <span className="text-muted-foreground text-xs">{descLabel}</span>
+            <span className="">Filters {label[0]}</span>
+            <span className="text-muted-foreground text-xs">{label[1]}</span>
           </div>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0">
-        <SheetHeader className="px-4 pt-4 pb-0">
-          <SheetTitle>Filters</SheetTitle>
-        </SheetHeader>
+      <SheetContent side="left">
         <div className="flex-1 overflow-auto px-4 pb-4">
+          <div className="pb-2">
+            <FilterChips
+              chips={chips}
+              onClearAll={() => {
+                const emptySet = new Set<string>();
+                setTempCategoryFilters(emptySet);
+                setTempSizeFilters(emptySet);
+                setTempConditionFilters(emptySet);
+                setTempPriceRange([minPrice, maxPrice]);
+              }}
+            />
+          </div>
           <CategoryFilters
             categoryOptions={categoryOptions}
             sizeOptions={sizeOptions}

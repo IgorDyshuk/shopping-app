@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
-import { useFilteredProduct } from "@/hooks/useProducts";
+import { useFilteredProduct } from "@/hooks/api-hooks/useProducts";
 import {
   Breadcrumb,
   BreadcrumbItem,

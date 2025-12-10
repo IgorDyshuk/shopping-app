@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/media-hooks/use-mobile";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -88,7 +88,7 @@ export function NavigationMenuComplete() {
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
-              <NavigationMenuLink asChild>
+                <NavigationMenuLink asChild>
                   <Link
                     className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
                     to="#drops"
@@ -137,7 +137,7 @@ export function NavigationMenuComplete() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-      <NavigationMenuItem>
+        <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link to="#sell">Продать вещь</Link>
           </NavigationMenuLink>

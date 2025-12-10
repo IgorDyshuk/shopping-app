@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/layout/Header/SideBar/app-sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 type AppLayoutProps = {
   children: ReactNode;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SearchIcon } from "lucide-react";
 
-import { useProducts } from "@/hooks/useProducts";
+import { useProducts } from "@/hooks/api-hooks/useProducts";
 import {
   InputGroup,
   InputGroupAddon,

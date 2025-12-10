@@ -4,8 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { CategorySkeleton } from "@/components/layout/skeletons/CategorySkeleton";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoryFilters } from "@/components/categories/CategoryFilters";
-import { useFilteredProduct } from "@/hooks/useProducts";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useFilteredProduct } from "@/hooks/api-hooks/useProducts";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,10 +14,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,36 +27,18 @@ import {
   ListChevronsUpDown,
 } from "lucide-react";
 import { CategoryFiltersDrawer } from "@/components/categories/CategoryFiltersDrawer";
+import {
+  accessorySizeOptions,
+  conditionOptions,
+  defaultSizeOptions,
+  presetCategoryOptions,
+  sneakerSizeOptions,
+} from "@/constants/category-presets";
+import { FilterChips } from "@/components/categories/FilterChips";
+import { useFilterChips } from "@/hooks/categoty-hooks/use-filter-chips";
+import { useSortOptions } from "@/hooks/categoty-hooks/use-sort-options";
 
 function Category() {
-  const defaultSizeOptions = [
-    { id: "XS", label: "XS" },
-    { id: "S", label: "S" },
-    { id: "M", label: "M" },
-    { id: "L", label: "L" },
-    { id: "XL", label: "XL" },
-  ];
-
-  const sneakerSizeOptions = [
-    { id: "EU36", label: "EU 36" },
-    { id: "EU38", label: "EU 38" },
-    { id: "EU40", label: "EU 40" },
-    { id: "EU42", label: "EU 42" },
-    { id: "EU44", label: "EU 44" },
-  ];
-
-  const accessorySizeOptions = [
-    { id: "ONE", label: "One size" },
-    { id: "S", label: "Small" },
-    { id: "M", label: "Medium" },
-    { id: "L", label: "Large" },
-  ];
-
-  const conditionOptions = [
-    { id: "new", label: "New" },
-    { id: "used", label: "Pre-owned" },
-  ];
-
   const { category = "" } = useParams<{ category: string }>();
   const decodedCategory = useMemo(
     () => decodeURIComponent(category),
@@ -84,31 +62,6 @@ function Category() {
     if (lower.includes("access")) return "accessories";
     return "default";
   }, [decodedCategory]);
-
-  const presetCategoryOptions = useMemo(
-    () => ({
-      clothing: [
-        { id: "tops", label: "Tops" },
-        { id: "outerwear", label: "Outerwear" },
-        { id: "bottoms", label: "Bottoms" },
-        { id: "dresses", label: "Dresses" },
-        { id: "sets", label: "Sets" },
-      ],
-      sneakers: [
-        { id: "lifestyle", label: "Lifestyle" },
-        { id: "running", label: "Running" },
-        { id: "basketball", label: "Basketball" },
-        { id: "trail", label: "Trail / Hiking" },
-      ],
-      accessories: [
-        { id: "bags", label: "Bags" },
-        { id: "hats", label: "Hats & Caps" },
-        { id: "jewelry", label: "Jewelry" },
-        { id: "tech", label: "Tech accessories" },
-      ],
-    }),
-    []
-  );
 
   const categoryOptions = useMemo(() => {
     if (presetKey === "clothing") return presetCategoryOptions.clothing;
@@ -192,12 +145,38 @@ function Category() {
     maxPrice,
   ]);
 
-  const sortOptions = [
-    { value: "popularity", label: "Popularity" },
-    { value: "rating", label: "Rating" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
-  ] as const;
+  const chips = useFilterChips({
+    categoryOptions,
+    sizeOptions,
+    conditionOptions,
+    categorySet: activeCategoryFilters,
+    sizeSet: activeSizeFilters,
+    conditionSet: activeConditionFilters,
+    priceRange,
+    minPrice,
+    maxPrice,
+    onClearPrice: () => setPriceRange([minPrice, maxPrice]),
+    makeClearCategory: (id) => () =>
+      setActiveCategoryFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+    makeClearSize: (id) => () =>
+      setActiveSizeFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+    makeClearCondition: (id) => () =>
+      setActiveConditionFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
+  });
+
+  const sortOptions = useSortOptions();
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
@@ -340,10 +319,23 @@ function Category() {
                     }}
                   />
                 )}
-                <p className="hidden sm:block text-sm text-muted-foreground">
-                  Found {sortedProducts.length}{" "}
-                  {sortedProducts.length === 1 ? "item" : "items"}
-                </p>
+                {!isFilterDrawer && (
+                  <>
+                    <p className="hidden sm:block text-sm text-muted-foreground">
+                      Found {sortedProducts.length}{" "}
+                      {sortedProducts.length === 1 ? "item" : "items"}
+                    </p>
+                    <FilterChips
+                      chips={chips}
+                      onClearAll={() => {
+                        setActiveCategoryFilters(new Set());
+                        setActiveSizeFilters(new Set());
+                        setActiveConditionFilters(new Set());
+                        setPriceRange([minPrice, maxPrice]);
+                      }}
+                    />
+                  </>
+                )}
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                 <DropdownMenu>

@@ -1,4 +1,4 @@
-import { useProducts } from "@/hooks/useProducts";
+import { useProducts } from "@/hooks/api-hooks/useProducts";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
