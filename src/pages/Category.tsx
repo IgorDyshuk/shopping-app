@@ -19,7 +19,17 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { Button } from "@/components/ui/button";
-import { ListChevronsDownUp, ListChevronsUpDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  ArrowDownUp,
+  ListChevronsDownUp,
+  ListChevronsUpDown,
+} from "lucide-react";
 import { CategoryFiltersDrawer } from "@/components/categories/CategoryFiltersDrawer";
 
 function Category() {
@@ -182,6 +192,13 @@ function Category() {
     maxPrice,
   ]);
 
+  const sortOptions = [
+    { value: "popularity", label: "Popularity" },
+    { value: "rating", label: "Rating" },
+    { value: "price-asc", label: "Price: Low to High" },
+    { value: "price-desc", label: "Price: High to Low" },
+  ] as const;
+
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     const hasCategoryFilters = activeCategoryFilters.size > 0;
@@ -291,15 +308,14 @@ function Category() {
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center md:items-end">
               <div className="flex items-center gap-3">
-                <p className="hidden sm:block text-sm text-muted-foreground">
-                  Found {sortedProducts.length}{" "}
-                  {sortedProducts.length === 1 ? "item" : "items"}
-                </p>
                 {isFilterDrawer && (
                   <CategoryFiltersDrawer
-                    label={`Filters${
-                      activeFiltersCount ? ` (${activeFiltersCount})` : ""
-                    }`}
+                    label={[
+                      activeFiltersCount ? `(${activeFiltersCount})` : "",
+                      `${sortedProducts.length} ${
+                        sortedProducts.length === 1 ? "item" : "items"
+                      }`,
+                    ]}
                     open={filtersOpen}
                     onOpenChange={setFiltersOpen}
                     categoryOptions={categoryOptions}
@@ -324,24 +340,51 @@ function Category() {
                     }}
                   />
                 )}
+                <p className="hidden sm:block text-sm text-muted-foreground">
+                  Found {sortedProducts.length}{" "}
+                  {sortedProducts.length === 1 ? "item" : "items"}
+                </p>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                <NativeSelect
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  aria-label="Sort products"
-                >
-                  <NativeSelectOption value="price-asc">
-                    Price: Low to High
-                  </NativeSelectOption>
-                  <NativeSelectOption value="price-desc">
-                    Price: High to Low
-                  </NativeSelectOption>
-                  <NativeSelectOption value="rating">Rating</NativeSelectOption>
-                  <NativeSelectOption value="popularity">
-                    Popularity
-                  </NativeSelectOption>
-                </NativeSelect>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="lg"
+                      className="min-w-[60px] justify-start gap-2 px-4 py-2"
+                    >
+                      <ArrowDownUp
+                        className="size-5 lg:size-6 text-primary"
+                        strokeWidth={2.5}
+                      />
+                      <div className="flex flex-col items-start leading-tight">
+                        <span className="">Sorted</span>
+                        <span className="text-muted-foreground text-xs">
+                          {
+                            sortOptions.find(
+                              (option) => option.value === sortBy
+                            )?.label
+                          }
+                        </span>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {sortOptions.map((option) => (
+                      <DropdownMenuItem
+                        key={option.value}
+                        onClick={() => setSortBy(option.value)}
+                        className={
+                          sortBy === option.value
+                            ? "font-medium text-primary"
+                            : undefined
+                        }
+                      >
+                        {option.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <div className="hidden md:inline-flex overflow-hidden rounded-md border">
                   <Button
                     type="button"

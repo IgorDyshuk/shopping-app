@@ -74,7 +74,7 @@ function SearchBar({
       ref={containerRef}
       className={cn("relative w-full max-w-xl", className)}
     >
-      <InputGroup className="bg-card dark:bg-card border border-input shadow-sm rounded-md">
+      <InputGroup className="bg-input dark:bg-muted border border-input shadow-2xl rounded-md">
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
         </InputGroupAddon>
@@ -108,7 +108,7 @@ function SearchBar({
 
       {showSuggestions && (
         <div
-          className={`absolute left-0 right-0 top-full z-0 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg ${
+          className={`absolute left-0 right-0 top-full z-0 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-4xl shadow-black/40 ${
             closing
               ? "animate-out fade-out-0 zoom-out-95 duration-150"
               : "animate-in fade-in-0 zoom-in-95 duration-150"

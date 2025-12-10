@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/sheet";
 import type { FilterOption } from "./CategoryFilters";
 import { CategoryFilters } from "./CategoryFilters";
+import { Funnel } from "lucide-react";
 
 type CategoryFiltersDrawerProps = {
-  label: string;
+  label: string[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
   categoryOptions: FilterOption[];
@@ -97,11 +98,22 @@ export function CategoryFiltersDrawer({
     onOpenChange(false);
   };
 
+  const displayLabel = Array.isArray(label) ? label[0] ?? "Filters" : label;
+  const descLabel = Array.isArray(label) ? label[1] ?? "" : "";
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
-        <Button variant="default" size="default">
-          {label}
+        <Button
+          variant="ghost"
+          size="lg"
+          className="min-w-[60px] justify-start gap-2 px-4 py-2"
+        >
+          <Funnel className="size-5 lg:size-6 text-primary" strokeWidth={2.5} />
+          <div className="flex flex-col items-start leading-tight">
+            <span className="">Filters {displayLabel}</span>
+            <span className="text-muted-foreground text-xs">{descLabel}</span>
+          </div>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
