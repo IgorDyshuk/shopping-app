@@ -74,6 +74,11 @@ export function NavigationMenuComplete() {
     >
       <NavigationMenuList className="flex-wrap z-100">
         <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link to="/">{t("sidebar.main.home")}</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
           <NavigationMenuTrigger onClick={() => navigate("/catalog")}>
             {t("nav.catalogTrigger")}
           </NavigationMenuTrigger>
@@ -103,7 +108,9 @@ export function NavigationMenuComplete() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{t("nav.creatorsTrigger")}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>
+            {t("nav.creatorsTrigger")}
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px]">
               {creators.map((item) => (

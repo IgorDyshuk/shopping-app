@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { GalleryVerticalEnd } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -12,15 +14,29 @@ type SignUpProps = {
 
 export default function SignUp({ className }: SignUpProps) {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setOpen(true);
+    document.addEventListener("open-signup", handleOpen as EventListener);
+    return () =>
+      document.removeEventListener("open-signup", handleOpen as EventListener);
+  }, []);
+
+  const switchToLogin = () => {
+    setOpen(false);
+    document.dispatchEvent(new CustomEvent("open-login"));
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="default"
           size="sm"
           type="submit"
           className={cn("rounded-full px-4", className)}
+          onClick={() => setOpen(true)}
         >
           {t("auth.signup")}
         </Button>
@@ -37,7 +53,7 @@ export default function SignUp({ className }: SignUpProps) {
               </div>
               website name.
             </a>
-            <SignupForm />
+            <SignupForm onSwitchToLogin={switchToLogin} />
           </div>
         </div>
       </DialogContent>

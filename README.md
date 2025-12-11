@@ -9,8 +9,8 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - Axios + TanStack React Query (fakestore API)
 
 ## Структура
-- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`.
-- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`).
+- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`.
+- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`).
 - `src/lib/apiConfig.ts` — базовый URL/таймауты (`VITE_API_URL`, `VITE_API_TIMEOUT`).
 - `src/api/client.ts` — axios-инстанс с auth-header.
 - `src/api/{products,auth}.ts` — сервисы fakestore.
@@ -25,6 +25,11 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/components/products/ProductCard.tsx` — карточка товара с фаворит-тогглом (Sonner toast) и ховер-эффектом.
 - `src/components/products/ProductCarousel.tsx` — переиспользуемая карусель карточек (autoplay, responsive perRow, peek next, “Смотреть больше” ссылка, стрелки inline/боковые).
 - `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары в карусели (Embla + Autoplay) и скелетон при загрузке.
+- `src/pages/Catalog.tsx` — каталог с секциями по категориям и ссылками “show more” в категории.
+- `src/pages/Category.tsx` — категория с полноценными фильтрами (категории/размер/состояние/гендер, диапазон цены со слайдером и инпутами), сортировкой, чипами активных фильтров, sticky панелью на десктопе и drawer на мобильных.
+- `src/components/categories/CategoryFilters.tsx` — боковая панель фильтров (категория, размер, состояние, гендер, цена).
+- `src/components/categories/CategoryFiltersDrawer.tsx` — мобильный/узкий режим: drawer с теми же фильтрами, кнопками Apply/Cancel и чипами выбранных значений.
+- `src/constants/filters-presets.ts` — пресеты фильтров с `labelKey` для перевода (категории, размеры, состояние, гендер).
 - `src/components/layout/AppLayout.tsx` — общий лейаут приложения (фиксированный хедер, контент с отступом под него, футер, подключение сайдбара).
 - `src/components/layout/Footer.tsx` — футер с описанием маркетплейса и ссылками (Marketplace, Support, Company).
 - `src/App.tsx` — точка входа, оборачивает страницы в `SidebarProvider` и `AppLayout`.

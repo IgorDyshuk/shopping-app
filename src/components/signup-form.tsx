@@ -19,8 +19,9 @@ import { Input } from "@/components/ui/input";
 
 export function SignupForm({
   className,
+  onSwitchToLogin,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { onSwitchToLogin?: () => void }) {
   const { t } = useTranslation();
 
   return (
@@ -80,7 +81,15 @@ export function SignupForm({
                 <Button type="submit">{t("authForm.signup.submit")}</Button>
                 <FieldDescription className="text-center">
                   {t("authForm.signup.footer")}{" "}
-                  <a href="#">{t("authForm.signup.footerLink")}</a>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onSwitchToLogin?.();
+                    }}
+                  >
+                    {t("authForm.signup.footerLink")}
+                  </a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

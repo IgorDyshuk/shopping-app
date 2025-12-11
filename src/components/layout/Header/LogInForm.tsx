@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { GalleryVerticalEnd } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -13,9 +15,22 @@ type LogInProps = {
 
 export default function LogIn({ className }: LogInProps) {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setOpen(true);
+    document.addEventListener("open-login", handleOpen as EventListener);
+    return () =>
+      document.removeEventListener("open-login", handleOpen as EventListener);
+  }, []);
+
+  const switchToSignup = () => {
+    setOpen(false);
+    document.dispatchEvent(new CustomEvent("open-signup"));
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -24,6 +39,7 @@ export default function LogIn({ className }: LogInProps) {
             "rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground",
             className
           )}
+          onClick={() => setOpen(true)}
         >
           {t("auth.login")}
         </Button>
@@ -40,7 +56,7 @@ export default function LogIn({ className }: LogInProps) {
               </div>
               website name.
             </a>
-            <LoginForm />
+            <LoginForm onSwitchToSignup={switchToSignup} />
           </div>
         </div>
       </DialogContent>
