@@ -13,45 +13,27 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Link, useNavigate } from "react-router-dom";
+import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 
-const drops = [
-  {
-    title: "Сегодняшний дроп",
-    href: "#drops-today",
-    description: "Свежее поступление вещей блогеров — успей купить первым.",
-  },
-  {
-    title: "Календарь дропов",
-    href: "#drops-calendar",
-    description: "Следи за расписанием будущих релизов.",
-  },
-  {
-    title: "Редкие лоты",
-    href: "#drops-archive",
-    description: "Последние экземпляры из прошедших дропов.",
-  },
-];
+const clothingCategory = CATALOG_CATEGORIES.clothing;
+const electronicsCategory = CATALOG_CATEGORIES.electronics;
+const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 
 const catalog = [
   {
     title: "Одежда",
-    href: "#catalog-clothes",
+    href: clothingCategory,
     description: "Худи, футболки, джинсы и коллаборации.",
   },
   {
     title: "Обувь",
-    href: "#catalog-sneakers",
+    href: electronicsCategory,
     description: "Сникеры и лимитированные пары.",
   },
   {
     title: "Аксессуары",
-    href: "#catalog-accessories",
+    href: jeweleryCategory,
     description: "Сумки, часы, украшения от блогеров.",
-  },
-  {
-    title: "Гаджеты",
-    href: "#catalog-gadgets",
-    description: "Техника и сетапы инфлюенсеров.",
   },
 ];
 
@@ -84,39 +66,27 @@ export function NavigationMenuComplete() {
     >
       <NavigationMenuList className="flex-wrap z-100">
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Дропы</NavigationMenuTrigger>
+          <NavigationMenuTrigger onClick={() => navigate("/catalog")}>
+            Каталог
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <Link
                     className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                    to="#drops"
+                    to="/catalog"
                   >
                     <div className="mb-2 text-lg font-medium sm:mt-4">
-                      Эксклюзивные дропы
+                      Весь каталог
                     </div>
                     <p className="text-muted-foreground text-sm leading-tight">
-                      Следи за расписанием релизов и забирай редкие вещи
-                      блогеров первым.
+                      Одежда, электроника, украшения, дропы блогеров — выбери
+                      категорию и фильтруй в одном месте.{" "}
                     </p>
                   </Link>
                 </NavigationMenuLink>
               </li>
-              {drops.map((item) => (
-                <ListItem key={item.title} href={item.href} title={item.title}>
-                  {item.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger onClick={() => navigate("/catalog")}>
-            Каталог
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {catalog.map((item) => (
                 <ListItem key={item.title} href={item.href} title={item.title}>
                   {item.description}
@@ -161,12 +131,12 @@ function ListItem({
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <a href={href}>
+        <Link to={`/category/${encodeURIComponent(href)}`}>
           <div className="text-sm leading-none font-medium">{title}</div>
           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   );

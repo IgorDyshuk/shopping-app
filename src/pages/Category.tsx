@@ -33,10 +33,11 @@ import {
   defaultSizeOptions,
   presetCategoryOptions,
   sneakerSizeOptions,
+  genderOptions,
 } from "@/constants/category-presets";
 import { FilterChips } from "@/components/categories/FilterChips";
-import { useFilterChips } from "@/hooks/categoty-hooks/use-filter-chips";
-import { useSortOptions } from "@/hooks/categoty-hooks/use-sort-options";
+import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
+import { useSortOptions } from "@/hooks/category-hooks/use-sort-options";
 
 function Category() {
   const { category = "" } = useParams<{ category: string }>();
@@ -84,6 +85,12 @@ function Category() {
     return defaultSizeOptions;
   }, [presetKey]);
 
+  const genderOptionsForCategory = useMemo(() => {
+    const lower = decodedCategory.toLowerCase();
+    if (lower.includes("men") || lower.includes("women")) return [];
+    return presetKey === "clothing" ? genderOptions : [];
+  }, [presetKey, decodedCategory]);
+
   const [sortBy, setSortBy] = useState("popularity");
   const [layout, setLayout] = useState<"dense" | "spacious">("dense");
   const [activeCategoryFilters, setActiveCategoryFilters] = useState<
@@ -95,6 +102,9 @@ function Category() {
   const [activeConditionFilters, setActiveConditionFilters] = useState<
     Set<string>
   >(() => new Set());
+  const [activeGenderFilters, setActiveGenderFilters] = useState<Set<string>>(
+    () => new Set()
+  );
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 767px)");
@@ -103,6 +113,12 @@ function Category() {
   const deriveSize = (id: number) => sizeOptions[id % sizeOptions.length].id;
   const deriveCondition = (id: number) =>
     conditionOptions[id % conditionOptions.length].id;
+  const getProductGender = (p: { category?: string }) => {
+    const cat = p.category?.toLowerCase() ?? "";
+    if (cat.includes("women")) return "women";
+    if (cat.includes("men")) return "men";
+    return "unisex";
+  };
 
   const [minPrice, maxPrice] = useMemo(() => {
     if (!products || products.length === 0) return [0, 0];
@@ -134,12 +150,14 @@ function Category() {
       activeCategoryFilters.size +
       activeSizeFilters.size +
       activeConditionFilters.size +
+      activeGenderFilters.size +
       (priceFiltered ? 1 : 0)
     );
   }, [
     activeCategoryFilters.size,
     activeSizeFilters.size,
     activeConditionFilters.size,
+    activeGenderFilters.size,
     priceRange,
     minPrice,
     maxPrice,
@@ -152,6 +170,8 @@ function Category() {
     categorySet: activeCategoryFilters,
     sizeSet: activeSizeFilters,
     conditionSet: activeConditionFilters,
+    genderOptions: genderOptionsForCategory,
+    genderSet: activeGenderFilters,
     priceRange,
     minPrice,
     maxPrice,
@@ -174,6 +194,12 @@ function Category() {
         next.delete(id);
         return next;
       }),
+    makeClearGender: (id) => () =>
+      setActiveGenderFilters((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      }),
   });
 
   const sortOptions = useSortOptions();
@@ -185,6 +211,7 @@ function Category() {
       priceRange[0] !== minPrice || priceRange[1] !== maxPrice;
     const hasSizeFilters = activeSizeFilters.size > 0;
     const hasConditionFilters = activeConditionFilters.size > 0;
+    const hasGenderFilters = activeGenderFilters.size > 0;
 
     return products.filter((p) => {
       const categoryPass =
@@ -206,18 +233,25 @@ function Category() {
           (id) => deriveCondition(p.id) === id || !id
         );
 
-      return categoryPass && pricePass && sizePass && conditionPass;
+      const genderPass =
+        !hasGenderFilters || activeGenderFilters.has(getProductGender(p));
+
+      return (
+        categoryPass && pricePass && sizePass && conditionPass && genderPass
+      );
     });
   }, [
     products,
     activeCategoryFilters,
     activeSizeFilters,
     activeConditionFilters,
+    activeGenderFilters,
     priceRange,
     minPrice,
     maxPrice,
     deriveCondition,
     deriveSize,
+    getProductGender,
   ]);
 
   const sortedProducts = useMemo(() => {
@@ -300,9 +334,11 @@ function Category() {
                     categoryOptions={categoryOptions}
                     sizeOptions={sizeOptions}
                     conditionOptions={conditionOptions}
+                    genderOptions={genderOptionsForCategory}
                     activeCategoryFilters={activeCategoryFilters}
                     activeSizeFilters={activeSizeFilters}
                     activeConditionFilters={activeConditionFilters}
+                    activeGenderFilters={activeGenderFilters}
                     priceRange={priceRange}
                     minPrice={minPrice}
                     maxPrice={maxPrice}
@@ -310,11 +346,13 @@ function Category() {
                       categories,
                       sizes,
                       conditions,
+                      genders,
                       priceRange,
                     }) => {
                       setActiveCategoryFilters(categories);
                       setActiveSizeFilters(sizes);
                       setActiveConditionFilters(conditions);
+                      setActiveGenderFilters(genders ?? new Set());
                       setPriceRange(priceRange);
                     }}
                   />
@@ -331,6 +369,7 @@ function Category() {
                         setActiveCategoryFilters(new Set());
                         setActiveSizeFilters(new Set());
                         setActiveConditionFilters(new Set());
+                        setActiveGenderFilters(new Set());
                         setPriceRange([minPrice, maxPrice]);
                       }}
                     />
@@ -404,9 +443,11 @@ function Category() {
                   categoryOptions={categoryOptions}
                   sizeOptions={sizeOptions}
                   conditionOptions={conditionOptions}
+                  genderOptions={genderOptionsForCategory}
                   activeCategoryFilters={activeCategoryFilters}
                   activeSizeFilters={activeSizeFilters}
                   activeConditionFilters={activeConditionFilters}
+                  activeGenderFilters={activeGenderFilters}
                   priceRange={priceRange}
                   minPrice={minPrice}
                   maxPrice={maxPrice}
@@ -428,6 +469,14 @@ function Category() {
                   }
                   onConditionToggle={(id, checked) =>
                     setActiveConditionFilters((prev) => {
+                      const next = new Set(prev);
+                      if (checked) next.add(id);
+                      else next.delete(id);
+                      return next;
+                    })
+                  }
+                  onGenderToggle={(id, checked) =>
+                    setActiveGenderFilters((prev) => {
                       const next = new Set(prev);
                       if (checked) next.add(id);
                       else next.delete(id);

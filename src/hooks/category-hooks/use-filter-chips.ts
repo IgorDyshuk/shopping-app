@@ -15,6 +15,8 @@ type UseFilterChipsParams = {
   categorySet: Set<string>;
   sizeSet: Set<string>;
   conditionSet: Set<string>;
+  genderOptions?: FilterOption[];
+  genderSet?: Set<string>;
   priceRange: [number, number];
   minPrice: number;
   maxPrice: number;
@@ -22,6 +24,7 @@ type UseFilterChipsParams = {
   makeClearCategory: (id: string) => () => void;
   makeClearSize: (id: string) => () => void;
   makeClearCondition: (id: string) => () => void;
+  makeClearGender?: (id: string) => () => void;
 };
 
 export function useFilterChips({
@@ -31,6 +34,8 @@ export function useFilterChips({
   categorySet,
   sizeSet,
   conditionSet,
+  genderOptions,
+  genderSet,
   priceRange,
   minPrice,
   maxPrice,
@@ -38,6 +43,7 @@ export function useFilterChips({
   makeClearCategory,
   makeClearSize,
   makeClearCondition,
+  makeClearGender,
 }: UseFilterChipsParams) {
   return useMemo<ChipItem[]>(() => {
     const items: ChipItem[] = [];
@@ -71,6 +77,18 @@ export function useFilterChips({
       });
     });
 
+    if (genderOptions && genderSet && makeClearGender) {
+      Array.from(genderSet).forEach((id) => {
+        const label =
+          genderOptions.find((opt) => opt.id === id)?.label || id;
+        items.push({
+          key: `gender-${id}`,
+          label,
+          onClear: makeClearGender(id),
+        });
+      });
+    }
+
     const hasPrice = priceRange[0] !== minPrice || priceRange[1] !== maxPrice;
     if (hasPrice) {
       items.push({
@@ -87,15 +105,18 @@ export function useFilterChips({
     categorySet,
     sizeSet,
     conditionSet,
+    genderSet,
     priceRange,
     minPrice,
     maxPrice,
     categoryOptions,
     sizeOptions,
     conditionOptions,
+    genderOptions,
     onClearPrice,
     makeClearCategory,
     makeClearSize,
     makeClearCondition,
+    makeClearGender,
   ]);
 }

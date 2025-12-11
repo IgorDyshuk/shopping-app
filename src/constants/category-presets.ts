@@ -26,6 +26,11 @@ export const conditionOptions = [
   { id: "used", label: "Pre-owned" },
 ];
 
+export const genderOptions = [
+  { id: "men", label: "Men" },
+  { id: "women", label: "Women" },
+];
+
 export const presetCategoryOptions = {
   clothing: [
     { id: "tops", label: "Tops" },

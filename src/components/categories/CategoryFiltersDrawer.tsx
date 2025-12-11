@@ -10,7 +10,7 @@ import {
 import type { FilterOption } from "./CategoryFilters";
 import { CategoryFilters } from "./CategoryFilters";
 import { FilterChips } from "./FilterChips";
-import { useFilterChips } from "@/hooks/categoty-hooks/use-filter-chips";
+import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { Funnel } from "lucide-react";
 
 type CategoryFiltersDrawerProps = {
@@ -20,9 +20,11 @@ type CategoryFiltersDrawerProps = {
   categoryOptions: FilterOption[];
   sizeOptions: FilterOption[];
   conditionOptions: FilterOption[];
+  genderOptions?: FilterOption[];
   activeCategoryFilters: Set<string>;
   activeSizeFilters: Set<string>;
   activeConditionFilters: Set<string>;
+  activeGenderFilters?: Set<string>;
   priceRange: [number, number];
   minPrice: number;
   maxPrice: number;
@@ -30,6 +32,7 @@ type CategoryFiltersDrawerProps = {
     categories: Set<string>;
     sizes: Set<string>;
     conditions: Set<string>;
+    genders?: Set<string>;
     priceRange: [number, number];
   }) => void;
 };
@@ -41,9 +44,11 @@ export function CategoryFiltersDrawer({
   categoryOptions,
   sizeOptions,
   conditionOptions,
+  genderOptions,
   activeCategoryFilters,
   activeSizeFilters,
   activeConditionFilters,
+  activeGenderFilters,
   priceRange,
   minPrice,
   maxPrice,
@@ -58,6 +63,9 @@ export function CategoryFiltersDrawer({
   const [tempConditionFilters, setTempConditionFilters] = useState<Set<string>>(
     () => new Set()
   );
+  const [tempGenderFilters, setTempGenderFilters] = useState<Set<string>>(
+    () => new Set()
+  );
   const [tempPriceRange, setTempPriceRange] = useState<[number, number]>([
     0, 0,
   ]);
@@ -67,6 +75,7 @@ export function CategoryFiltersDrawer({
       setTempCategoryFilters(new Set(activeCategoryFilters));
       setTempSizeFilters(new Set(activeSizeFilters));
       setTempConditionFilters(new Set(activeConditionFilters));
+      setTempGenderFilters(new Set(activeGenderFilters ?? []));
       setTempPriceRange(priceRange);
     }
   }, [
@@ -74,6 +83,7 @@ export function CategoryFiltersDrawer({
     activeCategoryFilters,
     activeSizeFilters,
     activeConditionFilters,
+    activeGenderFilters,
     priceRange,
   ]);
 
@@ -93,6 +103,7 @@ export function CategoryFiltersDrawer({
       categories: new Set(tempCategoryFilters),
       sizes: new Set(tempSizeFilters),
       conditions: new Set(tempConditionFilters),
+      genders: new Set(tempGenderFilters),
       priceRange: tempPriceRange,
     });
     onOpenChange(false);
@@ -105,6 +116,8 @@ export function CategoryFiltersDrawer({
     categorySet: tempCategoryFilters,
     sizeSet: tempSizeFilters,
     conditionSet: tempConditionFilters,
+    genderOptions,
+    genderSet: tempGenderFilters,
     priceRange: tempPriceRange,
     minPrice,
     maxPrice,
@@ -127,6 +140,15 @@ export function CategoryFiltersDrawer({
         next.delete(id);
         return next;
       }),
+    makeClearGender:
+      genderOptions && tempGenderFilters
+        ? (id) => () =>
+            setTempGenderFilters((prev) => {
+              const next = new Set(prev);
+              next.delete(id);
+              return next;
+            })
+        : undefined,
   });
 
   return (
@@ -154,6 +176,7 @@ export function CategoryFiltersDrawer({
                 setTempCategoryFilters(emptySet);
                 setTempSizeFilters(emptySet);
                 setTempConditionFilters(emptySet);
+                setTempGenderFilters(new Set());
                 setTempPriceRange([minPrice, maxPrice]);
               }}
             />
@@ -162,9 +185,11 @@ export function CategoryFiltersDrawer({
             categoryOptions={categoryOptions}
             sizeOptions={sizeOptions}
             conditionOptions={conditionOptions}
+            genderOptions={genderOptions}
             activeCategoryFilters={tempCategoryFilters}
             activeSizeFilters={tempSizeFilters}
             activeConditionFilters={tempConditionFilters}
+            activeGenderFilters={tempGenderFilters}
             priceRange={tempPriceRange}
             minPrice={minPrice}
             maxPrice={maxPrice}
@@ -184,8 +209,16 @@ export function CategoryFiltersDrawer({
                 return next;
               })
             }
-            onConditionToggle={(id, checked) =>
-              setTempConditionFilters((prev) => {
+              onConditionToggle={(id, checked) =>
+                setTempConditionFilters((prev) => {
+                  const next = new Set(prev);
+                  if (checked) next.add(id);
+                  else next.delete(id);
+                  return next;
+                })
+              }
+            onGenderToggle={(id, checked) =>
+              setTempGenderFilters((prev) => {
                 const next = new Set(prev);
                 if (checked) next.add(id);
                 else next.delete(id);

@@ -12,15 +12,18 @@ type CategoryFiltersProps = {
   categoryOptions: FilterOption[];
   sizeOptions: FilterOption[];
   conditionOptions: FilterOption[];
+  genderOptions?: FilterOption[];
   activeCategoryFilters: Set<string>;
   activeSizeFilters: Set<string>;
   activeConditionFilters: Set<string>;
+  activeGenderFilters?: Set<string>;
   priceRange: [number, number];
   minPrice: number;
   maxPrice: number;
   onCategoryToggle: (id: string, checked: boolean) => void;
   onSizeToggle: (id: string, checked: boolean) => void;
   onConditionToggle: (id: string, checked: boolean) => void;
+  onGenderToggle?: (id: string, checked: boolean) => void;
   onPriceChange: (min: number, max: number) => void;
   className?: string;
 };
@@ -29,15 +32,18 @@ export function CategoryFilters({
   categoryOptions,
   sizeOptions,
   conditionOptions,
+  genderOptions = [],
   activeCategoryFilters,
   activeSizeFilters,
   activeConditionFilters,
+  activeGenderFilters,
   priceRange,
   minPrice,
   maxPrice,
   onCategoryToggle,
   onSizeToggle,
   onConditionToggle,
+  onGenderToggle,
   onPriceChange,
   className,
 }: CategoryFiltersProps) {
@@ -49,6 +55,29 @@ export function CategoryFilters({
       )}
     >
       <h2 className="text-lg font-semibold">Фильтры</h2>
+
+      {genderOptions.length > 0 && activeGenderFilters && onGenderToggle && (
+        <div className="space-y-3 rounded-lg border border-dashed p-3">
+          <p className="text-sm font-medium text-muted-foreground">Пол</p>
+          <div className="space-y-2">
+            {genderOptions.map((filter) => (
+              <label
+                key={filter.id}
+                className="flex items-center gap-2 text-sm text-foreground"
+              >
+                <Checkbox
+                  id={`gender-${filter.id}`}
+                  checked={activeGenderFilters.has(filter.id)}
+                  onCheckedChange={(val) =>
+                    onGenderToggle(filter.id, Boolean(val))
+                  }
+                />
+                {filter.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="space-y-3 rounded-lg border border-dashed p-3">
         <p className="text-sm font-medium text-muted-foreground">Категория</p>

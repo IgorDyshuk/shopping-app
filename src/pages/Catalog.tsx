@@ -12,18 +12,21 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 
 function Catalog() {
-  const menCategory = "men's clothing";
-  const womenCategory = "women's clothing";
-  const electronicsCategory = "electronics";
-  const jeweleryCategory = "jewelery";
+  const menCategory = CATALOG_CATEGORIES.men;
+  const womenCategory = CATALOG_CATEGORIES.women;
+  const clothingCategory = CATALOG_CATEGORIES.clothing;
+  const electronicsCategory = CATALOG_CATEGORIES.electronics;
+  const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 
   const {
     data: menClothes,
     isLoading,
     isError,
   } = useFilteredProduct(menCategory);
+  const { data: clothingAll } = useFilteredProduct(clothingCategory);
   const { data: womenClothes } = useFilteredProduct(womenCategory);
   const { data: electronics } = useFilteredProduct(electronicsCategory);
   const { data: jewelery } = useFilteredProduct(jeweleryCategory);
@@ -58,6 +61,16 @@ function Catalog() {
           <p className="text-muted-foreground">No products found.</p>
         ) : (
           <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
+            <ItemsCarousel
+              title="Clothing"
+              items={clothingAll ?? []}
+              getItemKey={(product) => product.id}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+              peekNext={true}
+              viewAllLink={`/category/${encodeURIComponent(clothingCategory)}`}
+              controlsInline
+              renderItem={(product) => <ProductCard product={product} />}
+            />
             <ItemsCarousel
               title="Men's clothing"
               items={menClothes ?? []}

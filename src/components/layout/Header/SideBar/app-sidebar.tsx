@@ -27,6 +27,11 @@ import {
 } from "@/components/ui/sidebar";
 import LogIn from "../LogInForm";
 import SignUp from "../SIgnUpForm";
+import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
+
+const clothingCategory = CATALOG_CATEGORIES.clothing;
+const electronicsCategory = CATALOG_CATEGORIES.electronics;
+const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 
 const data = {
   user: {
@@ -53,26 +58,6 @@ const data = {
       icon: Home,
     },
     {
-      title: "Дропы",
-      url: "#drops",
-      icon: Sparkles,
-      isActive: true,
-      items: [
-        {
-          title: "Сегодняшний дроп",
-          url: "#drops-today",
-        },
-        {
-          title: "Календарь",
-          url: "#drops-calendar",
-        },
-        {
-          title: "Редкие лоты",
-          url: "#drops-archive",
-        },
-      ],
-    },
-    {
       title: "Каталог",
       url: "/catalog",
       icon: Boxes,
@@ -84,19 +69,15 @@ const data = {
         },
         {
           title: "Одежда",
-          url: `/category/${encodeURIComponent("men's clothing")}`,
+          url: `/category/${encodeURIComponent(clothingCategory)}`,
         },
         {
           title: "Обувь",
-          url: `/category/${encodeURIComponent("women's clothing")}`,
+          url: `/category/${encodeURIComponent(electronicsCategory)}`,
         },
         {
           title: "Аксессуары",
-          url: `/category/${encodeURIComponent("jewelery")}`,
-        },
-        {
-          title: "Гаджеты",
-          url: `/category/${encodeURIComponent("electronics")}`,
+          url: `/category/${encodeURIComponent(jeweleryCategory)}`,
         },
       ],
     },
@@ -104,6 +85,7 @@ const data = {
       title: "Блогеры",
       url: "#creators",
       icon: Users,
+      isActive: true,
       items: [
         {
           title: "Топ блогеры",
