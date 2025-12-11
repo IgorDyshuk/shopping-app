@@ -5,6 +5,7 @@ import {
   CreditCard,
   LogOut,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -33,6 +34,7 @@ export function NavUser({
   };
 }) {
   const { isMobile, state } = useSidebar();
+  const { t } = useTranslation();
 
   const compactButton = (
     <SidebarMenuButton className="justify-center px-0">
@@ -89,21 +91,21 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                {t("sidebar.account.account")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Orders
+                {t("sidebar.account.orders")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                {t("sidebar.account.notifications")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              {t("sidebar.account.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

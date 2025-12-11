@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { useProducts } from "@/hooks/api-hooks/useProducts";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
@@ -5,6 +7,7 @@ import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
 
 function Home() {
   const { data: products, isLoading, isError } = useProducts();
+  const { t } = useTranslation("home");
 
   return (
     <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30">
@@ -12,11 +15,11 @@ function Home() {
         {isLoading ? (
           <HomeSkeleton />
         ) : isError ? (
-          <p className="text-destructive">Failed to load products.</p>
+          <p className="text-destructive">{t("error")}</p>
         ) : (
           <>
             <ItemsCarousel
-              title="Our popular bloggers"
+              title={t("carousels.popularBloggers")}
               items={products ?? []}
               getItemKey={(product) => product.id}
               autoplay
@@ -29,7 +32,7 @@ function Home() {
             />
 
             <ItemsCarousel
-              title="Popular picks"
+              title={t("carousels.popularPicks")}
               items={products ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
@@ -40,7 +43,7 @@ function Home() {
             />
 
             <ItemsCarousel
-              title="Trending now"
+              title={t("carousels.trending")}
               items={products ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, sm: 2, md: 2, lg: 2, xl: 2 }}
@@ -51,7 +54,7 @@ function Home() {
             />
 
             <ItemsCarousel
-              title="How it works"
+              title={t("carousels.howItWorks")}
               items={products ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 1, sm: 1, md: 1, lg: 1, xl: 1 }}
@@ -60,7 +63,7 @@ function Home() {
             />
 
             <ItemsCarousel
-              title="New arrivals"
+              title={t("carousels.newArrivals")}
               items={products ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, sm: 2, md: 3, lg: 4, xl: 6 }}

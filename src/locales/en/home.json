@@ -1,3 +1,11 @@
 {
-  "welcome": "Welcome to React and react-i18next"
+  "welcome": "Welcome to React and react-i18next",
+  "carousels": {
+    "popularBloggers": "Our popular bloggers",
+    "popularPicks": "Popular picks",
+    "trending": "Trending now",
+    "howItWorks": "How it works",
+    "newArrivals": "New arrivals"
+  },
+  "error": "Failed to load products."
 }

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
 import { ProductCard } from "@/components/products/ProductCard";
@@ -20,6 +21,7 @@ function Catalog() {
   const clothingCategory = CATALOG_CATEGORIES.clothing;
   const electronicsCategory = CATALOG_CATEGORIES.electronics;
   const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
+  const { t } = useTranslation("catalog");
 
   const {
     data: menClothes,
@@ -37,32 +39,32 @@ function Catalog() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">Home</Link>
+              <Link to="/">{t("breadcrumb.home")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Catalog</BreadcrumbPage>
+            <BreadcrumbPage>{t("breadcrumb.catalog")}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="flex flex-col gap-8 my-7.5">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold">Catalog</h1>
-          <p className="text-muted-foreground">All we have</p>
+          <h1 className="text-3xl font-semibold">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
         </div>
 
         {isLoading ? (
           <HomeSkeleton />
         ) : isError ? (
-          <p className="text-destructive">Failed to load product.</p>
+          <p className="text-destructive">{t("error")}</p>
         ) : !menClothes ? (
-          <p className="text-muted-foreground">No products found.</p>
+          <p className="text-muted-foreground">{t("empty")}</p>
         ) : (
           <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
             <ItemsCarousel
-              title="Clothing"
+              title={t("sections.clothing")}
               items={clothingAll ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
@@ -72,7 +74,7 @@ function Catalog() {
               renderItem={(product) => <ProductCard product={product} />}
             />
             <ItemsCarousel
-              title="Men's clothing"
+              title={t("sections.men")}
               items={menClothes ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
@@ -82,7 +84,7 @@ function Catalog() {
               renderItem={(product) => <ProductCard product={product} />}
             />
             <ItemsCarousel
-              title="Women's clothing"
+              title={t("sections.women")}
               items={womenClothes ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
@@ -92,7 +94,7 @@ function Catalog() {
               renderItem={(product) => <ProductCard product={product} />}
             />
             <ItemsCarousel
-              title="Electronics"
+              title={t("sections.electronics")}
               items={electronics ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
@@ -104,7 +106,7 @@ function Catalog() {
               renderItem={(product) => <ProductCard product={product} />}
             />
             <ItemsCarousel
-              title="Jewelerys"
+              title={t("sections.jewelery")}
               items={jewelery ?? []}
               getItemKey={(product) => product.id}
               perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
@@ -114,8 +116,8 @@ function Catalog() {
               renderItem={(product) => <ProductCard product={product} />}
             />
             {/* <pre className="max-h-[480px] overflow-auto rounded bg-muted p-3 text-xs leading-relaxed">
-            {JSON.stringify(products, null, 2)}
-          </pre> */}
+              {JSON.stringify(products, null, 2)}
+            </pre> */}
           </div>
         )}
       </div>

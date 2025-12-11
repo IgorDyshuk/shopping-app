@@ -12,6 +12,7 @@ import { CategoryFilters } from "./CategoryFilters";
 import { FilterChips } from "./FilterChips";
 import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { Funnel } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type CategoryFiltersDrawerProps = {
   label: [string, string];
@@ -54,6 +55,7 @@ export function CategoryFiltersDrawer({
   maxPrice,
   onApply,
 }: CategoryFiltersDrawerProps) {
+  const { t } = useTranslation("category");
   const [tempCategoryFilters, setTempCategoryFilters] = useState<Set<string>>(
     () => new Set()
   );
@@ -121,6 +123,10 @@ export function CategoryFiltersDrawer({
     priceRange: tempPriceRange,
     minPrice,
     maxPrice,
+    priceLabel: t("filters.range", {
+      min: tempPriceRange[0].toFixed(0),
+      max: tempPriceRange[1].toFixed(0),
+    }),
     onClearPrice: () => setTempPriceRange([minPrice, maxPrice]),
     makeClearCategory: (id) => () =>
       setTempCategoryFilters((prev) => {
@@ -149,6 +155,8 @@ export function CategoryFiltersDrawer({
               return next;
             })
         : undefined,
+    getLabel: (opt) =>
+      opt ? (opt.labelKey ? t(opt.labelKey) : opt.label) : "",
   });
 
   return (
@@ -161,7 +169,9 @@ export function CategoryFiltersDrawer({
         >
           <Funnel className="size-5 lg:size-6 text-primary" strokeWidth={2.5} />
           <div className="flex flex-col items-start leading-tight">
-            <span className="">Filters {label[0]}</span>
+            <span className="">
+              {t("filters.drawerTrigger")} {label[0]}
+            </span>
             <span className="text-muted-foreground text-xs">{label[1]}</span>
           </div>
         </Button>
@@ -236,10 +246,10 @@ export function CategoryFiltersDrawer({
               className="flex-1 max-[480px]:w-full"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t("filters.cancel")}
             </Button>
             <Button className="flex-1 max-[480px]:w-full" onClick={handleApply}>
-              Apply
+              {t("filters.apply")}
             </Button>
           </div>
         </SheetFooter>

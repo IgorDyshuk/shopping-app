@@ -1,0 +1,73 @@
+{
+  "breadcrumb": {
+    "home": "Home",
+    "catalog": "Catalog"
+  },
+  "titleFallback": "Category",
+  "subtitle": "Products filtered by category: {{category}}",
+  "found": "Found {{count}} {{itemLabel}}",
+  "items": {
+    "singular": "item",
+    "plural": "items"
+  },
+  "categories": {
+    "clothing": "Clothing",
+    "men": "Men's clothing",
+    "women": "Women's clothing",
+    "electronics": "Electronics",
+    "jewelery": "Jewelry",
+    "default": "Category"
+  },
+  "sortedLabel": "Sorted",
+  "loadingError": "Failed to load products.",
+  "empty": "No products found for these filters.",
+  "filters": {
+    "header": "Filters",
+    "gender": "Gender",
+    "category": "Category",
+    "size": "Size",
+    "price": "Price",
+    "condition": "Condition",
+    "range": "${{min}} – ${{max}}",
+    "clearAll": "Clear all",
+    "drawerTrigger": "Filters",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "options": {
+      "gender": {
+        "men": "Men",
+        "women": "Women"
+      },
+      "condition": {
+        "new": "New",
+        "used": "Pre-owned"
+      },
+      "size": {
+        "one": "One size",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "categories": {
+        "outerwear": "Outerwear",
+        "longSleeves": "Sweatshirts & Long sleeves",
+        "tees": "Tees & Tanks",
+        "bottoms": "Pants & Shorts",
+        "lifestyle": "Lifestyle",
+        "running": "Running",
+        "basketball": "Basketball",
+        "trail": "Trail / Hiking",
+        "bags": "Bags",
+        "hats": "Hats & Caps",
+        "jewelry": "Jewelry",
+        "tech": "Tech accessories"
+      }
+    }
+  },
+  "sorting": {
+    "popularity": "Popularity",
+    "rating": "Rating",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low"
+  }
+}

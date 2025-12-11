@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   Carousel,
@@ -51,6 +52,7 @@ export function ItemsCarousel<T>({
   viewAllLink,
 }: ProductCarouselProps<T>) {
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [columns, setColumns] = useState<number>(clampCount(perRow.base));
 
@@ -125,7 +127,7 @@ export function ItemsCarousel<T>({
                   to={viewAllLink}
                   className="text-xs sm:text-sm text-primary hover:underline"
                 >
-                  Show more
+                  {t("actions.viewMore")}
                 </Link>
               )}
 

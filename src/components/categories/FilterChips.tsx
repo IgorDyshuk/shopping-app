@@ -1,5 +1,7 @@
 import { X } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +24,7 @@ export function FilterChips({
   labelText,
   className,
 }: FilterChipsProps) {
+  const { t } = useTranslation("category");
   if (chips.length === 0) return null;
 
   return (
@@ -34,7 +37,7 @@ export function FilterChips({
           className="h-8 rounded-full px-3"
           onClick={onClearAll}
         >
-          Clear all
+          {t("filters.clearAll")}
         </Button>
       )}
       {labelText && <span className="text-muted-foreground">{labelText}</span>}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SearchIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { useProducts } from "@/hooks/api-hooks/useProducts";
 import {
@@ -26,6 +27,7 @@ function SearchBar({
   const { data: products, isLoading } = useProducts();
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -100,7 +102,7 @@ function SearchBar({
               setTimeout(() => inputRef.current?.blur(), 0);
             }
           }}
-          placeholder="Search products..."
+          placeholder={t("search.placeholder")}
           aria-expanded={showSuggestions}
           className="bg-transparent"
         />
@@ -117,11 +119,11 @@ function SearchBar({
           <div className="max-h-96 overflow-auto">
             {isLoading ? (
               <div className="px-3 py-2 text-sm text-muted-foreground">
-                Loading...
+                {t("search.loading")}
               </div>
             ) : !filtered.length ? (
               <div className="px-3 py-2 text-sm text-muted-foreground">
-                No results found.
+                {t("search.empty")}
               </div>
             ) : (
               <ul className="divide-y divide-border">

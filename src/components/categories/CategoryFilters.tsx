@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -6,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 export type FilterOption = {
   id: string;
   label: string;
+  labelKey?: string;
 };
 
 type CategoryFiltersProps = {
@@ -47,6 +50,8 @@ export function CategoryFilters({
   onPriceChange,
   className,
 }: CategoryFiltersProps) {
+  const { t } = useTranslation("category");
+
   return (
     <aside
       className={cn(
@@ -54,17 +59,23 @@ export function CategoryFilters({
         className
       )}
     >
-      <h2 className="text-lg font-semibold">Фильтры</h2>
+      <h2 className="text-lg font-semibold">{t("filters.header")}</h2>
 
       {genderOptions.length > 0 && activeGenderFilters && onGenderToggle && (
         <div className="space-y-3 rounded-lg border border-dashed p-3">
-          <p className="text-sm font-medium text-muted-foreground">Пол</p>
+          <p className="text-sm font-medium text-muted-foreground">
+            {t("filters.gender")}
+          </p>
           <div className="space-y-2">
-            {genderOptions.map((filter) => (
-              <label
-                key={filter.id}
-                className="flex items-center gap-2 text-sm text-foreground"
-              >
+              {genderOptions.map((filter) => {
+                const label = filter.labelKey
+                  ? t(filter.labelKey)
+                  : filter.label;
+                return (
+                  <label
+                    key={filter.id}
+                    className="flex items-center gap-2 text-sm text-foreground"
+                  >
                 <Checkbox
                   id={`gender-${filter.id}`}
                   checked={activeGenderFilters.has(filter.id)}
@@ -72,58 +83,80 @@ export function CategoryFilters({
                     onGenderToggle(filter.id, Boolean(val))
                   }
                 />
-                {filter.label}
+                {label}
               </label>
-            ))}
+                );
+              })}
           </div>
         </div>
       )}
 
       <div className="space-y-3 rounded-lg border border-dashed p-3">
-        <p className="text-sm font-medium text-muted-foreground">Категория</p>
+        <p className="text-sm font-medium text-muted-foreground">
+          {t("filters.category")}
+        </p>
         <div className="space-y-2">
-          {categoryOptions.map((filter) => (
-            <label
-              key={filter.id}
-              className="flex items-center gap-2 text-sm text-foreground"
-            >
-              <Checkbox
-                id={`cat-${filter.id}`}
-                checked={activeCategoryFilters.has(filter.id)}
-                onCheckedChange={(val) =>
-                  onCategoryToggle(filter.id, Boolean(val))
-                }
-              />
-              {filter.label}
-            </label>
-          ))}
+          {categoryOptions.map((filter) => {
+            const label = filter.labelKey
+              ? t(filter.labelKey)
+              : filter.label;
+            return (
+              <label
+                key={filter.id}
+                className="flex items-center gap-2 text-sm text-foreground"
+              >
+                <Checkbox
+                  id={`cat-${filter.id}`}
+                  checked={activeCategoryFilters.has(filter.id)}
+                  onCheckedChange={(val) =>
+                    onCategoryToggle(filter.id, Boolean(val))
+                  }
+                />
+                {label}
+              </label>
+            );
+          })}
         </div>
       </div>
 
       <div className="space-y-3 rounded-lg border border-dashed p-3">
-        <p className="text-sm font-medium text-muted-foreground">Размер</p>
+        <p className="text-sm font-medium text-muted-foreground">
+          {t("filters.size")}
+        </p>
         <div className="grid grid-cols-2 gap-2">
-          {sizeOptions.map((filter) => (
-            <label
-              key={filter.id}
-              className="flex items-center gap-2 text-sm text-foreground"
-            >
-              <Checkbox
-                id={`size-${filter.id}`}
-                checked={activeSizeFilters.has(filter.id)}
-                onCheckedChange={(val) => onSizeToggle(filter.id, Boolean(val))}
-              />
-              {filter.label}
-            </label>
-          ))}
+          {sizeOptions.map((filter) => {
+            const label = filter.labelKey
+              ? t(filter.labelKey)
+              : filter.label;
+            return (
+              <label
+                key={filter.id}
+                className="flex items-center gap-2 text-sm text-foreground"
+              >
+                <Checkbox
+                  id={`size-${filter.id}`}
+                  checked={activeSizeFilters.has(filter.id)}
+                  onCheckedChange={(val) =>
+                    onSizeToggle(filter.id, Boolean(val))
+                  }
+                />
+                {label}
+              </label>
+            );
+          })}
         </div>
       </div>
 
       <div className="space-y-3 rounded-lg border border-dashed p-3">
         <div className="flex items-center justify-between text-sm">
-          <p className="font-medium text-muted-foreground">Цена</p>
+          <p className="font-medium text-muted-foreground">
+            {t("filters.price")}
+          </p>
           <span className="text-xs text-muted-foreground">
-            ${priceRange[0].toFixed(0)} – ${priceRange[1].toFixed(0)}
+            {t("filters.range", {
+              min: priceRange[0].toFixed(0),
+              max: priceRange[1].toFixed(0),
+            })}
           </span>
         </div>
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -164,23 +197,30 @@ export function CategoryFilters({
       </div>
 
       <div className="space-y-3 rounded-lg border border-dashed p-3">
-        <p className="text-sm font-medium text-muted-foreground">Состояние</p>
+        <p className="text-sm font-medium text-muted-foreground">
+          {t("filters.condition")}
+        </p>
         <div className="space-y-2">
-          {conditionOptions.map((filter) => (
-            <label
-              key={filter.id}
-              className="flex items-center gap-2 text-sm text-foreground"
-            >
-              <Checkbox
-                id={`condition-${filter.id}`}
-                checked={activeConditionFilters.has(filter.id)}
-                onCheckedChange={(val) =>
-                  onConditionToggle(filter.id, Boolean(val))
-                }
-              />
-              {filter.label}
-            </label>
-          ))}
+          {conditionOptions.map((filter) => {
+            const label = filter.labelKey
+              ? t(filter.labelKey)
+              : filter.label;
+            return (
+              <label
+                key={filter.id}
+                className="flex items-center gap-2 text-sm text-foreground"
+              >
+                <Checkbox
+                  id={`condition-${filter.id}`}
+                  checked={activeConditionFilters.has(filter.id)}
+                  onCheckedChange={(val) =>
+                    onConditionToggle(filter.id, Boolean(val))
+                  }
+                />
+                {label}
+              </label>
+            );
+          })}
         </div>
       </div>
     </aside>

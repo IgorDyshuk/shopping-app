@@ -7,5 +7,127 @@
   "languages": {
     "en": "English",
     "uk": "Ukrainian"
+  },
+  "nav": {
+    "catalogTrigger": "Catalog",
+    "catalogHeroTitle": "All catalog",
+    "catalogHeroDescription": "Clothing, electronics, jewelry, creator drops — choose a category and filter in one place.",
+    "catalog": {
+      "clothing": {
+        "title": "Clothing",
+        "description": "Hoodies, tees, jeans, collabs."
+      },
+      "sneakers": {
+        "title": "Footwear",
+        "description": "Sneakers and limited pairs."
+      },
+      "accessories": {
+        "title": "Accessories",
+    "description": "Bags, watches, jewelry from creators."
+      }
+    },
+    "creatorsTrigger": "Creators",
+    "creators": {
+      "top": {
+        "title": "Top creators",
+        "description": "Popular showcases with fresh drops."
+      },
+      "all": {
+        "title": "All creators",
+        "description": "Search by name or nickname."
+      },
+      "collabs": {
+        "title": "Collabs",
+        "description": "Special drops with brands."
+      }
+    },
+    "sell": "Sell item",
+    "support": "FAQ & Support"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "loading": "Loading...",
+    "empty": "No results found."
+  },
+  "auth": {
+    "login": "Log in",
+    "signup": "Sign up"
+  },
+  "authForm": {
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "name": "Full Name",
+      "emailPlaceholder": "m@example.com",
+      "namePlaceholder": "John Doe"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Login with your Apple or Google account",
+      "apple": "Login with Apple",
+      "google": "Login with Google",
+      "separator": "Or continue with",
+      "forgot": "Forgot your password?",
+      "submit": "Login",
+      "footer": "Don't have an account?",
+      "footerLink": "Sign up"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Enter your email below to create your account",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "helper": "Must be at least 8 characters long.",
+      "submit": "Create Account",
+      "footer": "Already have an account?",
+      "footerLink": "Sign in"
+    }
+  },
+  "actions": {
+    "viewMore": "View more"
+  },
+  "footer": {
+    "brand": "Test Shop",
+    "description": "Resale marketplace for influencer drops and curated finds. Buy, sell, and discover limited pieces from your favorite creators.",
+    "marketplace": "Marketplace",
+    "support": "Support",
+    "company": "Company",
+    "links": {
+      "drops": "Drops",
+      "catalog": "Catalog",
+      "creators": "Creators",
+      "faq": "FAQ",
+      "help": "Help center",
+      "returns": "Returns",
+      "about": "About",
+      "terms": "Terms",
+      "privacy": "Privacy"
+    },
+    "rights": "All rights reserved."
+  },
+  "sidebar": {
+    "sectionTitle": "Platform",
+    "main": {
+      "home": "Home",
+      "catalog": "Catalog",
+      "catalogAll": "All catalog",
+      "catalogClothing": "Clothing",
+      "catalogSneakers": "Footwear",
+      "catalogAccessories": "Accessories",
+      "creators": "Creators",
+      "creatorsTop": "Top creators",
+      "creatorsAll": "All creators",
+      "creatorsCollabs": "Collabs"
+    },
+    "footer": {
+      "support": "Support",
+      "faq": "FAQ"
+    },
+    "account": {
+      "account": "Account",
+      "orders": "Orders",
+      "notifications": "Notifications",
+      "logout": "Log out"
+    }
   }
 }

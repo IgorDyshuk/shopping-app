@@ -1,4 +1,5 @@
 import { GalleryVerticalEnd } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -10,6 +11,8 @@ type SignUpProps = {
 };
 
 export default function SignUp({ className }: SignUpProps) {
+  const { t } = useTranslation();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -19,7 +22,7 @@ export default function SignUp({ className }: SignUpProps) {
           type="submit"
           className={cn("rounded-full px-4", className)}
         >
-          Sign up
+          {t("auth.signup")}
         </Button>
       </DialogTrigger>
       <DialogContent className="p-0 sm:max-w-lg">

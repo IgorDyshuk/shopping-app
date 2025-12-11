@@ -1,0 +1,73 @@
+{
+  "breadcrumb": {
+    "home": "Головна",
+    "catalog": "Каталог"
+  },
+  "titleFallback": "Категорія",
+  "subtitle": "Товари відфільтровані за категорією: {{category}}",
+  "found": "Знайдено {{count}} {{itemLabel}}",
+  "items": {
+    "singular": "товар",
+    "plural": "товари"
+  },
+  "categories": {
+    "clothing": "Одяг",
+    "men": "Чоловічий одяг",
+    "women": "Жіночий одяг",
+    "electronics": "Електроніка",
+    "jewelery": "Прикраси",
+    "default": "Категорія"
+  },
+  "sortedLabel": "Сортування",
+  "loadingError": "Не вдалося завантажити товари.",
+  "empty": "За цими фільтрами нічого не знайдено.",
+  "filters": {
+    "header": "Фільтри",
+    "gender": "Стать",
+    "category": "Категорія",
+    "size": "Розмір",
+    "price": "Ціна",
+    "condition": "Стан",
+    "range": "${{min}} – ${{max}}",
+    "clearAll": "Очистити все",
+    "drawerTrigger": "Фільтри",
+    "cancel": "Скасувати",
+    "apply": "Застосувати",
+    "options": {
+      "gender": {
+        "men": "Чоловіки",
+        "women": "Жінки"
+      },
+      "condition": {
+        "new": "Нове",
+        "used": "Б/в"
+      },
+      "size": {
+        "one": "Універсальний",
+        "small": "S (маленький)",
+        "medium": "M (середній)",
+        "large": "L (великий)"
+      },
+      "categories": {
+        "outerwear": "Верхній одяг",
+        "longSleeves": "Худі та довгий рукав",
+        "tees": "Футболки та майки",
+        "bottoms": "Штани та шорти",
+        "lifestyle": "Lifestyle",
+        "running": "Біг",
+        "basketball": "Баскетбол",
+        "trail": "Трейл / Хайкінг",
+        "bags": "Сумки",
+        "hats": "Кепки та головні убори",
+        "jewelry": "Прикраси",
+        "tech": "Тех-аксесуари"
+      }
+    }
+  },
+  "sorting": {
+    "popularity": "Популярність",
+    "rating": "Рейтинг",
+    "priceAsc": "Ціна: за зростанням",
+    "priceDesc": "Ціна: за спаданням"
+  }
+}

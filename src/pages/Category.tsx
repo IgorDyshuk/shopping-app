@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { CategorySkeleton } from "@/components/layout/skeletons/CategorySkeleton";
 import { ProductCard } from "@/components/products/ProductCard";
@@ -34,21 +35,35 @@ import {
   presetCategoryOptions,
   sneakerSizeOptions,
   genderOptions,
-} from "@/constants/category-presets";
+} from "@/constants/filters-presets";
 import { FilterChips } from "@/components/categories/FilterChips";
 import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { useSortOptions } from "@/hooks/category-hooks/use-sort-options";
+import { deriveCategoryId } from "@/utils/derive-product-category";
 
 function Category() {
   const { category = "" } = useParams<{ category: string }>();
+  const { t } = useTranslation("category");
   const decodedCategory = useMemo(
     () => decodeURIComponent(category),
     [category]
   );
-  const capitalizedCategory = useMemo(() => {
-    if (!decodedCategory) return "Category";
-    return decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1);
+  const categoryNameKey = useMemo(() => {
+    const lower = decodedCategory.toLowerCase();
+    if (lower.includes("men")) return "categories.men";
+    if (lower.includes("women")) return "categories.women";
+    if (lower.includes("electron")) return "categories.electronics";
+    if (lower.includes("jewel")) return "categories.jewelery";
+    if (lower.includes("cloth")) return "categories.clothing";
+    return "categories.default";
   }, [decodedCategory]);
+
+  const capitalizedCategory = useMemo(() => {
+    const key = categoryNameKey;
+    if (key) return t(key);
+    if (!decodedCategory) return t("categories.default");
+    return decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1);
+  }, [decodedCategory, categoryNameKey, t]);
 
   const {
     data: products,
@@ -175,6 +190,10 @@ function Category() {
     priceRange,
     minPrice,
     maxPrice,
+    priceLabel: t("filters.range", {
+      min: priceRange[0].toFixed(0),
+      max: priceRange[1].toFixed(0),
+    }),
     onClearPrice: () => setPriceRange([minPrice, maxPrice]),
     makeClearCategory: (id) => () =>
       setActiveCategoryFilters((prev) => {
@@ -200,6 +219,11 @@ function Category() {
         next.delete(id);
         return next;
       }),
+    getLabel: useCallback(
+      (opt?: { label: string; labelKey?: string }) =>
+        opt ? (opt.labelKey ? t(opt.labelKey) : opt.label) : "",
+      [t]
+    ),
   });
 
   const sortOptions = useSortOptions();
@@ -214,8 +238,10 @@ function Category() {
     const hasGenderFilters = activeGenderFilters.size > 0;
 
     return products.filter((p) => {
+      const categoryId = deriveCategoryId(p);
+
       const categoryPass =
-        !hasCategoryFilters || activeCategoryFilters.has(p.category);
+        !hasCategoryFilters || activeCategoryFilters.has(categoryId);
 
       const pricePass =
         !hasPriceRange ||
@@ -287,18 +313,20 @@ function Category() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">Home</Link>
+              <Link to="/">{t("breadcrumb.home")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/catalog">Catalog</Link>
+              <Link to="/catalog">{t("breadcrumb.catalog")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{decodedCategory || "Category"}</BreadcrumbPage>
+            <BreadcrumbPage>
+              {capitalizedCategory || t("categories.default")}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -306,14 +334,14 @@ function Category() {
       {isLoading ? (
         <CategorySkeleton />
       ) : isError ? (
-        <p className="text-destructive">Failed to load products.</p>
+        <p className="text-destructive">{t("loadingError")}</p>
       ) : (
         <div className="flex flex-col gap-6 my-7">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-3xl font-semibold">{capitalizedCategory}</h1>
               <p className="text-muted-foreground">
-                Products filtered by category: {decodedCategory || "all"}
+                {t("subtitle", { category: decodedCategory || "all" })}
               </p>
             </div>
           </div>
@@ -326,7 +354,9 @@ function Category() {
                     label={[
                       activeFiltersCount ? `(${activeFiltersCount})` : "",
                       `${sortedProducts.length} ${
-                        sortedProducts.length === 1 ? "item" : "items"
+                        sortedProducts.length === 1
+                          ? t("items.singular")
+                          : t("items.plural")
                       }`,
                     ]}
                     open={filtersOpen}
@@ -360,8 +390,13 @@ function Category() {
                 {!isFilterDrawer && (
                   <>
                     <p className="hidden sm:block text-sm text-muted-foreground">
-                      Found {sortedProducts.length}{" "}
-                      {sortedProducts.length === 1 ? "item" : "items"}
+                      {t("found", {
+                        count: sortedProducts.length,
+                        itemLabel:
+                          sortedProducts.length === 1
+                            ? t("items.singular")
+                            : t("items.plural"),
+                      })}
                     </p>
                     <FilterChips
                       chips={chips}
@@ -389,7 +424,7 @@ function Category() {
                         strokeWidth={2.5}
                       />
                       <div className="flex flex-col items-start leading-tight">
-                        <span className="">Sorted</span>
+                        <span className="">{t("sortedLabel")}</span>
                         <span className="text-muted-foreground text-xs">
                           {
                             sortOptions.find(
@@ -497,7 +532,7 @@ function Category() {
                 >
                   {sortedProducts.length === 0 ? (
                     <div className="col-span-full rounded-lg border border-dashed bg-muted/40 px-4 py-8 text-center text-muted-foreground">
-                      No products found for these filters.
+                      {t("empty")}
                     </div>
                   ) : (
                     sortedProducts.map((product) => (

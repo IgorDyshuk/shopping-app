@@ -20,11 +20,13 @@ type UseFilterChipsParams = {
   priceRange: [number, number];
   minPrice: number;
   maxPrice: number;
+  priceLabel: string;
   onClearPrice: () => void;
   makeClearCategory: (id: string) => () => void;
   makeClearSize: (id: string) => () => void;
   makeClearCondition: (id: string) => () => void;
   makeClearGender?: (id: string) => () => void;
+  getLabel: (opt?: FilterOption) => string;
 };
 
 export function useFilterChips({
@@ -39,18 +41,19 @@ export function useFilterChips({
   priceRange,
   minPrice,
   maxPrice,
+  priceLabel,
   onClearPrice,
   makeClearCategory,
   makeClearSize,
   makeClearCondition,
   makeClearGender,
+  getLabel,
 }: UseFilterChipsParams) {
   return useMemo<ChipItem[]>(() => {
     const items: ChipItem[] = [];
 
     Array.from(categorySet).forEach((id) => {
-      const label =
-        categoryOptions.find((opt) => opt.id === id)?.label || id;
+      const label = getLabel(categoryOptions.find((opt) => opt.id === id)) || id;
       items.push({
         key: `cat-${id}`,
         label,
@@ -59,7 +62,7 @@ export function useFilterChips({
     });
 
     Array.from(sizeSet).forEach((id) => {
-      const label = sizeOptions.find((opt) => opt.id === id)?.label || id;
+      const label = getLabel(sizeOptions.find((opt) => opt.id === id)) || id;
       items.push({
         key: `size-${id}`,
         label,
@@ -69,7 +72,7 @@ export function useFilterChips({
 
     Array.from(conditionSet).forEach((id) => {
       const label =
-        conditionOptions.find((opt) => opt.id === id)?.label || id;
+        getLabel(conditionOptions.find((opt) => opt.id === id)) || id;
       items.push({
         key: `condition-${id}`,
         label,
@@ -79,8 +82,7 @@ export function useFilterChips({
 
     if (genderOptions && genderSet && makeClearGender) {
       Array.from(genderSet).forEach((id) => {
-        const label =
-          genderOptions.find((opt) => opt.id === id)?.label || id;
+        const label = getLabel(genderOptions.find((opt) => opt.id === id)) || id;
         items.push({
           key: `gender-${id}`,
           label,
@@ -93,9 +95,7 @@ export function useFilterChips({
     if (hasPrice) {
       items.push({
         key: "price",
-        label: `Price: $${priceRange[0].toFixed(
-          0
-        )} - $${priceRange[1].toFixed(0)}`,
+        label: priceLabel,
         onClear: onClearPrice,
       });
     }
@@ -118,5 +118,7 @@ export function useFilterChips({
     makeClearSize,
     makeClearCondition,
     makeClearGender,
+    getLabel,
+    priceLabel,
   ]);
 }

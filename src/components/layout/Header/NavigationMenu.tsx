@@ -14,50 +14,58 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Link, useNavigate } from "react-router-dom";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
+import { useTranslation } from "react-i18next";
 
 const clothingCategory = CATALOG_CATEGORIES.clothing;
 const electronicsCategory = CATALOG_CATEGORIES.electronics;
 const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 
-const catalog = [
-  {
-    title: "Одежда",
-    href: clothingCategory,
-    description: "Худи, футболки, джинсы и коллаборации.",
-  },
-  {
-    title: "Обувь",
-    href: electronicsCategory,
-    description: "Сникеры и лимитированные пары.",
-  },
-  {
-    title: "Аксессуары",
-    href: jeweleryCategory,
-    description: "Сумки, часы, украшения от блогеров.",
-  },
-];
-
-const creators = [
-  {
-    title: "Топ блогеры",
-    href: "#creators-top",
-    description: "Популярные витрины с новыми вещами.",
-  },
-  {
-    title: "Все создатели",
-    href: "#creators-all",
-    description: "Ищи по имени или никнейму.",
-  },
-  {
-    title: "Коллаборации",
-    href: "#creators-collabs",
-    description: "Спец-дропы вместе с брендами.",
-  },
-];
-
 export function NavigationMenuComplete() {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const catalog = React.useMemo(
+    () => [
+      {
+        title: t("nav.catalog.clothing.title"),
+        href: clothingCategory,
+        description: t("nav.catalog.clothing.description"),
+      },
+      {
+        title: t("nav.catalog.sneakers.title"),
+        href: electronicsCategory,
+        description: t("nav.catalog.sneakers.description"),
+      },
+      {
+        title: t("nav.catalog.accessories.title"),
+        href: jeweleryCategory,
+        description: t("nav.catalog.accessories.description"),
+      },
+    ],
+    [t]
+  );
+
+  const creators = React.useMemo(
+    () => [
+      {
+        title: t("nav.creators.top.title"),
+        href: "#creators-top",
+        description: t("nav.creators.top.description"),
+      },
+      {
+        title: t("nav.creators.all.title"),
+        href: "#creators-all",
+        description: t("nav.creators.all.description"),
+      },
+      {
+        title: t("nav.creators.collabs.title"),
+        href: "#creators-collabs",
+        description: t("nav.creators.collabs.description"),
+      },
+    ],
+    [t]
+  );
 
   return (
     <NavigationMenu
@@ -67,7 +75,7 @@ export function NavigationMenuComplete() {
       <NavigationMenuList className="flex-wrap z-100">
         <NavigationMenuItem>
           <NavigationMenuTrigger onClick={() => navigate("/catalog")}>
-            Каталог
+            {t("nav.catalogTrigger")}
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -78,11 +86,10 @@ export function NavigationMenuComplete() {
                     to="/catalog"
                   >
                     <div className="mb-2 text-lg font-medium sm:mt-4">
-                      Весь каталог
+                      {t("nav.catalogHeroTitle")}
                     </div>
                     <p className="text-muted-foreground text-sm leading-tight">
-                      Одежда, электроника, украшения, дропы блогеров — выбери
-                      категорию и фильтруй в одном месте.{" "}
+                      {t("nav.catalogHeroDescription")}
                     </p>
                   </Link>
                 </NavigationMenuLink>
@@ -96,7 +103,7 @@ export function NavigationMenuComplete() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Блогеры</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("nav.creatorsTrigger")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px]">
               {creators.map((item) => (
@@ -109,12 +116,12 @@ export function NavigationMenuComplete() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="#sell">Продать вещь</Link>
+            <Link to="#sell">{t("nav.sell")}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="#support">FAQ & Поддержка</Link>
+            <Link to="#support">{t("nav.support")}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

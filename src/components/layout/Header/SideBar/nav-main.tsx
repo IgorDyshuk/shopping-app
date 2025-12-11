@@ -1,5 +1,6 @@
 import { ChevronRight, type LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 import {
   Collapsible,
@@ -32,13 +33,14 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const { t } = useTranslation()
   const { closeSidebar } = useSidebar()
   const normalizeTo = (url: string) =>
     url.startsWith("#") ? `/${url}` : url
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("sidebar.sectionTitle")}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>

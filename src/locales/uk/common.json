@@ -2,9 +2,132 @@
   "cta": "Натисни мене",
   "language": {
     "label": "Мова",
-    "selectPlaceholder": "Оберіть мову..."  },
+    "selectPlaceholder": "Оберіть мову..."
+  },
   "languages": {
     "en": "Англійська",
     "uk": "Українська"
+  },
+  "nav": {
+    "catalogTrigger": "Каталог",
+    "catalogHeroTitle": "Увесь каталог",
+    "catalogHeroDescription": "Одяг, електроніка, прикраси, дропи блогерів — обирай категорію й фільтруй в одному місці.",
+    "catalog": {
+      "clothing": {
+        "title": "Одяг",
+        "description": "Худі, футболки, джинси та колаборації."
+      },
+      "sneakers": {
+        "title": "Взуття",
+        "description": "Снікерси й лімітовані пари."
+      },
+      "accessories": {
+        "title": "Аксесуари",
+        "description": "Сумки, годинники, прикраси від блогерів."
+      }
+    },
+    "creatorsTrigger": "Блогери",
+    "creators": {
+      "top": {
+        "title": "Топ блогери",
+        "description": "Популярні вітрини зі свіжими дропами."
+      },
+      "all": {
+        "title": "Усі створці",
+        "description": "Шукай за ім’ям чи ніком."
+      },
+      "collabs": {
+        "title": "Колаборації",
+        "description": "Спец-дропи разом з брендами."
+      }
+    },
+    "sell": "Продати річ",
+    "support": "FAQ та підтримка"
+  },
+  "search": {
+    "placeholder": "Пошук товарів...",
+    "loading": "Завантаження...",
+    "empty": "Нічого не знайдено."
+  },
+  "auth": {
+    "login": "Увійти",
+    "signup": "Реєстрація"
+  },
+  "authForm": {
+    "fields": {
+      "email": "Email",
+      "password": "Пароль",
+      "name": "Повне ім'я",
+      "emailPlaceholder": "m@example.com",
+      "namePlaceholder": "Іван Петренко"
+    },
+    "login": {
+      "title": "З поверненням",
+      "subtitle": "Увійдіть через Apple або Google",
+      "apple": "Увійти через Apple",
+      "google": "Увійти через Google",
+      "separator": "Або продовжуйте з",
+      "forgot": "Забули пароль?",
+      "submit": "Увійти",
+      "footer": "Немає аккаунта?",
+      "footerLink": "Зареєструватися"
+    },
+    "signup": {
+      "title": "Створіть обліковий запис",
+      "subtitle": "Введіть email, щоб створити акаунт",
+      "password": "Пароль",
+      "confirmPassword": "Підтвердіть пароль",
+      "helper": "Мінімум 8 символів.",
+      "submit": "Створити акаунт",
+      "footer": "Вже маєте акаунт?",
+      "footerLink": "Увійти"
+    }
+  },
+  "actions": {
+    "viewMore": "Дивитись більше"
+  },
+  "footer": {
+    "brand": "Test Shop",
+    "description": "Маркетплейс ресейлу дропів та рідкісних речей від блогерів. Купуй, продавай і знаходь лімітовані речі улюблених творців.",
+    "marketplace": "Маркетплейс",
+    "support": "Підтримка",
+    "company": "Компанія",
+    "links": {
+      "drops": "Дропи",
+      "catalog": "Каталог",
+      "creators": "Блогери",
+      "faq": "FAQ",
+      "help": "Центр підтримки",
+      "returns": "Повернення",
+      "about": "Про нас",
+      "terms": "Умови",
+      "privacy": "Приватність"
+    },
+    "rights": "Усі права захищені."
+  },
+  "sidebar": {
+    "sectionTitle": "Платформа",
+    "main": {
+      "home": "Головна",
+      "catalog": "Каталог",
+      "catalogAll": "Увесь каталог",
+      "catalogClothing": "Одяг",
+      "catalogSneakers": "Взуття",
+      "catalogAccessories": "Аксесуари",
+      "creators": "Блогери",
+      "creatorsTop": "Топ блогери",
+      "creatorsAll": "Усі створці",
+      "creatorsCollabs": "Колаборації"
+    },
+    "footer": {
+      "support": "Підтримка",
+      "faq": "FAQ"
+    },
+    "account": {
+      "account": "Акаунт",
+      "orders": "Замовлення",
+      "notifications": "Сповіщення",
+      "logout": "Вийти"
+    }
   }
 }

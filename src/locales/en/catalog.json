@@ -1,0 +1,17 @@
+{
+  "breadcrumb": {
+    "home": "Home",
+    "catalog": "Catalog"
+  },
+  "title": "Catalog",
+  "subtitle": "All we have",
+  "error": "Failed to load products.",
+  "empty": "No products found.",
+  "sections": {
+    "clothing": "Clothing",
+    "men": "Men's clothing",
+    "women": "Women's clothing",
+    "electronics": "Electronics",
+    "jewelery": "Jewelry"
+  }
+}

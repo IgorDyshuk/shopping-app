@@ -8,7 +8,6 @@ import {
   Home,
   LifeBuoy,
   Send,
-  Sparkles,
   UserRound,
   Users,
 } from "lucide-react";
@@ -28,96 +27,101 @@ import {
 import LogIn from "../LogInForm";
 import SignUp from "../SIgnUpForm";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
+import { useTranslation } from "react-i18next";
 
 const clothingCategory = CATALOG_CATEGORIES.clothing;
 const electronicsCategory = CATALOG_CATEGORIES.electronics;
 const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 
-const data = {
-  user: {
-    name: "Guest",
-    email: "guest@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Influencers",
-      logo: GalleryVerticalEnd,
-      plan: "Marketplace",
-    },
-    {
-      name: "Collectors",
-      logo: CircleDollarSign,
-      plan: "Premium",
-    },
-  ],
-  navMain: [
-    {
-      title: "Главная",
-      url: "/",
-      icon: Home,
-    },
-    {
-      title: "Каталог",
-      url: "/catalog",
-      icon: Boxes,
-      isActive: true,
-      items: [
-        {
-          title: "Весь каталог",
-          url: "/catalog",
-        },
-        {
-          title: "Одежда",
-          url: `/category/${encodeURIComponent(clothingCategory)}`,
-        },
-        {
-          title: "Обувь",
-          url: `/category/${encodeURIComponent(electronicsCategory)}`,
-        },
-        {
-          title: "Аксессуары",
-          url: `/category/${encodeURIComponent(jeweleryCategory)}`,
-        },
-      ],
-    },
-    {
-      title: "Блогеры",
-      url: "#creators",
-      icon: Users,
-      isActive: true,
-      items: [
-        {
-          title: "Топ блогеры",
-          url: "#creators-top",
-        },
-        {
-          title: "Все создатели",
-          url: "#creators-all",
-        },
-        {
-          title: "Коллаборации",
-          url: "#creators-collabs",
-        },
-      ],
-    },
-  ],
-  navFooter: [
-    {
-      title: "Поддержка",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "FAQ",
-      url: "#",
-      icon: Send,
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, isMobile } = useSidebar();
+  const { t } = useTranslation();
+
+  const data = React.useMemo(
+    () => ({
+      user: {
+        name: "Guest",
+        email: "guest@example.com",
+        avatar: "/avatars/shadcn.jpg",
+      },
+      teams: [
+        {
+          name: "Influencers",
+          logo: GalleryVerticalEnd,
+          plan: "Marketplace",
+        },
+        {
+          name: "Collectors",
+          logo: CircleDollarSign,
+          plan: "Premium",
+        },
+      ],
+      navMain: [
+        {
+          title: t("sidebar.main.home"),
+          url: "/",
+          icon: Home,
+        },
+        {
+          title: t("sidebar.main.catalog"),
+          url: "/catalog",
+          icon: Boxes,
+          isActive: true,
+          items: [
+            {
+              title: t("sidebar.main.catalogAll"),
+              url: "/catalog",
+            },
+            {
+              title: t("sidebar.main.catalogClothing"),
+              url: `/category/${encodeURIComponent(clothingCategory)}`,
+            },
+            {
+              title: t("sidebar.main.catalogSneakers"),
+              url: `/category/${encodeURIComponent(electronicsCategory)}`,
+            },
+            {
+              title: t("sidebar.main.catalogAccessories"),
+              url: `/category/${encodeURIComponent(jeweleryCategory)}`,
+            },
+          ],
+        },
+        {
+          title: t("sidebar.main.creators"),
+          url: "#creators",
+          icon: Users,
+          isActive: true,
+          items: [
+            {
+              title: t("sidebar.main.creatorsTop"),
+              url: "#creators-top",
+            },
+            {
+              title: t("sidebar.main.creatorsAll"),
+              url: "#creators-all",
+            },
+            {
+              title: t("sidebar.main.creatorsCollabs"),
+              url: "#creators-collabs",
+            },
+          ],
+        },
+      ],
+      navFooter: [
+        {
+          title: t("sidebar.footer.support"),
+          url: "#",
+          icon: LifeBuoy,
+        },
+        {
+          title: t("sidebar.footer.faq"),
+          url: "#",
+          icon: Send,
+        },
+      ],
+    }),
+    [t]
+  );
 
   return (
     <Sidebar collapsible="icon" {...props}>

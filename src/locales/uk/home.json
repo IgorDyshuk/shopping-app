@@ -1,4 +1,11 @@
 {
-  "welcome": "Ласкаво просимо до React та react-i18next"
-
+  "welcome": "Ласкаво просимо до React та react-i18next",
+  "carousels": {
+    "popularBloggers": "Популярні блогери",
+    "popularPicks": "Популярні вибори",
+    "trending": "Зараз у тренді",
+    "howItWorks": "Як це працює",
+    "newArrivals": "Нові надходження"
+  },
+  "error": "Не вдалося завантажити товари."
 }

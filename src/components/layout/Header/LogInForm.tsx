@@ -1,4 +1,5 @@
 import { GalleryVerticalEnd } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { LoginForm } from "@/components/login-form";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,8 @@ type LogInProps = {
 };
 
 export default function LogIn({ className }: LogInProps) {
+  const { t } = useTranslation();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -22,7 +25,7 @@ export default function LogIn({ className }: LogInProps) {
             className
           )}
         >
-          Login
+          {t("auth.login")}
         </Button>
       </DialogTrigger>
       <DialogContent className="p-0 sm:max-w-lg">
