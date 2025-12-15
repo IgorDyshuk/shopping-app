@@ -105,6 +105,9 @@
     },
     "rights": "Усі права захищені."
   },
+  "carousels": {
+    "recentlyViewed": "Нещодавно переглянуті"
+  },
   "sidebar": {
     "sectionTitle": "Платформа",
     "main": {

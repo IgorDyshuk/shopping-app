@@ -14,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
+import { useViewedProductsStore } from "@/stores/use-viewed-products";
 
 function Catalog() {
   const menCategory = CATALOG_CATEGORIES.men;
@@ -21,7 +22,7 @@ function Catalog() {
   const clothingCategory = CATALOG_CATEGORIES.clothing;
   const electronicsCategory = CATALOG_CATEGORIES.electronics;
   const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
-  const { t } = useTranslation("catalog");
+  const { t } = useTranslation(["catalog", "common"]);
 
   const {
     data: menClothes,
@@ -32,6 +33,10 @@ function Catalog() {
   const { data: womenClothes } = useFilteredProduct(womenCategory);
   const { data: electronics } = useFilteredProduct(electronicsCategory);
   const { data: jewelery } = useFilteredProduct(jeweleryCategory);
+
+  const viewedProducts = useViewedProductsStore(
+    (state) => state.viewedProducts
+  );
 
   return (
     <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
@@ -115,6 +120,19 @@ function Catalog() {
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
+            {viewedProducts.length > 0 && (
+              <ItemsCarousel
+                title={t("carousels.recentlyViewed", { ns: "common" })}
+                items={viewedProducts}
+                getItemKey={(product) => product.id}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                peekNext
+                controlsInline
+                renderItem={(product) => (
+                  <ProductCard product={product as any} />
+                )}
+              />
+            )}
             {/* <pre className="max-h-[480px] overflow-auto rounded bg-muted p-3 text-xs leading-relaxed">
               {JSON.stringify(products, null, 2)}
             </pre> */}

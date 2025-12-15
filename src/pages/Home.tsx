@@ -4,10 +4,14 @@ import { useProducts } from "@/hooks/api-hooks/useProducts";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
+import { useViewedProductsStore } from "@/stores/use-viewed-products";
 
 function Home() {
   const { data: products, isLoading, isError } = useProducts();
-  const { t } = useTranslation("home");
+  const { t } = useTranslation(["home", "common"]);
+  const viewedProducts = useViewedProductsStore(
+    (state) => state.viewedProducts
+  );
 
   return (
     <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30">
@@ -72,6 +76,20 @@ function Home() {
               controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
+
+            {viewedProducts.length > 0 && (
+              <ItemsCarousel
+                title={t("carousels.recentlyViewed", { ns: "common" })}
+                items={viewedProducts}
+                getItemKey={(product) => product.id}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                peekNext
+                controlsInline
+                renderItem={(product) => (
+                  <ProductCard product={product as any} />
+                )}
+              />
+            )}
           </>
         )}
       </div>

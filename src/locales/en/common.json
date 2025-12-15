@@ -105,6 +105,9 @@
     },
     "rights": "All rights reserved."
   },
+  "carousels": {
+    "recentlyViewed": "Recently viewed"
+  },
   "sidebar": {
     "sectionTitle": "Platform",
     "main": {

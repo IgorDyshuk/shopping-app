@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useProduct } from "@/hooks/api-hooks/useProducts";
+import { useViewedProductsStore } from "@/stores/use-viewed-products";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +17,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
   const productId = useMemo(() => Number(id), [id]);
+  const addViewedProduct = useViewedProductsStore(
+    (state) => state.addViewedProduct
+  );
 
   const {
     data: product,
@@ -25,11 +29,17 @@ function ProductPage() {
 
   const categoryLabel = useMemo(() => {
     if (!category) return "Category";
-    return decodeURIComponent(category)
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    return (
+      decodeURIComponent(category).charAt(0).toUpperCase() +
+      decodeURIComponent(category).slice(1)
+    );
   }, [category]);
+
+  useEffect(() => {
+    if (product && !isLoading && !isError) {
+      addViewedProduct(product);
+    }
+  }, [product, isLoading, isError, addViewedProduct]);
 
   return (
     <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
@@ -84,9 +94,7 @@ function ProductPage() {
                     className="h-64 w-full object-contain"
                   />
                 ) : (
-                  <div className="text-sm text-muted-foreground">
-                    No image
-                  </div>
+                  <div className="text-sm text-muted-foreground">No image</div>
                 )}
               </div>
 
