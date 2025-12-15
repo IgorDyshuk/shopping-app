@@ -1,8 +1,4 @@
 {
-  "breadcrumb": {
-    "home": "Home",
-    "catalog": "Catalog"
-  },
   "title": "Catalog",
   "subtitle": "All we have",
   "error": "Failed to load products.",

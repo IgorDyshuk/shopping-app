@@ -1,8 +1,4 @@
 {
-  "breadcrumb": {
-    "home": "Головна",
-    "catalog": "Каталог"
-  },
   "titleFallback": "Категорія",
   "subtitle": "Товари відфільтровані за категорією: {{category}}",
   "found": "Знайдено {{count}} {{itemLabel}}",

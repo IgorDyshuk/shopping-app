@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { useProducts } from "@/hooks/api-hooks/useProducts";
 import {
@@ -28,6 +29,7 @@ function SearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -136,6 +138,13 @@ function SearchBar({
                         event.preventDefault();
                         setQuery(product.title);
                         startClose();
+                        navigate(
+                          `/category/${encodeURIComponent(product.category)}/${
+                            product.id
+                          }`
+                        );
+                        onRequestClose?.();
+                        setTimeout(() => inputRef.current?.blur(), 0);
                       }}
                     >
                       <div className="flex flex-col">

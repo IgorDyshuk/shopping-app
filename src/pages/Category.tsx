@@ -43,7 +43,7 @@ import { deriveCategoryId } from "@/utils/derive-product-category";
 
 function Category() {
   const { category = "" } = useParams<{ category: string }>();
-  const { t } = useTranslation("category");
+  const { t } = useTranslation(["category", "common"]);
   const decodedCategory = useMemo(
     () => decodeURIComponent(category),
     [category]
@@ -313,13 +313,13 @@ function Category() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">{t("breadcrumb.home")}</Link>
+              <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/catalog">{t("breadcrumb.catalog")}</Link>
+              <Link to="/catalog">{t("breadcrumb.catalog", { ns: "common" })}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

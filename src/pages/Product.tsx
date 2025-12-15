@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { useProduct } from "@/hooks/api-hooks/useProducts";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
@@ -26,14 +27,15 @@ function ProductPage() {
     isLoading,
     isError,
   } = useProduct(Number.isFinite(productId) ? productId : undefined);
+  const { t } = useTranslation("common");
 
   const categoryLabel = useMemo(() => {
-    if (!category) return "Category";
+    if (!category) return t("breadcrumb.catalog");
     return (
       decodeURIComponent(category).charAt(0).toUpperCase() +
       decodeURIComponent(category).slice(1)
     );
-  }, [category]);
+  }, [category, t]);
 
   useEffect(() => {
     if (product && !isLoading && !isError) {
@@ -44,16 +46,16 @@ function ProductPage() {
   return (
     <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
       <Breadcrumb>
-        <BreadcrumbList>
+        <BreadcrumbList className="hidden md:flex">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">Home</Link>
+              <Link to="/">{t("breadcrumb.home")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/catalog">Catalog</Link>
+              <Link to="/catalog">{t("breadcrumb.catalog")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           {category && (
@@ -70,8 +72,25 @@ function ProductPage() {
           )}
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{product?.title ?? "Product"}</BreadcrumbPage>
+            <BreadcrumbLink>
+              {product?.title ?? t("breadcrumb.product")}
+            </BreadcrumbLink>
           </BreadcrumbItem>
+        </BreadcrumbList>
+
+        <BreadcrumbList className="md:hidden">
+          {category && (
+            <>
+              <BreadcrumbSeparator className="rotate-180" />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/category/${encodeURIComponent(category)}`}>
+                    {categoryLabel}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
 

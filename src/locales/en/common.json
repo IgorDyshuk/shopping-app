@@ -108,6 +108,11 @@
   "carousels": {
     "recentlyViewed": "Recently viewed"
   },
+  "breadcrumb": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "product": "Product"
+  },
   "sidebar": {
     "sectionTitle": "Platform",
     "main": {

@@ -108,6 +108,11 @@
   "carousels": {
     "recentlyViewed": "Нещодавно переглянуті"
   },
+  "breadcrumb": {
+    "home": "Головна",
+    "catalog": "Каталог",
+    "product": "Товар"
+  },
   "sidebar": {
     "sectionTitle": "Платформа",
     "main": {
