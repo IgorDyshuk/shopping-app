@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import Home from "@/pages/Home";
 import Catalog from "@/pages/Catalog";
 import Category from "@/pages/Category";
+import ProductPage from "@/pages/Product";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 
@@ -20,6 +21,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/catalog" element={<Catalog />} />
               <Route path="/category/:category" element={<Category />} />
+              <Route
+                path="/category/:category/:id"
+                element={<ProductPage />}
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AppLayout>
