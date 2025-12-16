@@ -319,7 +319,9 @@ function Category() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/catalog">{t("breadcrumb.catalog", { ns: "common" })}</Link>
+              <Link to="/catalog">
+                {t("breadcrumb.catalog", { ns: "common" })}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
