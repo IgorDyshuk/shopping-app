@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 type ProductActionCardProps = {
   price?: number;
@@ -20,6 +21,8 @@ export function ProductActionCard({
   isFavorite,
   onFavoriteToggle,
 }: ProductActionCardProps) {
+  const isSmallScreen = useMediaQuery("(max-width: 500px)");
+
   return (
     <Card className="py-4">
       <CardContent className="w-full px-0 flex flex-col justify-between">
@@ -33,9 +36,13 @@ export function ProductActionCard({
             className="transition-colors duration-150 hover:text-primary hover:cursor-pointer"
           />
         </div>
-        <Separator className="w-full bg-muted-foreground" />
+        <Separator className="w-full bg-muted" />
         <div className="px-4 pt-3 flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-5">
+          <div
+            className={`flex flex-wrap items-center gap-5 ${
+              isSmallScreen ? "justify-between" : ""
+            }`}
+          >
             <div className="flex flex-col">
               <span className="text-xs md:text-sm text-primary">
                 {inStockLabel}
@@ -45,9 +52,11 @@ export function ProductActionCard({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Button className="bg-primary">
-                <ShoppingCart /> Купити
-              </Button>
+              {!isSmallScreen && (
+                <Button className="bg-primary">
+                  <ShoppingCart /> Купити
+                </Button>
+              )}
               <Toggle
                 aria-label={
                   isFavorite ? "Remove from favorites" : "Add to favorites"
@@ -62,6 +71,11 @@ export function ProductActionCard({
               </Toggle>
             </div>
           </div>
+          {isSmallScreen && (
+            <Button className="bg-primary">
+              <ShoppingCart /> Купити
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

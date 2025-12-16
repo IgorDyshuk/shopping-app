@@ -11,8 +11,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { RatingStars } from "@/components/pages/ProductPage/RatingStars";
+import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
   accessorySizeOptions,
@@ -27,6 +26,8 @@ import { ProductCharacteristics } from "@/components/pages/ProductPage/ProductCh
 import { ProductActionCard } from "@/components/pages/ProductPage/ProductActionCard";
 import { ProductSizePicker } from "@/components/pages/ProductPage/ProductSizePicker";
 import { ProductInfoAccordion } from "@/components/pages/ProductPage/ProductInfoAccordion";
+import { ProductHeadingCard } from "@/components/pages/ProductPage/ProductHeadingCard";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
@@ -76,6 +77,8 @@ function ProductPage() {
     if (sizePreset === "accessories") return accessorySizeOptions;
     return defaultSizeOptions;
   }, [sizePreset]);
+
+  const isSmallScreen = useMediaQuery("(max-width: 767px)");
 
   useEffect(() => {
     if (!selectedSize && sizeOptions.length) {
@@ -163,39 +166,29 @@ function ProductPage() {
       ) : isError ? (
         <p className="text-destructive">error</p>
       ) : (
-        <section className="flex flex-col gap-10 mt-4 xl:mt-6 ">
-          <div className="grid w-full gap-2 lg:grid-cols-2 items-start">
-            <Card>
-              <CardContent className="p-4">
+        <section className="flex flex-col gap-10 mt-2 sm:mt-4 xl:mt-6 ">
+          <div className="grid w-full gap-2 md:grid-cols-2 items-start">
+            {isSmallScreen && (
+              <ProductHeadingCard
+                title={product?.title}
+                rating={product?.rating}
+                code={product?.id}
+              />
+            )}
+
+            <Card className="border-0 md:border pt-3 md:py-0">
+              <CardContent className="p-2 md:p-4">
                 <ProductGallery images={galleryImages} title={product?.title} />
               </CardContent>
             </Card>
             <div className="flex flex-col gap-2">
-              <Card className="p-4">
-                <CardTitle className="text-lg">{product?.title}</CardTitle>
-                <CardContent className="w-full px-0 flex justify-between">
-                  <div className="flex items-center gap-2">
-                    {product?.rating?.rate ? (
-                      <>
-                        <RatingStars value={product.rating.rate} />
-                        <span className="text-sm font-medium">
-                          {product.rating.rate.toFixed(1)}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          ({product.rating.count})
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">
-                        No rating
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-muted-foreground text-sm">
-                    Код: {product?.id}
-                  </div>
-                </CardContent>
-              </Card>
+              {!isSmallScreen && (
+                <ProductHeadingCard
+                  title={product?.title}
+                  rating={product?.rating}
+                  code={product?.id}
+                />
+              )}
 
               <ProductActionCard
                 price={product?.price}

@@ -43,7 +43,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
   }
 
   return (
-    <div className="flex flex-col w-full gap-10">
+    <div className="flex flex-col w-full gap-7 sm:gap-10">
       <Carousel
         opts={{ align: "start", loop: true }}
         setApi={setCarouselApi}
@@ -52,7 +52,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
         <CarouselContent className="ml-0">
           {images.map((src, idx) => (
             <CarouselItem key={idx} className="pl-0">
-              <div className="h-100 sm:h-140">
+              <div className="h-100 sm:h-140 md:h-100 lg:h-120 xl:h-140">
                 <img
                   src={src}
                   alt={`${title ?? "Image"} ${idx + 1}`}
@@ -62,11 +62,11 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute left-7 top-1/2 -translate-y-1/2 -translate-x-1/2 size-10" />
-        <CarouselNext className="absolute right-7 top-1/2 -translate-y-1/2 translate-x-1/2 size-10" />
+        <CarouselPrevious className="hidden sm:flex sm:absolute left-7 top-1/2 -translate-y-1/2 -translate-x-1/2 size-10" />
+        <CarouselNext className="hidden sm:flex sm:absolute right-7 top-1/2 -translate-y-1/2 translate-x-1/2 size-10" />
       </Carousel>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2">
         {images.map((src, idx) => (
           <button
             key={idx}
