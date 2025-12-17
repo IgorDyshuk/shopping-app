@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
 import { useFilteredProduct, useProduct } from "@/hooks/api-hooks/useProducts";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
 import {
@@ -26,6 +25,7 @@ import { ProductCharacteristics } from "@/components/pages/ProductPage/ProductCh
 import { ProductActionCard } from "@/components/pages/ProductPage/ProductActionCard";
 import { ProductSizePicker } from "@/components/pages/ProductPage/ProductSizePicker";
 import { ProductInfoAccordion } from "@/components/pages/ProductPage/ProductInfoAccordion";
+import { ProductSectionsNav } from "@/components/pages/ProductPage/ProductSectionsNav";
 import { ProductHeadingCard } from "@/components/pages/ProductPage/ProductHeadingCard";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
@@ -50,6 +50,15 @@ function ProductPage() {
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
   );
+  const sectionLinks = useMemo(() => {
+    const links = [
+      { id: "overview", label: "Огляд" },
+      { id: "description", label: "Опис" },
+      { id: "characteristics", label: "Характеристики" },
+      { id: "related", label: "От этого же блогера" },
+    ];
+    return links;
+  }, [t, viewedProducts.length]);
 
   const categoryLabel = useMemo(() => {
     if (!category) return t("breadcrumb.catalog");
@@ -166,23 +175,14 @@ function ProductPage() {
       ) : isError ? (
         <p className="text-destructive">error</p>
       ) : (
-        <section className="flex flex-col gap-10 mt-2 sm:mt-4 xl:mt-6 ">
-          <div className="grid w-full gap-2 md:grid-cols-2 items-start">
-            {isSmallScreen && (
-              <ProductHeadingCard
-                title={product?.title}
-                rating={product?.rating}
-                code={product?.id}
-              />
-            )}
-
-            <Card className="border-0 md:border pt-3 md:py-0">
-              <CardContent className="p-2 md:p-4">
-                <ProductGallery images={galleryImages} title={product?.title} />
-              </CardContent>
-            </Card>
-            <div className="flex flex-col gap-2">
-              {!isSmallScreen && (
+        <section className="flex flex-col gap-2 mt-2 sm:mt-4 xl:mt-6 ">
+          <ProductSectionsNav sections={sectionLinks} />
+          <div className="flex flex-col gap-2">
+            <div
+              id="overview"
+              className="grid w-full gap-2 md:grid-cols-2 items-start scroll-mt-28"
+            >
+              {isSmallScreen && (
                 <ProductHeadingCard
                   title={product?.title}
                   rating={product?.rating}
@@ -190,59 +190,90 @@ function ProductPage() {
                 />
               )}
 
-              <ProductActionCard
-                price={product?.price}
-                isFavorite={isFavorite}
-                onFavoriteToggle={handleFavoriteToggle}
-              />
+              <Card className="border-0 md:border pt-3 md:py-0">
+                <CardContent className="p-2 md:p-4">
+                  <ProductGallery
+                    images={galleryImages}
+                    title={product?.title}
+                  />
+                </CardContent>
+              </Card>
+              <div className="flex flex-col gap-2">
+                {!isSmallScreen && (
+                  <ProductHeadingCard
+                    title={product?.title}
+                    rating={product?.rating}
+                    code={product?.id}
+                  />
+                )}
 
-              <ProductSizePicker
-                options={sizeOptions}
-                selected={selectedSize}
-                onSelect={setSelectedSize}
-              />
+                <ProductActionCard
+                  price={product?.price}
+                  isFavorite={isFavorite}
+                  onFavoriteToggle={handleFavoriteToggle}
+                />
 
-              <ProductInfoAccordion />
+                <ProductSizePicker
+                  options={sizeOptions}
+                  selected={selectedSize}
+                  onSelect={setSelectedSize}
+                />
+
+                <ProductInfoAccordion />
+              </div>
             </div>
           </div>
 
-          <ItemsCarousel
-            title={"От этого же блогера"}
-            items={products ?? []}
-            getItemKey={(product) => product.id}
-            perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
-            peekNext
-            controlsInline
-            renderItem={(product) => <ProductCard product={product as any} />}
-          />
+          <div className="flex flex-col gap-10">
+            <div></div>
+            <div id="related" className="scroll-mt-28">
+              <ItemsCarousel
+                title={"От этого же блогера"}
+                items={products ?? []}
+                getItemKey={(product) => product.id}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                peekNext
+                controlsInline
+                renderItem={(product) => (
+                  <ProductCard product={product as any} />
+                )}
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Card className="p-4">
-              <CardContent className="px-0">
-                <div className="grid gap-3 md:grid-cols-[1fr_2fr] md:items-start">
-                  <div className="text-2xl font-semibold">Опис</div>
-                  <div className="text-sm leading-relaxed text-foreground">
-                    {product?.description ||
-                      "Детальний опис товару буде доданий пізніше."}
+            <div className="flex flex-col gap-2">
+              <Card id="description" className="p-4 scroll-mt-28">
+                <CardContent className="px-0">
+                  <div className="grid gap-3 md:grid-cols-[1fr_2fr] md:items-start">
+                    <div className="text-2xl font-semibold">Опис</div>
+                    <div className="text-sm leading-relaxed text-foreground">
+                      {product?.description ||
+                        "Детальний опис товару буде доданий пізніше."}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <ProductCharacteristics items={characteristics} />
+              <div id="characteristics" className="scroll-mt-28">
+                <ProductCharacteristics items={characteristics} />
+              </div>
+            </div>
+
+            {viewedProducts.length > 0 && (
+              <div id="recently-viewed" className="scroll-mt-28">
+                <ItemsCarousel
+                  title={t("carousels.recentlyViewed", { ns: "common" })}
+                  items={viewedProducts}
+                  getItemKey={(product) => product.id}
+                  perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                  peekNext
+                  controlsInline
+                  renderItem={(product) => (
+                    <ProductCard product={product as any} />
+                  )}
+                />
+              </div>
+            )}
           </div>
-
-          {viewedProducts.length > 0 && (
-            <ItemsCarousel
-              title={t("carousels.recentlyViewed", { ns: "common" })}
-              items={viewedProducts}
-              getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
-              peekNext
-              controlsInline
-              renderItem={(product) => <ProductCard product={product as any} />}
-            />
-          )}
         </section>
       )}
 
