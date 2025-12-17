@@ -43,22 +43,28 @@ function ProductPage() {
     isLoading,
     isError,
   } = useProduct(Number.isFinite(productId) ? productId : undefined);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["product", "common"]);
 
   const { data: products } = useFilteredProduct(category);
 
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
   );
-  const sectionLinks = useMemo(() => {
-    const links = [
-      { id: "overview", label: "Огляд" },
-      { id: "description", label: "Опис" },
-      { id: "characteristics", label: "Характеристики" },
-      { id: "related", label: "От этого же блогера" },
-    ];
-    return links;
-  }, [t, viewedProducts.length]);
+  const sectionLinks = useMemo(
+    () => [
+      { id: "overview", label: t("sections.overview") },
+      {
+        id: "description",
+        label: t("sections.description"),
+      },
+      {
+        id: "characteristics",
+        label: t("sections.characteristics"),
+      },
+      { id: "related", label: t("sections.related") },
+    ],
+    [t]
+  );
 
   const categoryLabel = useMemo(() => {
     if (!category) return t("breadcrumb.catalog");
@@ -97,7 +103,7 @@ function ProductPage() {
 
   const handleFavoriteToggle = (next: boolean) => {
     setIsFavorite(next);
-    toast.success(next ? "Added to favorites" : "Removed from favorites", {
+    toast.success(next ? t("favorites.added", { ns: "common" }) : t("favorites.removed", { ns: "common" }), {
       description: product?.title,
     });
   };
@@ -109,14 +115,25 @@ function ProductPage() {
 
   const characteristics = useMemo(
     () => [
-      { label: "Brand", value: "nike" },
-      { label: "Розмір", value: selectedSize || "—" },
-      { label: "Колір", value: "Темний синій" },
-      { label: "Матеріал", value: "Бавовна / поліестер" },
-      { label: "Состояние", value: "нове" },
-      { label: "Країна-виробник товару", value: "Україна" },
+      { label: t("characteristics.brand"), value: "Nike" },
+      {
+        label: t("characteristics.condition"),
+        value: "нове",
+      },
+      {
+        label: t("characteristics.size"),
+        value: selectedSize || "—",
+      },
+      {
+        label: t("characteristics.material"),
+        value: "бавовна",
+      },
+      {
+        label: t("characteristics.stock"),
+        value: "13 одиниць",
+      },
     ],
-    [selectedSize]
+    [selectedSize, t]
   );
 
   return (
@@ -125,13 +142,15 @@ function ProductPage() {
         <BreadcrumbList className="hidden md:flex">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">{t("breadcrumb.home")}</Link>
+              <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/catalog">{t("breadcrumb.catalog")}</Link>
+              <Link to="/catalog">
+                {t("breadcrumb.catalog", { ns: "common" })}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           {category && (
@@ -228,7 +247,7 @@ function ProductPage() {
             <div></div>
             <div id="related" className="scroll-mt-28">
               <ItemsCarousel
-                title={"От этого же блогера"}
+                title={t("sections.related")}
                 items={products ?? []}
                 getItemKey={(product) => product.id}
                 perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
@@ -239,22 +258,25 @@ function ProductPage() {
                 )}
               />
             </div>
-
             <div className="flex flex-col gap-2">
               <Card id="description" className="p-4 scroll-mt-28">
                 <CardContent className="px-0">
                   <div className="grid gap-3 md:grid-cols-[1fr_2fr] md:items-start">
-                    <div className="text-2xl font-semibold">Опис</div>
+                    <div className="text-2xl font-semibold">
+                      {t("sections.description")}
+                    </div>
                     <div className="text-sm leading-relaxed text-foreground">
-                      {product?.description ||
-                        "Детальний опис товару буде доданий пізніше."}
+                      {product?.description || t("descriptionFallback")}
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               <div id="characteristics" className="scroll-mt-28">
-                <ProductCharacteristics items={characteristics} />
+                <ProductCharacteristics
+                  items={characteristics}
+                  title={t("sections.characteristics")}
+                />
               </div>
             </div>
 

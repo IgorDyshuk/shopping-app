@@ -1,4 +1,5 @@
 import { ChevronRight, Heart, ShoppingCart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -16,19 +17,24 @@ type ProductActionCardProps = {
 
 export function ProductActionCard({
   price,
-  inStockLabel = "Є в наявности",
+  inStockLabel,
   sellerName = "sdsffs",
   isFavorite,
   onFavoriteToggle,
 }: ProductActionCardProps) {
+  const { t } = useTranslation("product");
   const isSmallScreen = useMediaQuery("(max-width: 500px)");
+
+  const sellerLabel = t("seller");
+  const stockLabel = inStockLabel ?? t("inStock");
+  const buyLabel = t("buy");
 
   return (
     <Card className="py-4">
       <CardContent className="w-full px-0 flex flex-col justify-between">
         <div className="text-xs md:text-sm px-4 pb-3 flex w-full justify-between item">
           <div>
-            <span className="text-muted-foreground"> Продавець:</span>{" "}
+            <span className="text-muted-foreground">{sellerLabel}:</span>{" "}
             {sellerName}
           </div>
           <ChevronRight
@@ -45,7 +51,7 @@ export function ProductActionCard({
           >
             <div className="flex flex-col">
               <span className="text-xs md:text-sm text-primary">
-                {inStockLabel}
+                {stockLabel}
               </span>
               <span className="text-3xl">
                 {price !== undefined ? `${price} $` : "—"}
@@ -54,12 +60,12 @@ export function ProductActionCard({
             <div className="flex items-center gap-2">
               {!isSmallScreen && (
                 <Button className="bg-primary">
-                  <ShoppingCart /> Купити
+                  <ShoppingCart /> {buyLabel}
                 </Button>
               )}
               <Toggle
                 aria-label={
-                  isFavorite ? "Remove from favorites" : "Add to favorites"
+                  isFavorite ? t("favorites.removed") : t("favorites.added")
                 }
                 pressed={isFavorite}
                 onPressedChange={onFavoriteToggle}
@@ -73,7 +79,7 @@ export function ProductActionCard({
           </div>
           {isSmallScreen && (
             <Button className="bg-primary">
-              <ShoppingCart /> Купити
+              <ShoppingCart /> {buyLabel}
             </Button>
           )}
         </div>

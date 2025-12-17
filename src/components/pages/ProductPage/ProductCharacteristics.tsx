@@ -9,17 +9,19 @@ type Characteristic = {
 type ProductCharacteristicsProps = {
   items: Characteristic[];
   className?: string;
+  title?: string;
 };
 
 export function ProductCharacteristics({
   items,
   className,
+  title = "Характеристики",
 }: ProductCharacteristicsProps) {
   return (
     <Card className={cn("p-4", className)}>
       <CardContent className="px-0">
         <div className="grid gap-4 md:grid-cols-[1fr_2fr] items-start">
-          <div className="text-2xl font-semibold">Характеристики</div>
+          <div className="text-2xl font-semibold">{title}</div>
           <div className="flex flex-col">
             {items.map(({ label, value }) => (
               <div

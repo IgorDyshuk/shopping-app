@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Heart } from "lucide-react";
@@ -14,6 +15,7 @@ type ProductCardProps = {
 
 export function ProductCard({ product, bordered = false }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
   const productUrl = useMemo(
     () => `/category/${encodeURIComponent(product.category)}/${product.id}`,
@@ -22,9 +24,12 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
 
   const handleFavoriteToggle = (next: boolean) => {
     setIsFavorite(next);
-    toast.success(next ? "Added to favorites" : "Removed from favorites", {
+    toast.success(
+      next ? t("favorites.added") : t("favorites.removed"),
+      {
       description: product.title,
-    });
+      }
+    );
   };
 
   return (

@@ -113,6 +113,10 @@
     "catalog": "Каталог",
     "product": "Товар"
   },
+  "favorites": {
+    "added": "Додано в обране",
+    "removed": "Видалено з обраного"
+  },
   "sidebar": {
     "sectionTitle": "Платформа",
     "main": {

@@ -113,6 +113,10 @@
     "catalog": "Catalog",
     "product": "Product"
   },
+  "favorites": {
+    "added": "Added to favorites",
+    "removed": "Removed from favorites"
+  },
   "sidebar": {
     "sectionTitle": "Platform",
     "main": {

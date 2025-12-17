@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "overview": "Overview",
+    "description": "Description",
+    "characteristics": "Characteristics",
+    "related": "From this blogger"
+  },
+  "code": "Code",
+  "noRating": "No rating",
+  "inStock": "In stock",
+  "seller": "Seller",
+  "buy": "Buy",
+  "descriptionFallback": "Detailed description will be added later.",
+  "characteristics": {
+    "brand": "Brand",
+    "size": "Size",
+    "stock": "Left in stock",
+    "condition": "Condition",
+    "material": "Material"
+
+  },
+  "favorites": {
+    "added": "Added to favorites",
+    "removed": "Removed from favorites"
+  }
+}

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { RatingStars } from "@/components/pages/ProductPage/RatingStars";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 type ProductHeadingCardProps = {
   title?: string;
@@ -19,6 +20,7 @@ export function ProductHeadingCard({
   className,
 }: ProductHeadingCardProps) {
   const hasRating = Boolean(rating?.rate);
+  const { t } = useTranslation("product");
 
   return (
     <Card
@@ -41,10 +43,14 @@ export function ProductHeadingCard({
               </span>
             </>
           ) : (
-            <span className="text-sm text-muted-foreground">No rating</span>
+            <span className="text-sm text-muted-foreground">
+              {t("noRating")}
+            </span>
           )}
         </div>
-        <div className="text-muted-foreground text-sm">Код: {code}</div>
+        <div className="text-muted-foreground text-sm">
+          {t("code")}: {code}
+        </div>
       </CardContent>
     </Card>
   );

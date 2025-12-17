@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "overview": "Огляд",
+    "description": "Опис",
+    "characteristics": "Характеристики",
+    "related": "Від цього блогера"
+  },
+  "code": "Код",
+  "noRating": "Без рейтингу",
+  "inStock": "Є в наявності",
+  "seller": "Продавець",
+  "buy": "Купити",
+  "descriptionFallback": "Детальний опис товару буде доданий пізніше.",
+  "characteristics": {
+    "brand": "Бренд",
+    "condition": "Стан",
+    "size": "Розмір",
+    "stock": "Залишилось",
+    "material": "Матеріал"
+  },
+  "favorites": {
+    "added": "Додано в обране",
+    "removed": "Видалено з обраного"
+  }
+}

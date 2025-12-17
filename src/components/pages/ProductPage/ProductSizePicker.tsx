@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -17,12 +19,14 @@ export function ProductSizePicker({
   selected,
   onSelect,
 }: ProductSizePickerProps) {
+  const { t } = useTranslation("product");
+
   return (
     <Card className="p-4">
       <CardContent className="px-0">
         <div className="flex flex-col gap-2">
           <span className="text-xs md:text-sm text-muted-foreground">
-            Розмір
+            {t("characteristics.size")}
           </span>
           <div className="flex flex-wrap gap-2">
             {options.map((opt) => (

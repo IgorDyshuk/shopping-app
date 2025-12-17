@@ -50,7 +50,7 @@ export function ProductSectionsNav({
   if (!sections.length) return null;
 
   return (
-    <div className={"sticky top-[60px] z-40 "}>
+    <div className={"sticky top-[60px] z-20 "}>
       <nav
         aria-label="Product sections"
         className="w-full overflow-x-auto rounded-lg border bg-background/80 backdrop-blur px-2"
