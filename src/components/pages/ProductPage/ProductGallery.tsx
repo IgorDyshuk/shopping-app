@@ -43,7 +43,8 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
   }
 
   return (
-    <div className="flex flex-col w-full gap-7 sm:gap-10">
+    <div className="flex flex-col w-full gap-5 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-9 2xl:gap-10">
+      <div></div>
       <Carousel
         opts={{ align: "start", loop: true }}
         setApi={setCarouselApi}

@@ -28,7 +28,7 @@ export function ProductCharacteristics({
               >
                 <div className="flex gap-3 py-2">
                   <span className="text-muted-foreground">{label}</span>
-                  <span className="hidden md:flex flex-1 border-b border-dashed border-border/70" />
+                  <span className="flex flex-1 border-b border-dashed border-border/70" />
                 </div>
                 <div className="grid grid-cols-[1fr] md:grid-cols-[1fr] gap-2 py-2">
                   <span className="text-foreground text-left md:text-left">
