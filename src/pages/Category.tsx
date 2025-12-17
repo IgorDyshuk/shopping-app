@@ -521,7 +521,6 @@ function Category() {
                     })
                   }
                   onPriceChange={updatePriceRange}
-                  className="self-start md:sticky md:top-24"
                 />
               )}
               <div className="space-y-4">

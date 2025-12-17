@@ -48,16 +48,12 @@ export function CategoryFilters({
   onConditionToggle,
   onGenderToggle,
   onPriceChange,
-  className,
 }: CategoryFiltersProps) {
   const { t } = useTranslation("category");
 
   return (
     <aside
-      className={cn(
-        "space-y-5 rounded-xl border bg-sidebar/50 p-4 shadow-sm",
-        className
-      )}
+      className={cn("space-y-5 rounded-xl border bg-sidebar/50 p-4 shadow-sm")}
     >
       <h2 className="text-lg font-semibold">{t("filters.header")}</h2>
 
