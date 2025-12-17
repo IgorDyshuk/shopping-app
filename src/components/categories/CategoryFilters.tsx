@@ -67,26 +67,24 @@ export function CategoryFilters({
             {t("filters.gender")}
           </p>
           <div className="space-y-2">
-              {genderOptions.map((filter) => {
-                const label = filter.labelKey
-                  ? t(filter.labelKey)
-                  : filter.label;
-                return (
-                  <label
-                    key={filter.id}
-                    className="flex items-center gap-2 text-sm text-foreground"
-                  >
-                <Checkbox
-                  id={`gender-${filter.id}`}
-                  checked={activeGenderFilters.has(filter.id)}
-                  onCheckedChange={(val) =>
-                    onGenderToggle(filter.id, Boolean(val))
-                  }
-                />
-                {label}
-              </label>
-                );
-              })}
+            {genderOptions.map((filter) => {
+              const label = filter.labelKey ? t(filter.labelKey) : filter.label;
+              return (
+                <label
+                  key={filter.id}
+                  className="flex items-center gap-2 text-sm text-foreground"
+                >
+                  <Checkbox
+                    id={`gender-${filter.id}`}
+                    checked={activeGenderFilters.has(filter.id)}
+                    onCheckedChange={(val) =>
+                      onGenderToggle(filter.id, Boolean(val))
+                    }
+                  />
+                  {label}
+                </label>
+              );
+            })}
           </div>
         </div>
       )}
@@ -97,9 +95,7 @@ export function CategoryFilters({
         </p>
         <div className="space-y-2">
           {categoryOptions.map((filter) => {
-            const label = filter.labelKey
-              ? t(filter.labelKey)
-              : filter.label;
+            const label = filter.labelKey ? t(filter.labelKey) : filter.label;
             return (
               <label
                 key={filter.id}
@@ -125,9 +121,7 @@ export function CategoryFilters({
         </p>
         <div className="grid grid-cols-2 gap-2">
           {sizeOptions.map((filter) => {
-            const label = filter.labelKey
-              ? t(filter.labelKey)
-              : filter.label;
+            const label = filter.labelKey ? t(filter.labelKey) : filter.label;
             return (
               <label
                 key={filter.id}
@@ -202,9 +196,7 @@ export function CategoryFilters({
         </p>
         <div className="space-y-2">
           {conditionOptions.map((filter) => {
-            const label = filter.labelKey
-              ? t(filter.labelKey)
-              : filter.label;
+            const label = filter.labelKey ? t(filter.labelKey) : filter.label;
             return (
               <label
                 key={filter.id}

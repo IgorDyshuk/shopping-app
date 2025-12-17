@@ -143,7 +143,7 @@ function Header({ showSidebar = false }: HeaderProps) {
                         <SearchIcon className="size-5" />
                       )}
                     </Button>
-                    <ModeToggle />
+                    {showSidebar && <ModeToggle />}
                   </>
                 )}
 
@@ -152,7 +152,7 @@ function Header({ showSidebar = false }: HeaderProps) {
                     <LogIn />
                     <SignUp />
                     <LanguageSwitcher />
-                    {!isCompactSearch && <ModeToggle />}
+                    <ModeToggle />
                   </>
                 )}
               </div>
