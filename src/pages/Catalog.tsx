@@ -44,12 +44,14 @@ function Catalog() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">{t("breadcrumb.home")}</Link>
+              <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{t("breadcrumb.catalog")}</BreadcrumbPage>
+            <BreadcrumbPage>
+              {t("breadcrumb.catalog", { ns: "common" })}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

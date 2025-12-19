@@ -31,6 +31,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары в карусели (Embla + Autoplay), блок “Recently viewed” и скелетон при загрузке.
 - `src/pages/Catalog.tsx` — каталог с секциями по категориям, ссылками “show more” и блоком “Recently viewed”.
 - `src/pages/Category.tsx` — категория с полноценными фильтрами (категории/размер/состояние/гендер, диапазон цены со слайдером и инпутами), сортировкой, чипами активных фильтров, sticky панелью на десктопе и drawer на мобильных.
+- `src/pages/Sellers.tsx` — список всех блогеров/продавцов.
 - `src/pages/Product.tsx` — страница товара: галерея, рейтинг, выбор размера, блок продавца/цены/кнопок, аккордеоны с инфо/доставкой/возвратом, описание/характеристики, подборки по категории и недавно просмотренные, липкое меню секций.
 - `src/components/pages/ProductPage/ProductGallery.tsx` — галерея товара на Carousel с полноразмерными слайдами и кликабельными миниатюрами.
 - `src/components/pages/ProductPage/RatingStars.tsx` — отрисовка рейтинга (включая половинки).
@@ -40,6 +41,8 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/components/pages/ProductPage/ProductSectionsNav.tsx` — липкая навигация по секциям страницы товара.
 - `src/components/pages/ProductPage/ProductHeadingCard.tsx` — заголовок товара с рейтингом и кодом.
 - `src/components/pages/ProductPage/ProductCharacteristics.tsx` — блок характеристик с заголовком.
+- `src/api/sellers.ts` — API для блогеров/продавцов (list/get/create/update/delete).
+- `src/hooks/api-hooks/useSellers.ts` — React Query хуки для получения списка и детали селлера.
 - `src/components/categories/CategoryFilters.tsx` — боковая панель фильтров (категория, размер, состояние, гендер, цена).
 - `src/components/categories/CategoryFiltersDrawer.tsx` — мобильный/узкий режим: drawer с теми же фильтрами, кнопками Apply/Cancel и чипами выбранных значений.
 - `src/constants/filters-presets.ts` — пресеты фильтров с `labelKey` для перевода (категории, размеры, состояние, гендер).
