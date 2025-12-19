@@ -46,7 +46,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
     <div className="flex flex-col w-full gap-5 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-9 2xl:gap-10">
       <div></div>
       <Carousel
-        opts={{ align: "start", loop: true }}
+        opts={{ align: "start", loop: false }}
         setApi={setCarouselApi}
         className="relative w-full flex items-center justify-center"
       >

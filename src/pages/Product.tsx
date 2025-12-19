@@ -32,24 +32,27 @@ import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
   const productId = useMemo(() => Number(id), [id]);
-  const addViewedProduct = useViewedProductsStore(
-    (state) => state.addViewedProduct
-  );
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedSize, setSelectedSize] = useState<string>("");
-
   const {
     data: product,
     isLoading,
     isError,
   } = useProduct(Number.isFinite(productId) ? productId : undefined);
+  const { data: products } = useFilteredProduct(category);
+
   const { t } = useTranslation(["product", "common"]);
 
-  const { data: products } = useFilteredProduct(category);
+  const isSmallScreen = useMediaQuery("(max-width: 767px)");
+
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string>("");
 
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
   );
+  const addViewedProduct = useViewedProductsStore(
+    (state) => state.addViewedProduct
+  );
+
   const sectionLinks = useMemo(
     () => [
       { id: "overview", label: t("sections.overview") },
@@ -93,8 +96,6 @@ function ProductPage() {
     return defaultSizeOptions;
   }, [sizePreset]);
 
-  const isSmallScreen = useMediaQuery("(max-width: 767px)");
-
   useEffect(() => {
     if (!selectedSize && sizeOptions.length) {
       setSelectedSize(sizeOptions[2].id);
@@ -103,9 +104,14 @@ function ProductPage() {
 
   const handleFavoriteToggle = (next: boolean) => {
     setIsFavorite(next);
-    toast.success(next ? t("favorites.added", { ns: "common" }) : t("favorites.removed", { ns: "common" }), {
-      description: product?.title,
-    });
+    toast.success(
+      next
+        ? t("favorites.added", { ns: "common" })
+        : t("favorites.removed", { ns: "common" }),
+      {
+        description: product?.title,
+      }
+    );
   };
 
   const galleryImages = useMemo(() => {

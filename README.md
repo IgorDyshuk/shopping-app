@@ -10,8 +10,8 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - Zustand + persist (localStorage для недавно просмотренных)
 
 ## Структура
-- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`.
-- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`).
+- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`, `product`.
+- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`, `product.json`).
 - `src/lib/apiConfig.ts` — базовый URL/таймауты (`VITE_API_URL`, `VITE_API_TIMEOUT`).
 - `src/api/client.ts` — axios-инстанс с auth-header.
 - `src/api/{products,auth}.ts` — сервисы fakestore.
@@ -31,12 +31,15 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары в карусели (Embla + Autoplay), блок “Recently viewed” и скелетон при загрузке.
 - `src/pages/Catalog.tsx` — каталог с секциями по категориям, ссылками “show more” и блоком “Recently viewed”.
 - `src/pages/Category.tsx` — категория с полноценными фильтрами (категории/размер/состояние/гендер, диапазон цены со слайдером и инпутами), сортировкой, чипами активных фильтров, sticky панелью на десктопе и drawer на мобильных.
-- `src/pages/Product.tsx` — страница товара: галерея, рейтинг, выбор размера, блок продавца/цены/кнопок, аккордеоны с инфо/доставкой/возвратом, описание/характеристики, подборки по категории и недавно просмотренные.
+- `src/pages/Product.tsx` — страница товара: галерея, рейтинг, выбор размера, блок продавца/цены/кнопок, аккордеоны с инфо/доставкой/возвратом, описание/характеристики, подборки по категории и недавно просмотренные, липкое меню секций.
 - `src/components/pages/ProductPage/ProductGallery.tsx` — галерея товара на Carousel с полноразмерными слайдами и кликабельными миниатюрами.
 - `src/components/pages/ProductPage/RatingStars.tsx` — отрисовка рейтинга (включая половинки).
 - `src/components/pages/ProductPage/ProductActionCard.tsx` — блок продавца, цены/стока, CTA “Купити” и фаворит-тоггла.
 - `src/components/pages/ProductPage/ProductSizePicker.tsx` — выбор размера с вариантами кнопок.
 - `src/components/pages/ProductPage/ProductInfoAccordion.tsx` — аккордеон с информацией/доставкой/возвратом.
+- `src/components/pages/ProductPage/ProductSectionsNav.tsx` — липкая навигация по секциям страницы товара.
+- `src/components/pages/ProductPage/ProductHeadingCard.tsx` — заголовок товара с рейтингом и кодом.
+- `src/components/pages/ProductPage/ProductCharacteristics.tsx` — блок характеристик с заголовком.
 - `src/components/categories/CategoryFilters.tsx` — боковая панель фильтров (категория, размер, состояние, гендер, цена).
 - `src/components/categories/CategoryFiltersDrawer.tsx` — мобильный/узкий режим: drawer с теми же фильтрами, кнопками Apply/Cancel и чипами выбранных значений.
 - `src/constants/filters-presets.ts` — пресеты фильтров с `labelKey` для перевода (категории, размеры, состояние, гендер).
