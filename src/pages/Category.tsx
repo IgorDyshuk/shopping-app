@@ -308,7 +308,7 @@ function Category() {
   }, [isSmallScreen]);
 
   return (
-    <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -338,7 +338,7 @@ function Category() {
       ) : isError ? (
         <p className="text-destructive">{t("loadingError")}</p>
       ) : (
-        <div className="flex flex-col gap-6 my-7">
+        <div className="flex flex-col gap-6 mt-3 xl:mt-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-3xl font-semibold">{capitalizedCategory}</h1>

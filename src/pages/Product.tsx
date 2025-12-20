@@ -143,7 +143,7 @@ function ProductPage() {
   );
 
   return (
-    <section className="w-full my-18 xl:my-20">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList className="hidden md:flex">
           <BreadcrumbItem>
@@ -200,7 +200,7 @@ function ProductPage() {
       ) : isError ? (
         <p className="text-destructive">error</p>
       ) : (
-        <section className="flex flex-col gap-2 mt-2 sm:mt-4 xl:mt-6 ">
+        <section className="flex flex-col gap-2 mt-3 xl:mt-4">
           <ProductSectionsNav sections={sectionLinks} />
           <div className="flex flex-col gap-2">
             <div

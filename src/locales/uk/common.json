@@ -26,14 +26,14 @@
         "description": "Сумки, годинники, прикраси від блогерів."
       }
     },
-    "creatorsTrigger": "Блогери",
-    "creators": {
+    "bloggersTrigger": "Блогери",
+    "bloggers": {
       "top": {
         "title": "Топ блогери",
         "description": "Популярні вітрини зі свіжими дропами."
       },
       "all": {
-        "title": "Усі створці",
+        "title": "Усі блогери",
         "description": "Шукай за ім’ям чи ніком."
       },
       "collabs": {
@@ -88,14 +88,14 @@
   },
   "footer": {
     "brand": "Test Shop",
-    "description": "Маркетплейс ресейлу дропів та рідкісних речей від блогерів. Купуй, продавай і знаходь лімітовані речі улюблених творців.",
+    "description": "Маркетплейс ресейлу дропів та рідкісних речей від блогерів. Купуй, продавай і знаходь лімітовані речі улюблених блогерів.",
     "marketplace": "Маркетплейс",
     "support": "Підтримка",
     "company": "Компанія",
     "links": {
       "drops": "Дропи",
       "catalog": "Каталог",
-      "creators": "Блогери",
+      "bloggers": "Блогери",
       "faq": "FAQ",
       "help": "Центр підтримки",
       "returns": "Повернення",
@@ -126,10 +126,10 @@
       "catalogClothing": "Одяг",
       "catalogSneakers": "Взуття",
       "catalogAccessories": "Аксесуари",
-      "creators": "Блогери",
-      "creatorsTop": "Топ блогери",
-      "creatorsAll": "Усі створці",
-      "creatorsCollabs": "Колаборації"
+      "bloggers": "Блогери",
+      "bloggersTop": "Топ блогери",
+      "bloggersAll": "Усі блогери",
+      "bloggersCollabs": "Колаборації"
     },
     "footer": {
       "support": "Підтримка",

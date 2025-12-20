@@ -46,22 +46,22 @@ export function NavigationMenuComplete() {
     [t]
   );
 
-  const creators = React.useMemo(
+  const bloggers = React.useMemo(
     () => [
       {
-        title: t("nav.creators.top.title"),
+        title: t("nav.bloggers.all.title"),
+        href: "/bloggers",
+        description: t("nav.bloggers.all.description"),
+      },
+      {
+        title: t("nav.bloggers.top.title"),
         href: "#creators-top",
-        description: t("nav.creators.top.description"),
+        description: t("nav.bloggers.top.description"),
       },
       {
-        title: t("nav.creators.all.title"),
-        href: "#creators-all",
-        description: t("nav.creators.all.description"),
-      },
-      {
-        title: t("nav.creators.collabs.title"),
+        title: t("nav.bloggers.collabs.title"),
         href: "#creators-collabs",
-        description: t("nav.creators.collabs.description"),
+        description: t("nav.bloggers.collabs.description"),
       },
     ],
     [t]
@@ -108,12 +108,12 @@ export function NavigationMenuComplete() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            {t("nav.creatorsTrigger")}
+          <NavigationMenuTrigger onClick={() => navigate("/bloggers")}>
+            {t("nav.bloggersTrigger")}
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px]">
-              {creators.map((item) => (
+              {bloggers.map((item) => (
                 <ListItem key={item.title} href={item.href} title={item.title}>
                   {item.description}
                 </ListItem>
@@ -142,10 +142,13 @@ function ListItem({
   href,
   ...props
 }: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+  const isAbsolute = href.startsWith("/") || href.startsWith("#");
+  const to = isAbsolute ? href : `/category/${encodeURIComponent(href)}`;
+
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <Link to={`/category/${encodeURIComponent(href)}`}>
+        <Link to={to}>
           <div className="text-sm leading-none font-medium">{title}</div>
           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}

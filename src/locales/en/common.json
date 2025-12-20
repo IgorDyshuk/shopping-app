@@ -11,7 +11,7 @@
   "nav": {
     "catalogTrigger": "Catalog",
     "catalogHeroTitle": "All catalog",
-    "catalogHeroDescription": "Clothing, electronics, jewelry, creator drops — choose a category and filter in one place.",
+    "catalogHeroDescription": "Clothing, electronics, jewelry, blogger drops — choose a category and filter in one place.",
     "catalog": {
       "clothing": {
         "title": "Clothing",
@@ -23,18 +23,18 @@
       },
       "accessories": {
         "title": "Accessories",
-    "description": "Bags, watches, jewelry from creators."
+    "description": "Bags, watches, jewelry from bloggers."
       }
     },
-    "creatorsTrigger": "Creators",
-    "creators": {
+    "bloggersTrigger": "Bloggers",
+    "bloggers": {
       "top": {
-        "title": "Top creators",
+        "title": "Top bloggers",
         "description": "Popular showcases with fresh drops."
       },
       "all": {
-        "title": "All creators",
-        "description": "Search by name or nickname."
+        "title": "All bloggers",
+        "description": "Search bloggers by name or nickname."
       },
       "collabs": {
         "title": "Collabs",
@@ -88,14 +88,14 @@
   },
   "footer": {
     "brand": "Test Shop",
-    "description": "Resale marketplace for influencer drops and curated finds. Buy, sell, and discover limited pieces from your favorite creators.",
+    "description": "Resale marketplace for influencer drops and curated finds. Buy, sell, and discover limited pieces from your favorite bloggers.",
     "marketplace": "Marketplace",
     "support": "Support",
     "company": "Company",
     "links": {
       "drops": "Drops",
       "catalog": "Catalog",
-      "creators": "Creators",
+      "bloggers": "Bloggers",
       "faq": "FAQ",
       "help": "Help center",
       "returns": "Returns",
@@ -126,10 +126,10 @@
       "catalogClothing": "Clothing",
       "catalogSneakers": "Footwear",
       "catalogAccessories": "Accessories",
-      "creators": "Creators",
-      "creatorsTop": "Top creators",
-      "creatorsAll": "All creators",
-      "creatorsCollabs": "Collabs"
+      "bloggers": "Bloggers",
+      "bloggersTop": "Top bloggers",
+      "bloggersAll": "All bloggers",
+      "bloggersCollabs": "Collabs"
     },
     "footer": {
       "support": "Support",

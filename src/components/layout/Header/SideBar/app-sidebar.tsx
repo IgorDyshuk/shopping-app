@@ -87,21 +87,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           ],
         },
         {
-          title: t("sidebar.main.creators"),
+          title: t("sidebar.main.bloggers"),
           url: "#creators",
           icon: Users,
           isActive: true,
           items: [
             {
-              title: t("sidebar.main.creatorsTop"),
-              url: "#creators-top",
+              title: t("sidebar.main.bloggersAll"),
+              url: "/bloggers",
             },
             {
-              title: t("sidebar.main.creatorsAll"),
-              url: "#creators-all",
+              title: t("sidebar.main.bloggersTop"),
+              url: "/bloggers",
             },
             {
-              title: t("sidebar.main.creatorsCollabs"),
+              title: t("sidebar.main.bloggersCollabs"),
               url: "#creators-collabs",
             },
           ],

@@ -4,7 +4,7 @@ const footerLinks = {
   marketplace: [
     { labelKey: "footer.links.drops", href: "#drops" },
     { labelKey: "footer.links.catalog", href: "#catalog" },
-    { labelKey: "footer.links.creators", href: "#creators" },
+    { labelKey: "footer.links.bloggers", href: "#creators" },
   ],
   support: [
     { labelKey: "footer.links.faq", href: "#faq" },

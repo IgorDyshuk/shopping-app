@@ -39,7 +39,7 @@ function Catalog() {
   );
 
   return (
-    <section className="w-full my-16 sm:my-16 md:my-17 lg:my-17 xl:my-18 2xl:my-18">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -56,8 +56,8 @@ function Catalog() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-col gap-8 my-7.5">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-8 mt-3 xl:mt-4">
+        <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-semibold">{t("title")}</h1>
           <p className="text-muted-foreground">{t("subtitle")}</p>
         </div>
