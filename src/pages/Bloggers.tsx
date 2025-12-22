@@ -9,27 +9,9 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import BloggerSkeleton from "@/components/pages/Creator/BloggersSkeleton";
-import { BloggerCard } from "@/components/pages/Creator/BloggerCard";
-
-const TOP_ARTIST_IDS = [
-  "3TVXtAsR1Inumwj472S9r4", // Drake
-  "1Xyo4u8uXC1ZmMpatF05PJ", // The Weeknd
-  "66CXW7JJDKx0p3fFuLLYz8", // Ariana Grande
-  "06HL4z0CvFAxyc27GXpf02", // Taylor Swift
-  "7dGJo4pcD2V6oG8kP0tJRR", // Eminem
-  "246dkjvS1zLTtiykXe5h60", // Post Malone
-  "6eUKZXaKkcviH0Ku9w2n3V", // Ed Sheeran
-  "4q3ewBCX7sLwd24euuV69X", // Bad Bunny
-  "6qqNVTkY8uBg9cP3Jd7DAH", // Billie Eilish
-  "1McMsnEElThX1knmY4oliG", // Olivia Rodrigo
-  "6KImCVD70vtIoJWnq6nGn3", // Harry Styles
-  "6M2wZ9GZgrQXHCFfjv46we", // Dua Lipa
-  "53XhwfbYqKCa1cC15pYq2q", // Imagine Dragons
-  "3Nrfpe0tUJi4K4DXYWgMUX", // BTS
-  "2YZyLoL8N0Wb9xBt1NhZWg", // Kendrick Lamar
-  "5pKCCKE2ajJHZ9KAiaK11H", // Rihanna
-];
+import BloggerSkeleton from "@/components/pages/Blogger/BloggersSkeleton";
+import { BloggerCard } from "@/components/pages/Blogger/BloggerCard";
+import { TOP_BLOGGER_IDS } from "@/constants/blogger-ids";
 
 function BloggersPage() {
   const {
@@ -38,7 +20,7 @@ function BloggersPage() {
     isError,
     isFetching,
     isPlaceholderData,
-  } = useTopArtists(TOP_ARTIST_IDS);
+  } = useTopArtists(TOP_BLOGGER_IDS);
   const { t } = useTranslation("common");
 
   return (
@@ -70,7 +52,7 @@ function BloggersPage() {
             {t("error", { ns: "home" })}
           </p>
         ) : (
-          <div className="grid w-full gap-4 sm:gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid w-full gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {topArtists?.map((artist, idx) => (
               <BloggerCard key={artist?.id ?? idx} artist={artist} />
             ))}

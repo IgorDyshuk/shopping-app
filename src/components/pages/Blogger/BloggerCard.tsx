@@ -15,7 +15,7 @@ export function BloggerCard({ artist }: SellerCardProps) {
   return (
     <Card className="h-full p-0">
       <CardContent className="p-0 relative group">
-        <div className="relative h-120 lg:h-90 w-full overflow-hidden rounded-md">
+        <div className="relative h-70 sm:h-110 md:h-90 w-full overflow-hidden rounded-md">
           {cover && (
             <img
               src={cover}

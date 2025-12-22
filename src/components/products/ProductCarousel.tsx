@@ -140,27 +140,27 @@ export function ItemsCarousel<T>({
             </div>
           )}
         </div>
-        <CarouselContent
-          // className={`-ml-1.5 md:-ml-1.5 xl:-ml-3 ${contentClass}`}
-          className={`ml-0 ${contentClass}`}
-        >
-          {items.map((item, index) => (
-            <CarouselItem
-              key={getItemKey ? getItemKey(item, index) : index}
-              className={itemClasses}
-              style={itemStyle}
-            >
-              {renderItem(item)}
-            </CarouselItem>
-          ))}
-        </CarouselContent>
 
-        {!controlsInline && !hideControls && (
-          <>
-            <CarouselPrevious className="absolute left-7 top-1/2 -translate-y-1/2 -translate-x-1/2 size-10" />
-            <CarouselNext className="absolute right-7 top-1/2 -translate-y-1/2 translate-x-1/2 size-10" />
-          </>
-        )}
+        <div className="relative">
+          <CarouselContent className={`ml-0 ${contentClass}`}>
+            {items.map((item, index) => (
+              <CarouselItem
+                key={getItemKey ? getItemKey(item, index) : index}
+                className={itemClasses}
+                style={itemStyle}
+              >
+                {renderItem(item)}
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          {!controlsInline && !hideControls && (
+            <>
+              <CarouselPrevious className="absolute left-3 top-1/2 -translate-y-1/2 size-10" />
+              <CarouselNext className="absolute right-3 top-1/2 -translate-y-1/2 size-10" />
+            </>
+          )}
+        </div>
       </Carousel>
     </div>
   );

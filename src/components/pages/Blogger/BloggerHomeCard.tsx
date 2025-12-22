@@ -1,0 +1,34 @@
+import { Card, CardContent } from "@/components/ui/card";
+import type { SpotifyArtist } from "@/types/artist";
+
+type SellerCardProps = {
+  artist?: SpotifyArtist;
+};
+
+export function BloggerHomeCard({ artist }: SellerCardProps) {
+  if (!artist) return null;
+
+  const cover =
+    artist.images?.find((img) => img.width >= 640)?.url ||
+    artist.images?.[0]?.url;
+
+  return (
+    <Card className="h-full p-0">
+      <CardContent className="p-0 relative group">
+        <div className="relative h-45 sm:h-60 md:h-70 lg:h-90 w-full overflow-hidden rounded-md">
+          {cover && (
+            <img
+              src={cover}
+              alt={artist.name}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 hover:cursor-pointer"
+            />
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-black/25 to-transparent" />
+          <span className="pointer-events-none absolute bottom-2 left-3 px-3 text-left text-base md:text-lg font-medium leading-tight text-white drop-shadow">
+            {artist.name}
+          </span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

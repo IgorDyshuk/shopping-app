@@ -5,9 +5,15 @@ import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
+import { TOP_BLOGGER_IDS } from "@/constants/blogger-ids";
+import { useTopArtists } from "@/hooks/api-hooks/useArtists";
+import { BloggerCard } from "@/components/pages/Blogger/BloggerCard";
+import { BloggerHomeCard } from "@/components/pages/Blogger/BloggerHomeCard";
 
 function Home() {
   const { data: products, isLoading, isError } = useProducts();
+  const { data: topArtists, isLoading: isArtistLoading } =
+    useTopArtists(TOP_BLOGGER_IDS);
   const { t } = useTranslation(["home", "common"]);
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
@@ -16,7 +22,7 @@ function Home() {
   return (
     <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30">
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
-        {isLoading ? (
+        {isLoading || isArtistLoading ? (
           <HomeSkeleton />
         ) : isError ? (
           <p className="text-destructive">{t("error")}</p>
@@ -24,15 +30,17 @@ function Home() {
           <>
             <ItemsCarousel
               title={t("carousels.popularBloggers")}
-              items={products ?? []}
-              getItemKey={(product) => product.id}
+              items={(topArtists ?? []).filter(Boolean)}
+              getItemKey={(artist, idx) => artist?.id ?? idx}
               autoplay
               loop
-              perRow={{ base: 1 }}
+              perRow={{ base: 1, md: 2 }}
               controlsInline={false}
-              renderItem={(product) => (
-                <ProductCard product={product} bordered />
-              )}
+              renderItem={(artist) =>
+                artist ? (
+                  <BloggerHomeCard artist={artist} key={artist?.id} />
+                ) : null
+              }
             />
 
             <ItemsCarousel
@@ -50,7 +58,7 @@ function Home() {
               title={t("carousels.trending")}
               items={products ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, sm: 2, md: 2, lg: 2, xl: 2 }}
+              perRow={{ base: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
               viewAllLink="#"
               controlsInline
               loop
