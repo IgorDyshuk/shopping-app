@@ -41,13 +41,18 @@ import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { useSortOptions } from "@/hooks/category-hooks/use-sort-options";
 import { deriveCategoryId } from "@/utils/derive-product-category";
 
-function Category() {
-  const { category = "" } = useParams<{ category: string }>();
-  const { t } = useTranslation(["category", "common"]);
+type CategoryPageProps = {
+  presetCategory?: string;
+};
+
+function Category({ presetCategory }: CategoryPageProps) {
+  const { category: categoryParam = "" } = useParams<{ category?: string }>();
+  const rawCategory = presetCategory ?? categoryParam;
   const decodedCategory = useMemo(
-    () => decodeURIComponent(category),
-    [category]
+    () => decodeURIComponent(rawCategory),
+    [rawCategory]
   );
+  const { t } = useTranslation(["category", "common"]);
   const categoryNameKey = useMemo(() => {
     const lower = decodedCategory.toLowerCase();
     if (lower.includes("men")) return "categories.men";
@@ -308,44 +313,54 @@ function Category() {
   }, [isSmallScreen]);
 
   return (
-    <section className="w-full my-18 xl:my-19">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/catalog">
-                {t("breadcrumb.catalog", { ns: "common" })}
-              </Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              {capitalizedCategory || t("categories.default")}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <section className={`w-full ${presetCategory ? "my-0" : "my-18 xl:my-19"}`}>
+      {!presetCategory && (
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/catalog">
+                  {t("breadcrumb.catalog", { ns: "common" })}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                {capitalizedCategory || t("categories.default")}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      )}
 
       {isLoading ? (
         <CategorySkeleton />
       ) : isError ? (
         <p className="text-destructive">{t("loadingError")}</p>
       ) : (
-        <div className="flex flex-col gap-6 mt-3 xl:mt-4">
+        <div
+          className={`flex flex-col ${
+            presetCategory ? "mt-2 gap-2 sm:gap-0" : "gap-6 mt-3 xl:mt-4"
+          }`}
+        >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-semibold">{capitalizedCategory}</h1>
-              <p className="text-muted-foreground">
-                {t("subtitle", { category: decodedCategory || "all" })}
-              </p>
-            </div>
+            {!presetCategory && (
+              <div>
+                <h1 className="text-3xl font-semibold">
+                  {capitalizedCategory}
+                </h1>
+                <p className="text-muted-foreground">
+                  {t("subtitle", { category: decodedCategory || "all" })}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
@@ -474,7 +489,7 @@ function Category() {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
+            <div className="grid gap-6 items-start lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
               {!isFilterDrawer && (
                 <CategoryFilters
                   categoryOptions={categoryOptions}

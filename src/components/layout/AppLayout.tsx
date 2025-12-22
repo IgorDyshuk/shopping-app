@@ -25,9 +25,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       <SidebarInset>
         <div className="min-h-svh bg-background text-foreground flex flex-col">
           <Header showSidebar={showSidebar} />
-          <main className="mx-auto max-w-[1410px] px-3 flex-1 w-full">
+          <main className="mx-auto max-w-[1464px] px-3 flex-1 w-full">
             {children}
           </main>
+          {/* <main className="mx-auto flex-1 w-full">{children}</main> */}
           <Footer />
         </div>
       </SidebarInset>
