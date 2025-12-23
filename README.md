@@ -4,51 +4,38 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 
 ## Технологии
 - React 19, TypeScript, Vite
-- Tailwind (utility-классы), shadcn/ui (InputGroup, Navigation Menu, кнопки)
-- i18next + react-i18next (EN/UK, namespaces per page)
-- Axios + TanStack React Query (fakestore API)
-- Zustand + persist (localStorage для недавно просмотренных)
+- Tailwind, shadcn/ui (Navigation Menu, кнопки, Tooltip и др.)
+- i18next + react-i18next (EN/UK, per-page namespaces, язык хранится в zustand)
+- Axios + TanStack React Query (fakestore API + Spotify API)
+- Zustand + persist (recently viewed товары, выбранный язык)
 
 ## Структура
-- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`, `product`.
-- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`, `product.json`).
+- `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`, `product`, `blogger`; стартовый язык берётся из zustand.
+- `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`, `product.json`, `blogger.json`).
+- `src/stores/use-language.ts` — zustand-persist для выбранного языка (используется в i18n и `LanguageSwitcher`).
+- `src/stores/use-viewed-products.ts` — недавно просмотренные товары (persist в localStorage).
 - `src/lib/apiConfig.ts` — базовый URL/таймауты (`VITE_API_URL`, `VITE_API_TIMEOUT`).
 - `src/api/client.ts` — axios-инстанс с auth-header.
 - `src/api/{products,auth}.ts` — сервисы fakestore.
-- `src/hooks/{useProducts,useAuth}.ts` — хуки React Query.
+- `src/api/spotify.ts` — client-credentials Spotify (`VITE_SPOTIFY_CLIENT_ID`, `VITE_SPOTIFY_CLIENT_SECRET`, опционально `VITE_SPOTIFY_ACCESS_TOKEN`), кэш токена в рантайме.
+- `src/hooks/api-hooks/{useProducts,useAuth,useArtists,useSellers}.ts` — хуки React Query.
+- `src/types/{product,artist}.ts` — типы товара и артиста Spotify.
 - `src/lib/queryClient.ts` — QueryClient; подключён в `src/main.tsx`.
-- `src/components/layout/Header.tsx` — фиксированный хедер с адаптивным поиском (оверлей/кнопка на узких экранах) и навигацией.
-- `src/components/layout/Header/Navigation.tsx` — навигация под маркетплейс (дропы, каталог, создатели, продать вещь, FAQ) на Radix Navigation Menu.
-- `src/components/layout/Header/SearchBar.tsx` — InputGroup с подсказками (фильтр по товарам, открытия по вводу, закрытие по Esc/клику вне, анимация появления/исчезновения), переход к странице товара по клику на подсказку.
-- `src/components/ui/navigation-menu.tsx` — UI-компоненты навигационного меню.
-- `src/components/ui/accordion.tsx` — обёртка над Radix Accordion с триггерами и анимацией раскрытия.
-- `src/components/layout/Header/SideBar/*` — мобильный/десктоп сайдбар (иконка, кнопки входа/регистрации, аватар в свернутом состоянии, `nav-language.tsx` — переключатель языка в виде дропдауна).
-- `src/components/layout/skeletons/HomeSkeleton.tsx` — скелетон главной (секции с карточками) на время загрузки.
-- `src/components/layout/skeletons/ProductSkeleton.tsx` — скелетон страницы товара (галерея, рейтинг, CTA/размер/аккордеоны, описание, характеристики).
-- `src/components/products/ProductCard.tsx` — карточка товара с фаворит-тогглом (Sonner toast), ховер-эффектом и переходом на страницу товара.
-- `src/components/products/ProductCarousel.tsx` — переиспользуемая карусель карточек (autoplay, responsive perRow, peek next, “Смотреть больше” ссылка, стрелки inline/боковые).
-- `src/stores/use-viewed-products.ts` — zustand-store с persist в localStorage для недавно просмотренных (используется на Home/Catalog/Product).
-- `src/pages/Home.tsx` — главная, тянет тексты из `home`/`common`, выводит товары в карусели (Embla + Autoplay), блок “Recently viewed” и скелетон при загрузке.
-- `src/pages/Catalog.tsx` — каталог с секциями по категориям, ссылками “show more” и блоком “Recently viewed”.
-- `src/pages/Category.tsx` — категория с полноценными фильтрами (категории/размер/состояние/гендер, диапазон цены со слайдером и инпутами), сортировкой, чипами активных фильтров, sticky панелью на десктопе и drawer на мобильных.
-- `src/pages/Sellers.tsx` — список всех блогеров/продавцов.
-- `src/pages/Product.tsx` — страница товара: галерея, рейтинг, выбор размера, блок продавца/цены/кнопок, аккордеоны с инфо/доставкой/возвратом, описание/характеристики, подборки по категории и недавно просмотренные, липкое меню секций.
-- `src/components/pages/ProductPage/ProductGallery.tsx` — галерея товара на Carousel с полноразмерными слайдами и кликабельными миниатюрами.
-- `src/components/pages/ProductPage/RatingStars.tsx` — отрисовка рейтинга (включая половинки).
-- `src/components/pages/ProductPage/ProductActionCard.tsx` — блок продавца, цены/стока, CTA “Купити” и фаворит-тоггла.
-- `src/components/pages/ProductPage/ProductSizePicker.tsx` — выбор размера с вариантами кнопок.
-- `src/components/pages/ProductPage/ProductInfoAccordion.tsx` — аккордеон с информацией/доставкой/возвратом.
-- `src/components/pages/ProductPage/ProductSectionsNav.tsx` — липкая навигация по секциям страницы товара.
-- `src/components/pages/ProductPage/ProductHeadingCard.tsx` — заголовок товара с рейтингом и кодом.
-- `src/components/pages/ProductPage/ProductCharacteristics.tsx` — блок характеристик с заголовком.
-- `src/api/sellers.ts` — API для блогеров/продавцов (list/get/create/update/delete).
-- `src/hooks/api-hooks/useSellers.ts` — React Query хуки для получения списка и детали селлера.
-- `src/components/categories/CategoryFilters.tsx` — боковая панель фильтров (категория, размер, состояние, гендер, цена).
-- `src/components/categories/CategoryFiltersDrawer.tsx` — мобильный/узкий режим: drawer с теми же фильтрами, кнопками Apply/Cancel и чипами выбранных значений.
-- `src/constants/filters-presets.ts` — пресеты фильтров с `labelKey` для перевода (категории, размеры, состояние, гендер).
-- `src/components/layout/AppLayout.tsx` — общий лейаут приложения (фиксированный хедер, контент с отступом под него, футер, подключение сайдбара).
-- `src/components/layout/Footer.tsx` — футер с описанием маркетплейса и ссылками (Marketplace, Support, Company).
-- `src/App.tsx` — точка входа, оборачивает страницы в `SidebarProvider` и `AppLayout`; роуты Home/Catalog/Category/Product + Toaster.
+- `src/constants/{filters-presets,blogger-ids}.ts` — пресеты фильтров и список ID блогеров.
+- `src/components/layout/Header.tsx` — фиксированный хедер с адаптивным поиском и навигацией; `LanguageSwitcher` читает язык из zustand.
+- `src/components/layout/Header/SideBar/*` — сайдбар (моб/десктоп) с навигацией и сменой языка.
+- `src/components/layout/skeletons/{HomeSkeleton,ProductSkeleton,BloggerSkeleton}.tsx` — скелетоны главной, товара, блогера.
+- `src/components/products/{ProductCard,ProductCarousel}.tsx` — карточки и карусель товаров (Embla, autoplay, responsive perRow, peek next).
+- `src/components/pages/ProductPage/*` — галерея, рейтинг, карточки действия/размера, аккордеон информации, характеристики, липкое меню секций.
+- `src/components/pages/Blogger/*` — карточки блогеров (для списка и главной), скелетон.
+- `src/components/categories/*` — фильтры категории (панель и drawer), чипы активных фильтров.
+- `src/pages/Home.tsx` — главная: карусели товаров, recently viewed, блок популярных блогеров (Spotify) и скелетон при любой загрузке/placeholder данных.
+- `src/pages/Catalog.tsx` — каталог с секциями и блоком recently viewed.
+- `src/pages/Category.tsx` — категория с фильтрами/сортировкой/чипами; поддерживает проп `presetCategory` (при передаче хлебные крошки скрываются и используется указанная категория).
+- `src/pages/Product.tsx` — страница товара: галерея, рейтинг, выбор размера, CTA, аккордеоны, описание/характеристики, подборки по категории и недавно просмотренные, липкое меню секций.
+- `src/pages/Bloggers.tsx` — список блогеров (artists из Spotify) с карточками и скелетоном.
+- `src/pages/Blogger.tsx` — страница блогера: обложка с тултипом “Verified blogger”, счётчик подписчиков, жанры/описание, соцкнопки, встроенная категория мужской одежды (`Category presetCategory="clothing"`).
+- `src/App.tsx` — роутинг Home/Catalog/Category/Product/Bloggers/Blogger, обёртка AppLayout + Toaster.
 
 ## Запуск
 - Установка: `npm install` (или `npm ci`).
@@ -58,6 +45,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 ## Переключение API
 - `VITE_API_URL` — другой бэкенд (по умолчанию `https://fakestoreapi.com`).
 - `VITE_API_TIMEOUT` — таймаут запросов в мс.
+- `VITE_SPOTIFY_CLIENT_ID` / `VITE_SPOTIFY_CLIENT_SECRET` — client credentials Spotify (для блоков блогеров). Опционально `VITE_SPOTIFY_ACCESS_TOKEN` для заранее полученного токена.
 
 ## Дополнительно
 - GH Pages: `npm run deploy` (используется `homepage` в `package.json`).

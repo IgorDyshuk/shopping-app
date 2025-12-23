@@ -10,14 +10,12 @@ import SignUp from "./Header/SIgnUpForm";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { LanguageSwitcher } from "./Header/LanguageSwitcher";
 
 type HeaderProps = {
   showSidebar?: boolean;
 };
 
 function Header({ showSidebar = false }: HeaderProps) {
-  const [isCompactSearch, setIsCompactSearch] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isHiding, setIsHiding] = useState(false);
   const [isEntering, setIsEntering] = useState(false);
@@ -37,20 +35,6 @@ function Header({ showSidebar = false }: HeaderProps) {
 
   const headerLeft =
     showSidebar && isTabletUp ? (isSidebarOpen ? "255px" : "47px") : "0px";
-
-  useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1555px)");
-    const update = () => setIsCompactSearch(mql.matches);
-    update();
-    mql.addEventListener("change", update);
-    return () => mql.removeEventListener("change", update);
-  }, []);
-
-  useEffect(() => {
-    if (!isCompactSearch) {
-      setShowSearchBar(false);
-    }
-  }, [isCompactSearch]);
 
   useEffect(() => {
     if (!showSearchBar) {
@@ -93,11 +77,11 @@ function Header({ showSidebar = false }: HeaderProps) {
 
   return (
     <header
-      className="fixed right-0 top-0 z-40 border-b bg-background/80 backdrop-blur transition-[left] duration-185 ease-linear"
+      className="fixed right-0 top-0 z-40 border-b bg-background transition-[left] duration-185 ease-linear"
       style={{ left: headerLeft }}
     >
       <div className="relative">
-        <div className="mx-auto flex w-full max-w-[1800px] flex-col gap-3 px-2 md:px-4 py-3">
+        <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-3 px-2 md:px-4 py-3">
           <div className="relative z-20 flex items-center gap-3">
             <div className="flex items-center gap-2">
               {showSidebar && <SidebarTrigger />}
@@ -114,44 +98,34 @@ function Header({ showSidebar = false }: HeaderProps) {
               )}
 
               <div className="flex items-center gap-3 ml-auto">
-                {!isCompactSearch && (
-                  <div className="hidden min-[1521px]:flex items-center gap-3">
-                    <SearchBar className="w-[460px]" />
-                  </div>
-                )}
-                {isCompactSearch && (
-                  <>
-                    <Button
-                      ref={toggleRef}
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        setShowSearchBar((prev) => {
-                          if (prev) {
-                            startHide();
-                            return prev;
-                          }
-                          return true;
-                        })
+                <Button
+                  ref={toggleRef}
+                  variant="ghost"
+                  size="icon"
+                  onClick={() =>
+                    setShowSearchBar((prev) => {
+                      if (prev) {
+                        startHide();
+                        return prev;
                       }
-                      aria-expanded={showSearchBar}
-                      aria-label="Search"
-                    >
-                      {showSearchBar ? (
-                        <X className="size-5" />
-                      ) : (
-                        <SearchIcon className="size-5" />
-                      )}
-                    </Button>
-                    {showSidebar && <ModeToggle />}
-                  </>
-                )}
+                      return true;
+                    })
+                  }
+                  aria-expanded={showSearchBar}
+                  aria-label="Search"
+                >
+                  {showSearchBar ? (
+                    <X className="size-5" />
+                  ) : (
+                    <SearchIcon className="size-5" />
+                  )}
+                </Button>
+                {showSidebar && <ModeToggle />}
 
                 {!showSidebar && (
                   <>
                     <LogIn />
                     <SignUp />
-                    <LanguageSwitcher />
                     <ModeToggle />
                   </>
                 )}
@@ -160,7 +134,7 @@ function Header({ showSidebar = false }: HeaderProps) {
           </div>
         </div>
 
-        {isCompactSearch && showSearchBar && (
+        {showSearchBar && (
           <div
             ref={overlayRef}
             className={`absolute left-0 right-0 top-full z-40 px-3 pb-3 transition-all duration-200 ${

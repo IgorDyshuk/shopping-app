@@ -28,8 +28,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           <main className="mx-auto max-w-[1464px] px-3 flex-1 w-full">
             {children}
           </main>
-          {/* <main className="mx-auto flex-1 w-full">{children}</main> */}
-          <Footer />
+          <Footer showLanguage={!showSidebar} />
         </div>
       </SidebarInset>
     </>

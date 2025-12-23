@@ -123,11 +123,6 @@ export function NavigationMenuComplete() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="#sell">{t("nav.sell")}</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link to="#support">{t("nav.support")}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
