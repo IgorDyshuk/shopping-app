@@ -36,7 +36,7 @@ function LoginPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="w-full max-w-xl px-4 mt-3 xl:mt-4">
+      <div className="w-full max-w-xl px-0 sm:px-4 mt-3 xl:mt-4">
         <LoginForm onSwitchToSignup={() => navigate("/signup")} isPage />
       </div>
     </section>

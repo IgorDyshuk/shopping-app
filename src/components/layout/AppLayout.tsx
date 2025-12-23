@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import { useSidebar } from "@/components/ui/sidebar";
 
 type AppLayoutProps = {
   children: ReactNode;
@@ -14,10 +15,18 @@ type AppLayoutProps = {
 export function AppLayout({ children }: AppLayoutProps) {
   const showSidebar = useMediaQuery("(max-width: 1131px)");
   const { pathname } = useLocation();
+  const { closeSidebar } = useSidebar();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!showSidebar) return;
+    if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
+      closeSidebar();
+    }
+  }, [showSidebar, pathname, closeSidebar]);
 
   return (
     <>

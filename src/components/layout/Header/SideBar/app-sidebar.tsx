@@ -24,8 +24,6 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import LogIn from "../LogInForm";
-import SignUp from "../SIgnUpForm";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 import { useTranslation } from "react-i18next";
 import LogIN_SignUp from "./LoginSugnupButtons";
