@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useLanguageStore } from "@/stores/use-language";
 
 const languages = [
   { value: "en", labelKey: "languages.en" },
@@ -23,13 +24,19 @@ const languages = [
 
 function LanguageSwitcher() {
   const { t, i18n } = useTranslation();
+  const { language, setLanguage } = useLanguageStore();
   const [open, setOpen] = useState(false);
 
-  const currentLanguage = (i18n.resolvedLanguage ??
-    i18n.language ??
-    "en") as string;
+  const currentLanguage = language || (i18n.resolvedLanguage ?? i18n.language ?? "en");
   const activeLanguage =
     languages.find(({ value }) => value === currentLanguage) ?? languages[0];
+
+  // Sync i18n with stored language on mount/update.
+  useEffect(() => {
+    if (currentLanguage && currentLanguage !== i18n.language) {
+      void i18n.changeLanguage(currentLanguage);
+    }
+  }, [currentLanguage, i18n]);
 
   const handleSelect = (value: string) => {
     if (value === currentLanguage) {
@@ -37,6 +44,7 @@ function LanguageSwitcher() {
       return;
     }
 
+    setLanguage(value);
     void i18n.changeLanguage(value);
     setOpen(false);
   };

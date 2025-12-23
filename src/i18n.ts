@@ -13,6 +13,21 @@ import ukCatalog from "./locales/uk/catalog.json";
 import ukCategory from "./locales/uk/category.json";
 import ukProduct from "./locales/uk/product.json";
 import ukBlogger from "./locales/uk/blogger.json";
+import { LANGUAGE_STORAGE_KEY } from "@/stores/use-language";
+
+let initialLanguage = "en";
+if (typeof window !== "undefined") {
+  const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      initialLanguage =
+        parsed?.state?.language || parsed?.language || initialLanguage;
+    } catch {
+      // ignore parse errors
+    }
+  }
+}
 
 void i18n.use(initReactI18next).init({
   resources: {
@@ -33,8 +48,8 @@ void i18n.use(initReactI18next).init({
       blogger: ukBlogger,
     },
   },
-  lng: "en",
-  fallbackLng: "en",
+  lng: initialLanguage,
+  fallbackLng: initialLanguage,
   defaultNS: "common",
   supportedLngs: ["en", "uk"],
   interpolation: {
