@@ -6,16 +6,32 @@ import enHome from "./locales/en/home.json";
 import enCatalog from "./locales/en/catalog.json";
 import enCategory from "./locales/en/category.json";
 import enProduct from "./locales/en/product.json";
+import enBlogger from "./locales/en/blogger.json";
 import ukCommon from "./locales/uk/common.json";
 import ukHome from "./locales/uk/home.json";
 import ukCatalog from "./locales/uk/catalog.json";
 import ukCategory from "./locales/uk/category.json";
 import ukProduct from "./locales/uk/product.json";
+import ukBlogger from "./locales/uk/blogger.json";
 
 void i18n.use(initReactI18next).init({
   resources: {
-    en: { common: enCommon, home: enHome, catalog: enCatalog, category: enCategory, product: enProduct },
-    uk: { common: ukCommon, home: ukHome, catalog: ukCatalog, category: ukCategory, product: ukProduct },
+    en: {
+      common: enCommon,
+      home: enHome,
+      catalog: enCatalog,
+      category: enCategory,
+      product: enProduct,
+      blogger: enBlogger,
+    },
+    uk: {
+      common: ukCommon,
+      home: ukHome,
+      catalog: ukCatalog,
+      category: ukCategory,
+      product: ukProduct,
+      blogger: ukBlogger,
+    },
   },
   lng: "en",
   fallbackLng: "en",

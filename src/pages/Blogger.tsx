@@ -19,10 +19,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useArtistInfo } from "@/hooks/api-hooks/useArtists";
 import { Button } from "@/components/ui/button";
 import Category from "./Category";
+import { BloggerSkeleton } from "@/components/pages/Blogger/BloggerSkeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 function BloggerPage() {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["blogger", "common"]);
   const { data: artist, isLoading, isError } = useArtistInfo(id || undefined);
 
   if (!id) {
@@ -34,6 +41,14 @@ function BloggerPage() {
     artist?.images?.[0]?.url;
   const spotifyUrl = artist?.external_urls?.spotify;
   const searchQuery = encodeURIComponent(artist?.name ?? "");
+  const followersLabel =
+    artist?.followers?.total != null
+      ? t("followers", {
+          ns: "blogger",
+          count: artist.followers.total,
+          formatted: new Intl.NumberFormat().format(artist.followers.total),
+        })
+      : null;
 
   return (
     <section className="w-full my-18 xl:my-19">
@@ -41,7 +56,7 @@ function BloggerPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/">{t("breadcrumb.home")}</Link>
+              <Link to="/">{t("breadcrumb.home", { ns: "common" })}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -54,14 +69,16 @@ function BloggerPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink>{artist?.name ?? "Blogger"}</BreadcrumbLink>
+            <BreadcrumbLink>
+              {artist?.name ?? t("defaultName", { ns: "blogger" })}
+            </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="mt-4 flex flex-col gap-0">
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">{t("search.loading")}</p>
+          <BloggerSkeleton />
         ) : isError || !artist ? (
           <p className="text-destructive text-sm">
             {t("error", { ns: "home", defaultValue: "Error loading blogger" })}
@@ -89,17 +106,28 @@ function BloggerPage() {
                     />
                   )}
                   <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
-                  <div className="pointer-events-none absolute bottom-3 md:bottom-4 left-3 md:left-4 text-white drop-shadow space-y-1">
+                  <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 text-white drop-shadow space-y-1">
                     <div className="flex items-start gap-0.5 sm:gap-1">
                       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
                         {artist.name}
                       </h1>
-                      <CheckCircle2 className="size-3.5 sm:size-5 text-primary drop-shadow" />
+                      <TooltipProvider delayDuration={150}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <CheckCircle2 className="size-3.5 sm:size-5 text-primary drop-shadow cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            {t("verifiedBlogger", {
+                              ns: "blogger",
+                              defaultValue: "Verified blogger",
+                            })}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
-                    {artist.followers?.total && (
+                    {followersLabel && (
                       <p className="text-xs sm:text-sm text-white/80">
-                        {new Intl.NumberFormat().format(artist.followers.total)}{" "}
-                        followers
+                        {followersLabel}
                       </p>
                     )}
                   </div>
@@ -114,7 +142,7 @@ function BloggerPage() {
                     <p className="text-sm ">
                       {artist.genres?.length
                         ? artist.genres.join(", ")
-                        : "No description yet."}
+                        : t("noDescription", { ns: "blogger" })}
                     </p>
                   </div>
                 </div>
@@ -128,7 +156,10 @@ function BloggerPage() {
                     >
                       <a href={spotifyUrl} target="_blank" rel="noreferrer">
                         <ExternalLink className="size-4" />
-                        Spotify
+                        {t("cta.spotify", {
+                          ns: "blogger",
+                          defaultValue: "Spotify",
+                        })}
                       </a>
                     </Button>
                   )}
@@ -139,7 +170,10 @@ function BloggerPage() {
                       rel="noreferrer"
                     >
                       <Youtube className="size-4" />
-                      YouTube
+                      {t("cta.youtube", {
+                        ns: "blogger",
+                        defaultValue: "YouTube",
+                      })}
                     </a>
                   </Button>
                   <Button asChild variant="outline" size="sm" className="gap-2">
@@ -149,7 +183,10 @@ function BloggerPage() {
                       rel="noreferrer"
                     >
                       <Facebook className="size-4" />
-                      Facebook
+                      {t("cta.facebook", {
+                        ns: "blogger",
+                        defaultValue: "Facebook",
+                      })}
                     </a>
                   </Button>
                   <Button asChild variant="outline" size="sm" className="gap-2">
@@ -159,7 +196,10 @@ function BloggerPage() {
                       rel="noreferrer"
                     >
                       <Send className="size-4" />
-                      Telegram
+                      {t("cta.telegram", {
+                        ns: "blogger",
+                        defaultValue: "Telegram",
+                      })}
                     </a>
                   </Button>
                 </div>

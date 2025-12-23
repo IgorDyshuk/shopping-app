@@ -1,0 +1,12 @@
+{
+  "defaultName": "Блогер",
+  "verifiedBlogger": "Підтверджений блогер",
+  "noDescription": "Опису поки немає.",
+  "followers": "{{formatted}} підписників",
+  "cta": {
+    "spotify": "Spotify",
+    "youtube": "YouTube",
+    "facebook": "Facebook",
+    "telegram": "Telegram"
+  }
+}

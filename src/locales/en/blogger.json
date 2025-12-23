@@ -1,0 +1,12 @@
+{
+  "defaultName": "Blogger",
+  "verifiedBlogger": "Verified blogger",
+  "noDescription": "No description yet.",
+  "followers": "{{formatted}} followers",
+  "cta": {
+    "spotify": "Spotify",
+    "youtube": "YouTube",
+    "facebook": "Facebook",
+    "telegram": "Telegram"
+  }
+}
