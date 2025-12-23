@@ -28,6 +28,7 @@ import LogIn from "../LogInForm";
 import SignUp from "../SIgnUpForm";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 import { useTranslation } from "react-i18next";
+import LogIN_SignUp from "./LoginSugnupButtons";
 
 const clothingCategory = CATALOG_CATEGORIES.clothing;
 const electronicsCategory = CATALOG_CATEGORIES.electronics;
@@ -126,12 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        {(state === "expanded" || isMobile) && (
-          <div className="flex gap-2">
-            <LogIn className="flex-1 min-w-0 justify-center" />
-            <SignUp className="flex-1 min-w-0 justify-center" />
-          </div>
-        )}
+        {(state === "expanded" || isMobile) && <LogIN_SignUp />}
         {state === "collapsed" && !isMobile && (
           <div className="flex justify-center py-1">
             <Button

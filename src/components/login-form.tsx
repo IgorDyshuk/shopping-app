@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,15 +22,26 @@ import { Input } from "@/components/ui/input";
 export function LoginForm({
   className,
   onSwitchToSignup,
+  isPage = false,
+  onClose,
   ...props
-}: React.ComponentProps<"div"> & { onSwitchToSignup?: () => void }) {
+}: React.ComponentProps<"div"> & {
+  onSwitchToSignup?: () => void;
+  isPage?: boolean;
+  onClose?: () => void;
+}) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+    <div
+      className={cn("flex flex-col gap-6", className)}
+      data-is-page={isPage ? "true" : "false"}
+      {...props}
+    >
+      <Card className={`${isPage ? "border-none" : ""}`}>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">
+          <CardTitle className={`${isPage ? "text-3xl" : "text-xl"}`}>
             {t("authForm.login.title")}
           </CardTitle>
           <CardDescription>{t("authForm.login.subtitle")}</CardDescription>
@@ -93,7 +105,12 @@ export function LoginForm({
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      onSwitchToSignup?.();
+                      if (onSwitchToSignup) {
+                        onSwitchToSignup();
+                      } else {
+                        navigate("/signup");
+                      }
+                      onClose?.();
                     }}
                   >
                     {t("authForm.login.footerLink")}

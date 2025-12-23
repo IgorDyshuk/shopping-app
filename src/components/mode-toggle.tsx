@@ -8,7 +8,7 @@ export function ModeToggle() {
   return (
     <div
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className={`flex items-center cursor-pointer transition-transform duration-500
+      className={`flex items-center cursor-pointer transition-transform duration-500 p-1
                          ${isDark ? "rotate-180" : "rotate-0"}
                          `}
     >

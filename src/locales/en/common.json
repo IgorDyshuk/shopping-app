@@ -51,7 +51,8 @@
   },
   "auth": {
     "login": "Log in",
-    "signup": "Sign up"
+    "signup": "Sign up",
+    "authorization": "Authorization"
   },
   "authForm": {
     "fields": {

@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMenu";
 import { SearchBar } from "@/components/layout/Header/SearchBar";
 import LogIn from "./Header/LogInForm";
-import SignUp from "./Header/SIgnUpForm";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { User } from "lucide-react";
 
 type HeaderProps = {
   showSidebar?: boolean;
@@ -124,8 +124,18 @@ function Header({ showSidebar = false }: HeaderProps) {
 
                 {!showSidebar && (
                   <>
-                    <LogIn />
-                    <SignUp />
+                    <LogIn
+                      trigger={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Account"
+                          className=" text-white hover:cursor-po"
+                        >
+                          <User className="size-6 text-foreground" />
+                        </Button>
+                      }
+                    />
                     <ModeToggle />
                   </>
                 )}

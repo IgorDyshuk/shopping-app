@@ -51,7 +51,8 @@
   },
   "auth": {
     "login": "Увійти",
-    "signup": "Реєстрація"
+    "signup": "Реєстрація",
+    "authorization": "Авторизація"
   },
   "authForm": {
     "fields": {

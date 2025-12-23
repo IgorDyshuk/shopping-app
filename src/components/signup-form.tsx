@@ -26,9 +26,9 @@ export function SignupForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="border-none">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">
+          <CardTitle className="text-3xl">
             {t("authForm.signup.title")}
           </CardTitle>
           <CardDescription>{t("authForm.signup.subtitle")}</CardDescription>
@@ -59,23 +59,19 @@ export function SignupForm({
                 />
               </Field>
               <Field>
-                <Field className="grid grid-cols-2 gap-4">
-                  <Field>
-                    <FieldLabel htmlFor="password">
-                      {t("authForm.signup.password")}
-                    </FieldLabel>
-                    <Input id="password" type="password" required />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">
-                      {t("authForm.signup.confirmPassword")}
-                    </FieldLabel>
-                    <Input id="confirm-password" type="password" required />
-                  </Field>
-                </Field>
+                <FieldLabel htmlFor="password">
+                  {t("authForm.signup.password")}
+                </FieldLabel>
+                <Input id="password" type="password" required />
                 <FieldDescription>
                   {t("authForm.signup.helper")}
                 </FieldDescription>
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="confirm-password">
+                  {t("authForm.signup.confirmPassword")}
+                </FieldLabel>
+                <Input id="confirm-password" type="password" required />
               </Field>
               <Field>
                 <Button type="submit">{t("authForm.signup.submit")}</Button>

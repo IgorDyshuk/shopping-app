@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { GalleryVerticalEnd } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -11,9 +11,10 @@ import { cn } from "@/lib/utils";
 
 type LogInProps = {
   className?: string;
+  trigger?: ReactNode;
 };
 
-export default function LogIn({ className }: LogInProps) {
+export default function LogIn({ className, trigger }: LogInProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -24,25 +25,22 @@ export default function LogIn({ className }: LogInProps) {
       document.removeEventListener("open-login", handleOpen as EventListener);
   }, []);
 
-  const switchToSignup = () => {
-    setOpen(false);
-    document.dispatchEvent(new CustomEvent("open-signup"));
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className={cn(
-            "rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground",
-            className
-          )}
-          onClick={() => setOpen(true)}
-        >
-          {t("auth.login")}
-        </Button>
+        {trigger ?? (
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground",
+              className
+            )}
+            onClick={() => setOpen(true)}
+          >
+            {t("auth.login")}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="p-0 sm:max-w-lg">
         <div className="bg-muted flex min-h-[70vh] flex-col items-center justify-center gap-6 p-6 md:p-10 rounded-md">
@@ -56,7 +54,7 @@ export default function LogIn({ className }: LogInProps) {
               </div>
               website name.
             </a>
-            <LoginForm onSwitchToSignup={switchToSignup} />
+            <LoginForm onClose={() => setOpen(false)} />
           </div>
         </div>
       </DialogContent>
