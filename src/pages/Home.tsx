@@ -32,7 +32,7 @@ function Home() {
     isLoading || isArtistLoading || !topArtists || topArtists.length === 0;
 
   return (
-    <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30 px-0 md:px-2">
+    <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-13 xl:my-15 2xl:my-30  ">
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
         {showSkeleton ? (
           <HomeSkeleton />
@@ -55,13 +55,13 @@ function Home() {
               }
             />
 
-            <div className="flex flex-col gap-1">
-              <h1 className="text-2xl px-2">{t("carousels.newArrivals")}</h1>
-              <div className="flex overflow-x-auto pl-1 sm:pl-2 py-3 md:py-6 md:pl-0 md:grid md:grid-cols-3 md:gap-y-7 md:overflow-visible xl:grid-cols-4">
+            <div className="flex flex-col gap-0 md:gap-1">
+              <h1 className="text-2xl">{t("carousels.newArrivals")}</h1>
+              <div className="flex overflow-x-auto py-3 md:py-6 md:grid md:grid-cols-4 md:gap-y-7 md:overflow-visible xl:grid-cols-4">
                 {products?.slice(0, productsArrivalsCount).map((product) => (
                   <div
                     key={product.id}
-                    className="min-w-[240px] sm:min-w-[280px] md:min-w-0"
+                    className="min-w-60 sm:min-w-[280px] md:min-w-0"
                   >
                     <ProductHomeCard product={product} />
                   </div>
@@ -70,10 +70,8 @@ function Home() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h1 className="text-2xl px-2">
-                {t("carousels.popularBloggers")}
-              </h1>
-              <div className="flex overflow-x-auto gap-1 pl-2 py-2 md:py-6  md:pl-0 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <h1 className="text-2xl">{t("carousels.popularBloggers")}</h1>
+              <div className="flex overflow-x-auto gap-1 py-2 md:py-6 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {(topArtists ?? [])
                   .filter(Boolean)
                   .slice(0, bloggersArrivalsCount)

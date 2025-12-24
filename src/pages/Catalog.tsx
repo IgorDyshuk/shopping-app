@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
-import { ProductCard } from "@/components/products/ProductCard";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { useFilteredProduct } from "@/hooks/api-hooks/useProducts";
 import {
@@ -15,6 +14,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
+import { ProductHomeCard } from "@/components/products/ProductHomeCard";
+import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
 
 function Catalog() {
   const menCategory = CATALOG_CATEGORIES.men;
@@ -39,7 +40,7 @@ function Catalog() {
   );
 
   return (
-    <section className="w-full my-18 xl:my-19 px-2">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -74,53 +75,72 @@ function Catalog() {
               title={t("sections.clothing")}
               items={clothingAll ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink={`/category/${encodeURIComponent(clothingCategory)}`}
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
+
             <ItemsCarousel
               title={t("sections.men")}
               items={menClothes ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink={`/category/${encodeURIComponent(menCategory)}`}
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
+
             <ItemsCarousel
               title={t("sections.women")}
               items={womenClothes ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink={`/category/${encodeURIComponent(womenCategory)}`}
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
+
             <ItemsCarousel
               title={t("sections.electronics")}
               items={electronics ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink={`/category/${encodeURIComponent(
                 electronicsCategory
               )}`}
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
+
             <ItemsCarousel
               title={t("sections.jewelery")}
               items={jewelery ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink={`/category/${encodeURIComponent(jeweleryCategory)}`}
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
             {viewedProducts.length > 0 && (
               <ItemsCarousel
@@ -131,7 +151,7 @@ function Catalog() {
                 peekNext
                 controlsInline
                 renderItem={(product) => (
-                  <ProductCard product={product as any} />
+                  <ProductSmallHomeCard product={product as any} />
                 )}
               />
             )}

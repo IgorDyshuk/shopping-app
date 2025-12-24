@@ -51,7 +51,7 @@ function BloggerPage() {
       : null;
 
   return (
-    <section className="w-full my-18 xl:my-19 px-2">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

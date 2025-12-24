@@ -99,8 +99,8 @@ export function ItemsCarousel<T>({
   }, [perRow.base, perRow.xs, perRow.sm, perRow.md, perRow.lg, perRow.xl]);
 
   const hideControls = isMobile && isSmallScreen;
-  const itemClasses = "pl-0";
-  const peekOffsetPx = peekNext ? 16 : 0;
+  const itemClasses = "pl-0 first:pl-3";
+  const peekOffsetPx = !disableMobileCarousel && peekNext ? 16 : 0;
   const itemStyle = useMemo(
     () => ({
       flexBasis: `calc(100% / ${clampCount(columns)} - ${peekOffsetPx}px)`,
@@ -113,8 +113,8 @@ export function ItemsCarousel<T>({
 
   if (isMobile && disableMobileCarousel) {
     return (
-      <div className="relative">
-        <div className="mb-1 md:mb-3 flex items-center gap-3 px-3">
+      <div className="relative ">
+        <div className="mb-1 md:mb-3 flex items-center gap-3">
           <h2 className="text-2xl">{title}</h2>
           {viewAllLink && (
             <Link
@@ -125,11 +125,11 @@ export function ItemsCarousel<T>({
             </Link>
           )}
         </div>
-        <div className="flex overflow-x-auto pb-4 pl-2 md:pl-3 py-2 md:py-6">
+        <div className="flex overflow-x-auto pb-4 py-2 md:py-6">
           {items.map((item, index) => (
             <div
               key={getItemKey ? getItemKey(item, index) : index}
-              className="min-w-[220px]"
+              className="min-w-60"
             >
               {renderItem(item)}
             </div>
@@ -146,7 +146,7 @@ export function ItemsCarousel<T>({
         plugins={autoplayPlugin ? [autoplayPlugin] : []}
       >
         <div className="mb-1 md:mb-2 flex items-center justify-between">
-          <div className="flex items-center gap-3 px-3">
+          <div className="flex items-center gap-3">
             <h2 className="text-2xl">{title}</h2>
             {viewAllLink && (
               <Link
@@ -172,7 +172,7 @@ export function ItemsCarousel<T>({
 
         <div className="relative">
           <CarouselContent
-            className={`ml-0 py-2 md:py-6 pl-2 md:pl-0 ${contentClass}`}
+            className={`ml-0 py-2 md:py-6 gap-1 ${contentClass}`}
           >
             {items.map((item, index) => (
               <CarouselItem

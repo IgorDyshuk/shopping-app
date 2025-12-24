@@ -80,7 +80,7 @@ function Header({ showSidebar = false }: HeaderProps) {
       style={{ left: headerLeft }}
     >
       <div className="relative">
-        <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-3 px-2 md:px-2 py-3">
+        <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-3 p-3">
           <div className="relative z-20 flex items-center gap-3">
             <div className="flex items-center gap-2">
               {showSidebar && <SidebarTrigger />}

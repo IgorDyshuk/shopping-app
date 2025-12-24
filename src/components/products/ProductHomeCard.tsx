@@ -43,7 +43,7 @@ export function ProductHomeCard({ product }: ProductCardProps) {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-2 opacity-0 rounded-md bg-card transition-all transition-150 group-hover:opacity-100 group-hover:shadow-[0_0_28px_rgba(0,0,0,0.18)]"
+        className="pointer-events-none absolute -inset-2 opacity-0 rounded-md bg-card transition-all transition-150 group-hover:opacity-100 group-hover:shadow-[0_0_10px_rgba(0,0,0,0.18)]"
       />
       <div className="relative z-10 flex h-full w-full flex-col gap-2 p-1">
         <div className="relative flex h-full w-full flex-col gap-2">

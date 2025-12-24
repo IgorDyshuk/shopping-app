@@ -19,7 +19,6 @@ import {
 } from "@/constants/filters-presets";
 import { ProductGallery } from "@/components/pages/ProductPage/ProductGallery";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
-import { ProductCard } from "@/components/products/ProductCard";
 import { ProductSkeleton } from "@/components/layout/skeletons/ProductSkeleton";
 import { ProductCharacteristics } from "@/components/pages/ProductPage/ProductCharacteristics";
 import { ProductActionCard } from "@/components/pages/ProductPage/ProductActionCard";
@@ -28,6 +27,8 @@ import { ProductInfoAccordion } from "@/components/pages/ProductPage/ProductInfo
 import { ProductSectionsNav } from "@/components/pages/ProductPage/ProductSectionsNav";
 import { ProductHeadingCard } from "@/components/pages/ProductPage/ProductHeadingCard";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
+import { ProductHomeCard } from "@/components/products/ProductHomeCard";
 
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
@@ -143,7 +144,7 @@ function ProductPage() {
   );
 
   return (
-    <section className="w-full my-18 xl:my-19 px-2">
+    <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
         <BreadcrumbList className="hidden md:flex">
           <BreadcrumbItem>
@@ -256,11 +257,12 @@ function ProductPage() {
                 title={t("sections.related")}
                 items={products ?? []}
                 getItemKey={(product) => product.id}
-                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 3, lg: 3, xl: 4 }}
                 peekNext
+                disableMobileCarousel
                 controlsInline
                 renderItem={(product) => (
-                  <ProductCard product={product as any} />
+                  <ProductHomeCard product={product as any} />
                 )}
               />
             </div>
@@ -287,19 +289,17 @@ function ProductPage() {
             </div>
 
             {viewedProducts.length > 0 && (
-              <div id="recently-viewed" className="scroll-mt-28">
-                <ItemsCarousel
-                  title={t("carousels.recentlyViewed", { ns: "common" })}
-                  items={viewedProducts}
-                  getItemKey={(product) => product.id}
-                  perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
-                  peekNext
-                  controlsInline
-                  renderItem={(product) => (
-                    <ProductCard product={product as any} />
-                  )}
-                />
-              </div>
+              <ItemsCarousel
+                title={t("carousels.recentlyViewed", { ns: "common" })}
+                items={viewedProducts}
+                getItemKey={(product) => product.id}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+                peekNext
+                controlsInline
+                renderItem={(product) => (
+                  <ProductSmallHomeCard product={product as any} />
+                )}
+              />
             )}
           </div>
         </section>

@@ -15,7 +15,7 @@ function LoginPage() {
   const { t } = useTranslation("common");
 
   return (
-    <section className="flex flex-col w-full items-center my-18 xl:my-19 px-2">
+    <section className="flex flex-col w-full items-center my-18 xl:my-19">
       <Breadcrumb className="flex justify-center">
         <BreadcrumbList className="flex justify-center items-center gap-2 text-center">
           <BreadcrumbItem>
