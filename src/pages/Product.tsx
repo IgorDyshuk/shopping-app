@@ -143,7 +143,7 @@ function ProductPage() {
   );
 
   return (
-    <section className="w-full my-18 xl:my-19">
+    <section className="w-full my-18 xl:my-19 px-2">
       <Breadcrumb>
         <BreadcrumbList className="hidden md:flex">
           <BreadcrumbItem>

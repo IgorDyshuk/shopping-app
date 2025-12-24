@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMenu";
 import { SearchBar } from "@/components/layout/Header/SearchBar";
 import LogIn from "./Header/LogInForm";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { User } from "lucide-react";
@@ -81,7 +80,7 @@ function Header({ showSidebar = false }: HeaderProps) {
       style={{ left: headerLeft }}
     >
       <div className="relative">
-        <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-3 px-2 md:px-4 py-3">
+        <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-3 px-2 md:px-2 py-3">
           <div className="relative z-20 flex items-center gap-3">
             <div className="flex items-center gap-2">
               {showSidebar && <SidebarTrigger />}
@@ -120,24 +119,20 @@ function Header({ showSidebar = false }: HeaderProps) {
                     <SearchIcon className="size-5" />
                   )}
                 </Button>
-                {showSidebar && <ModeToggle />}
 
                 {!showSidebar && (
-                  <>
-                    <LogIn
-                      trigger={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          aria-label="Account"
-                          className=" text-white hover:cursor-po"
-                        >
-                          <User className="size-6 text-foreground" />
-                        </Button>
-                      }
-                    />
-                    <ModeToggle />
-                  </>
+                  <LogIn
+                    trigger={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Account"
+                        className=" text-white hover:cursor-po"
+                      >
+                        <User className="size-6 text-foreground" />
+                      </Button>
+                    }
+                  />
                 )}
               </div>
             </div>

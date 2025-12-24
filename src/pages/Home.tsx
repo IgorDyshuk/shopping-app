@@ -8,6 +8,10 @@ import { useViewedProductsStore } from "@/stores/use-viewed-products";
 import { TOP_BLOGGER_IDS } from "@/constants/blogger-ids";
 import { useTopArtists } from "@/hooks/api-hooks/useArtists";
 import { BloggerHomeCard } from "@/components/pages/Blogger/BloggerHomeCard";
+import { ProductHomeCard } from "@/components/products/ProductHomeCard";
+import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
+import { BloggerCard } from "@/components/pages/Blogger/BloggerCard";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 function Home() {
   const { data: products, isLoading, isError } = useProducts();
@@ -20,11 +24,15 @@ function Home() {
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
   );
+  const isMdOnly = useMediaQuery("(min-width: 768px) and (max-width: 1280px)");
+  const isSmOnly = useMediaQuery("(min-width: 768px) and (max-width: 1024px)");
+  const productsArrivalsCount = isMdOnly ? 6 : 8;
+  const bloggersArrivalsCount = isMdOnly ? (isSmOnly ? 6 : 8) : 10;
   const showSkeleton =
     isLoading || isArtistLoading || !topArtists || topArtists.length === 0;
 
   return (
-    <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30">
+    <section className="flex w-full flex-col gap-8 my-20 sm:my-22 md:my-24 lg:my-26 xl:my-28 2xl:my-30 px-0 md:px-2">
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-18 2xl:gap-20">
         {showSkeleton ? (
           <HomeSkeleton />
@@ -33,7 +41,7 @@ function Home() {
         ) : (
           <>
             <ItemsCarousel
-              title={t("carousels.popularBloggers")}
+              title={t("")}
               items={(topArtists ?? []).filter(Boolean)}
               getItemKey={(artist, idx) => artist?.id ?? idx}
               autoplay
@@ -47,26 +55,65 @@ function Home() {
               }
             />
 
+            <div className="flex flex-col gap-1">
+              <h1 className="text-2xl px-2">{t("carousels.newArrivals")}</h1>
+              <div className="flex overflow-x-auto pl-1 sm:pl-2 py-3 md:py-6 md:pl-0 md:grid md:grid-cols-3 md:gap-y-7 md:overflow-visible xl:grid-cols-4">
+                {products?.slice(0, productsArrivalsCount).map((product) => (
+                  <div
+                    key={product.id}
+                    className="min-w-[240px] sm:min-w-[280px] md:min-w-0"
+                  >
+                    <ProductHomeCard product={product} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <h1 className="text-2xl px-2">
+                {t("carousels.popularBloggers")}
+              </h1>
+              <div className="flex overflow-x-auto gap-1 pl-2 py-2 md:py-6  md:pl-0 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {(topArtists ?? [])
+                  .filter(Boolean)
+                  .slice(0, bloggersArrivalsCount)
+                  .map((artist, idx) => (
+                    <div
+                      key={artist?.id ?? idx}
+                      className="min-w-[220px] sm:min-w-[260px] md:min-w-0"
+                    >
+                      <BloggerCard artist={artist} />
+                    </div>
+                  ))}
+              </div>
+            </div>
+
             <ItemsCarousel
               title={t("carousels.popularPicks")}
               items={products ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
               peekNext={true}
               viewAllLink="#"
               controlsInline
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
 
             <ItemsCarousel
               title={t("carousels.trending")}
               items={products ?? []}
               getItemKey={(product) => product.id}
-              perRow={{ base: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
+              perRow={{ base: 1, xs: 3, sm: 2, md: 3, lg: 4, xl: 4 }}
+              peekNext={true}
               viewAllLink="#"
               controlsInline
-              loop
-              renderItem={(product) => <ProductCard product={product} />}
+              disableMobileCarousel
+              renderItem={(product) => (
+                <ProductHomeCard key={product.id} product={product} />
+              )}
             />
 
             <ItemsCarousel
@@ -75,17 +122,6 @@ function Home() {
               getItemKey={(product) => product.id}
               perRow={{ base: 1, sm: 1, md: 1, lg: 1, xl: 1 }}
               controlsInline={false}
-              renderItem={(product) => <ProductCard product={product} />}
-            />
-
-            <ItemsCarousel
-              title={t("carousels.newArrivals")}
-              items={products ?? []}
-              getItemKey={(product) => product.id}
-              perRow={{ base: 2, sm: 2, md: 3, lg: 4, xl: 6 }}
-              peekNext={true}
-              viewAllLink="#"
-              controlsInline
               renderItem={(product) => <ProductCard product={product} />}
             />
 
@@ -98,7 +134,7 @@ function Home() {
                 peekNext
                 controlsInline
                 renderItem={(product) => (
-                  <ProductCard product={product as any} />
+                  <ProductSmallHomeCard product={product as any} />
                 )}
               />
             )}

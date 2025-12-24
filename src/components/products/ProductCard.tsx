@@ -24,12 +24,9 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
 
   const handleFavoriteToggle = (next: boolean) => {
     setIsFavorite(next);
-    toast.success(
-      next ? t("favorites.added") : t("favorites.removed"),
-      {
+    toast.success(next ? t("favorites.added") : t("favorites.removed"), {
       description: product.title,
-      }
-    );
+    });
   };
 
   return (
@@ -49,9 +46,7 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
     >
       <div className="relative mb-0 xl:mb-1 w-full rounded-md bg-card">
         <Toggle
-          aria-label={
-            isFavorite ? "Remove from favorites" : "Add to favorites"
-          }
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           pressed={isFavorite}
           onPressedChange={handleFavoriteToggle}
           variant="outline"

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 import {
   Carousel,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useIsMobile } from "@/hooks/media-hooks/use-mobile";
+import { ChevronRight } from "lucide-react";
 
 type ProductCarouselProps<T> = {
   title: string;
@@ -31,6 +31,7 @@ type ProductCarouselProps<T> = {
   controlsInline?: boolean;
   peekNext?: boolean;
   viewAllLink?: string;
+  disableMobileCarousel?: boolean;
 };
 
 const clampCount = (count?: number) => {
@@ -50,9 +51,9 @@ export function ItemsCarousel<T>({
   controlsInline = true,
   peekNext = false,
   viewAllLink,
+  disableMobileCarousel = false,
 }: ProductCarouselProps<T>) {
   const isMobile = useIsMobile();
-  const { t } = useTranslation();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [columns, setColumns] = useState<number>(clampCount(perRow.base));
 
@@ -98,7 +99,6 @@ export function ItemsCarousel<T>({
   }, [perRow.base, perRow.xs, perRow.sm, perRow.md, perRow.lg, perRow.xl]);
 
   const hideControls = isMobile && isSmallScreen;
-  // const itemClasses = "pl-1.5 md:pl-2 xl:pl-3";
   const itemClasses = "pl-0";
   const peekOffsetPx = peekNext ? 16 : 0;
   const itemStyle = useMemo(
@@ -111,26 +111,55 @@ export function ItemsCarousel<T>({
   const slidesToScroll = clampCount(columns);
   const contentClass = peekNext ? "pr-2" : "";
 
+  if (isMobile && disableMobileCarousel) {
+    return (
+      <div className="relative">
+        <div className="mb-1 md:mb-3 flex items-center gap-3 px-3">
+          <h2 className="text-2xl">{title}</h2>
+          {viewAllLink && (
+            <Link
+              to={viewAllLink}
+              className="flex items-center gap-1 text-xs sm:text-sm hover:underline"
+            >
+              <ChevronRight className="size-4" />
+            </Link>
+          )}
+        </div>
+        <div className="flex overflow-x-auto pb-4 pl-2 md:pl-3 py-2 md:py-6">
+          {items.map((item, index) => (
+            <div
+              key={getItemKey ? getItemKey(item, index) : index}
+              className="min-w-[220px]"
+            >
+              {renderItem(item)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       <Carousel
         opts={{ align: "start", loop: loop, slidesToScroll }}
         plugins={autoplayPlugin ? [autoplayPlugin] : []}
       >
-        <div className="mb-1 md:mb-3 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">{title}</h2>
+        <div className="mb-1 md:mb-2 flex items-center justify-between">
+          <div className="flex items-center gap-3 px-3">
+            <h2 className="text-2xl">{title}</h2>
+            {viewAllLink && (
+              <Link
+                to={viewAllLink}
+                className="flex items-center gap-1 text-xs sm:text-sm hover:underline"
+              >
+                <ChevronRight className="size-5" />
+              </Link>
+            )}
+          </div>
 
           {(viewAllLink || (controlsInline && !hideControls)) && (
-            <div className="flex items-center gap-3">
-              {viewAllLink && (
-                <Link
-                  to={viewAllLink}
-                  className="text-xs sm:text-sm text-primary hover:underline"
-                >
-                  {t("actions.viewMore")}
-                </Link>
-              )}
-
+            <div className="flex">
               {controlsInline && !hideControls && (
                 <div className="flex items-center gap-2 sm:flex">
                   <CarouselPrevious className="static translate-y-0 size-10" />
@@ -142,7 +171,9 @@ export function ItemsCarousel<T>({
         </div>
 
         <div className="relative">
-          <CarouselContent className={`ml-0 ${contentClass}`}>
+          <CarouselContent
+            className={`ml-0 py-2 md:py-6 pl-2 md:pl-0 ${contentClass}`}
+          >
             {items.map((item, index) => (
               <CarouselItem
                 key={getItemKey ? getItemKey(item, index) : index}

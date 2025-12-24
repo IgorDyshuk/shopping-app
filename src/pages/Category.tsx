@@ -313,7 +313,9 @@ function Category({ presetCategory }: CategoryPageProps) {
   }, [isSmallScreen]);
 
   return (
-    <section className={`w-full ${presetCategory ? "my-0" : "my-18 xl:my-19"}`}>
+    <section
+      className={`w-full ${presetCategory ? "my-0" : "my-18 xl:my-19 px-2"}`}
+    >
       {!presetCategory && (
         <Breadcrumb>
           <BreadcrumbList>

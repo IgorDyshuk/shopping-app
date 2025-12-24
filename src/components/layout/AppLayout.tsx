@@ -32,9 +32,9 @@ export function AppLayout({ children }: AppLayoutProps) {
     <>
       {showSidebar && <AppSidebar />}
       <SidebarInset>
-        <div className="min-h-svh bg-background text-foreground flex flex-col">
+        <div className="min-h-svh bg-[#fff] text-foreground flex flex-col">
           <Header showSidebar={showSidebar} />
-          <main className="mx-auto max-w-[1464px] px-3 flex-1 w-full">
+          <main className="mx-auto max-w-[1464px] px-0 md:px3 flex-1 w-full">
             {children}
           </main>
           <Footer showLanguage={!showSidebar} />

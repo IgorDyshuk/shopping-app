@@ -52,7 +52,7 @@ function BloggersPage() {
             {t("error", { ns: "home" })}
           </p>
         ) : (
-          <div className="grid w-full gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid w-full gap-1 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {topArtists?.map((artist, idx) => (
               <BloggerCard key={artist?.id ?? idx} artist={artist} />
             ))}
