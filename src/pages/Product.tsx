@@ -262,7 +262,7 @@ function ProductPage() {
                 disableMobileCarousel
                 controlsInline
                 renderItem={(product) => (
-                  <ProductHomeCard product={product as any} />
+                  <ProductHomeCard inCarousel product={product as any} />
                 )}
               />
             </div>

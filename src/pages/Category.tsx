@@ -39,7 +39,7 @@ import { FilterChips } from "@/components/categories/FilterChips";
 import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { useSortOptions } from "@/hooks/category-hooks/use-sort-options";
 import { deriveCategoryId } from "@/utils/derive-product-category";
-import { ProductHomeCard } from "@/components/products/ProductHomeCard";
+import { ProductFilterCard } from "@/components/products/ProductFilterCard";
 
 type CategoryPageProps = {
   presetCategory?: string;
@@ -540,7 +540,7 @@ function Category({ presetCategory }: CategoryPageProps) {
               )}
               <div className="space-y-4">
                 <div
-                  className={`grid grid-cols-2 gap-y-3 md:gap-y-7  ${
+                  className={`grid grid-cols-2 gap-y-5 md:gap-y-7  ${
                     layout === "dense"
                       ? "md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
                       : "md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
@@ -552,7 +552,7 @@ function Category({ presetCategory }: CategoryPageProps) {
                     </div>
                   ) : (
                     sortedProducts.map((product) => (
-                      <ProductHomeCard key={product.id} product={product} />
+                      <ProductFilterCard key={product.id} product={product} />
                     ))
                   )}
                 </div>

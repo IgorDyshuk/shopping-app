@@ -8,8 +8,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import { useIsMobile } from "@/hooks/media-hooks/use-mobile";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import Autoplay from "embla-carousel-autoplay";
 import { ChevronRight } from "lucide-react";
 
 type ProductCarouselProps<T> = {
@@ -54,6 +55,7 @@ export function ItemsCarousel<T>({
   disableMobileCarousel = false,
 }: ProductCarouselProps<T>) {
   const isMobile = useIsMobile();
+  const isBelowMd = useMediaQuery("(max-width: 767px)");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [columns, setColumns] = useState<number>(clampCount(perRow.base));
 
@@ -99,8 +101,8 @@ export function ItemsCarousel<T>({
   }, [perRow.base, perRow.xs, perRow.sm, perRow.md, perRow.lg, perRow.xl]);
 
   const hideControls = isMobile && isSmallScreen;
-  const itemClasses = "pl-0 first:pl-3";
-  const peekOffsetPx = !disableMobileCarousel && peekNext ? 16 : 0;
+  const itemClasses = "px-0 md:px-0.5";
+  const peekOffsetPx = !isBelowMd && peekNext ? 16 : 0;
   const itemStyle = useMemo(
     () => ({
       flexBasis: `calc(100% / ${clampCount(columns)} - ${peekOffsetPx}px)`,
@@ -111,18 +113,20 @@ export function ItemsCarousel<T>({
   const slidesToScroll = clampCount(columns);
   const contentClass = peekNext ? "pr-2" : "";
 
-  if (isMobile && disableMobileCarousel) {
+  if (disableMobileCarousel && isBelowMd) {
     return (
       <div className="relative ">
         <div className="mb-1 md:mb-3 flex items-center gap-3">
-          <h2 className="text-2xl">{title}</h2>
-          {viewAllLink && (
+          {viewAllLink ? (
             <Link
               to={viewAllLink}
-              className="flex items-center gap-1 text-xs sm:text-sm hover:underline"
+              className="flex items-center gap-2 hover:text-muted-foreground"
             >
-              <ChevronRight className="size-4" />
+              <h2 className="text-2xl">{title}</h2>
+              <ChevronRight className="size-5 pt-1" />
             </Link>
+          ) : (
+            <h2 className="text-2xl">{title}</h2>
           )}
         </div>
         <div className="flex overflow-x-auto pb-4 py-2 md:py-6">
@@ -145,18 +149,18 @@ export function ItemsCarousel<T>({
         opts={{ align: "start", loop: loop, slidesToScroll }}
         plugins={autoplayPlugin ? [autoplayPlugin] : []}
       >
-        <div className="mb-1 md:mb-2 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="mb-1 md:mb-2 flex items-center justify-between px-1">
+          {viewAllLink ? (
+            <Link
+              to={viewAllLink}
+              className="flex items-center gap-2 hover:text-black/70 transition-colors duration-150"
+            >
+              <h2 className="text-2xl">{title}</h2>
+              <ChevronRight className="size-5 pt-1" />
+            </Link>
+          ) : (
             <h2 className="text-2xl">{title}</h2>
-            {viewAllLink && (
-              <Link
-                to={viewAllLink}
-                className="flex items-center gap-1 text-xs sm:text-sm hover:underline"
-              >
-                <ChevronRight className="size-5" />
-              </Link>
-            )}
-          </div>
+          )}
 
           {(viewAllLink || (controlsInline && !hideControls)) && (
             <div className="flex">

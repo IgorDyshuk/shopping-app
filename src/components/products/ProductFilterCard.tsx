@@ -7,17 +7,12 @@ import { toast } from "sonner";
 
 import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
-import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 type ProductCardProps = {
   product: Product;
-  inCarousel?: boolean;
 };
 
-export function ProductHomeCard({
-  product,
-  inCarousel = false,
-}: ProductCardProps) {
+export function ProductFilterCard({ product }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { t } = useTranslation("common");
   const navigate = useNavigate();
@@ -32,8 +27,6 @@ export function ProductHomeCard({
       description: product.title,
     });
   };
-
-  const isBelowMd = useMediaQuery("(max-width: 767px)");
 
   return (
     <article
@@ -52,11 +45,7 @@ export function ProductHomeCard({
         aria-hidden
         className="pointer-events-none absolute -inset-2 opacity-0 rounded-md bg-card transition-all transition-150 group-hover:opacity-100 group-hover:shadow-[0_0_10px_rgba(0,0,0,0.18)]"
       />
-      <div
-        className={`relative z-10 flex h-full w-full flex-col gap-2 ${
-          inCarousel ? "p-0.75 md:p-0" : "pr-1.5 md:p-1"
-        }`}
-      >
+      <div className="relative z-10 flex h-full w-full flex-col gap-2 pr-1.5 md:p-1">
         <div className="relative flex h-full w-full flex-col gap-2">
           <Toggle
             aria-label={
@@ -66,21 +55,17 @@ export function ProductHomeCard({
             onPressedChange={handleFavoriteToggle}
             variant="outline"
             size="sm"
-            className={`absolute right-3 top-3 z-10 ${
-              isBelowMd
-                ? "right-2 top-2 opacity-100"
-                : "right-3 top-3 opacity-0 group-hover:opacity-100"
-            }  transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer`}
+            className="absolute right-3 top-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
             <Heart className="size-4" />
           </Toggle>
-          <div className="relative py-6 md:py-18 px-8 sm:px-6 xl:px-10 xl:mb-1 w-full rounded-sm bg-[#f0f0f3] md:bg-[#f7f7f7] flex justify-center">
+          <div className="relative py-9 md:py-10 px-8 sm:px-6 xl:px-10 xl:mb-1 w-full rounded-sm bg-[#f0f0f3] md:bg-[#f7f7f7] flex justify-center">
             <img
               src={product.image}
               alt={product.title}
-              className="h-60 sm:h-51 md:h-57 lg:h-63 xl:h-69 2xl:h-75 w-fit object-contain transition-transform duration-300"
+              className="h-42 sm:h-48 md:h-53 lg:h-59 xl:h-64 2xl:h-70 w-fit object-contain transition-transform duration-300"
             />
           </div>
           <div className="flex flex-col gap-1 sm:gap-2 font-base">

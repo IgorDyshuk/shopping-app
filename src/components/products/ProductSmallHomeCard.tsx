@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 type ProductCardProps = {
   product: Product;
@@ -28,6 +29,8 @@ export function ProductSmallHomeCard({ product }: ProductCardProps) {
     });
   };
 
+  const isBelowMd = useMediaQuery("(max-width: 767px)");
+
   return (
     <article
       role="button"
@@ -45,7 +48,7 @@ export function ProductSmallHomeCard({ product }: ProductCardProps) {
         aria-hidden
         className="pointer-events-none absolute -inset-4 opacity-0 rounded-md bg-card transition-all transition-150 group-hover:opacity-100 group-hover:shadow-[0_0_28px_rgba(0,0,0,0.18)]"
       />
-      <div className="relative z-10 flex h-full w-full flex-col gap-2 p-1">
+      <div className="relative z-10 flex h-full w-full flex-col gap-2 pr-0">
         <div className="relative flex h-full w-full flex-col gap-2">
           <Toggle
             aria-label={
@@ -55,7 +58,11 @@ export function ProductSmallHomeCard({ product }: ProductCardProps) {
             onPressedChange={handleFavoriteToggle}
             variant="outline"
             size="sm"
-            className="absolute right-3 top-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer"
+            className={`absolute right-3 top-3 z-10 ${
+              isBelowMd
+                ? "right-2 top-2 opacity-100"
+                : "right-3 top-3 opacity-0 group-hover:opacity-100"
+            }  transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer`}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
@@ -65,7 +72,7 @@ export function ProductSmallHomeCard({ product }: ProductCardProps) {
             <img
               src={product.image}
               alt={product.title}
-              className="h-40 sm:h-41 md:h-43 lg:h-45 xl:h-47 2xl:h-50 w-fit object-contain transition-transform duration-300"
+              className="h-30 sm:h-41 md:h-43 lg:h-45 xl:h-47 2xl:h-50 w-fit object-contain transition-transform duration-300"
             />
           </div>
           <div className="flex flex-col gap-1 font-base">

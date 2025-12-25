@@ -81,7 +81,11 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
@@ -95,7 +99,11 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
@@ -109,7 +117,11 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
@@ -125,7 +137,11 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
@@ -139,7 +155,11 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
             {viewedProducts.length > 0 && (

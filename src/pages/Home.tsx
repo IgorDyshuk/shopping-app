@@ -63,7 +63,7 @@ function Home() {
                     key={product.id}
                     className="min-w-60 sm:min-w-[280px] md:min-w-0"
                   >
-                    <ProductHomeCard product={product} />
+                    <ProductHomeCard inCarousel={false} product={product} />
                   </div>
                 ))}
               </div>
@@ -96,7 +96,11 @@ function Home() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
@@ -110,7 +114,11 @@ function Home() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard key={product.id} product={product} />
+                <ProductHomeCard
+                  inCarousel
+                  key={product.id}
+                  product={product}
+                />
               )}
             />
 
