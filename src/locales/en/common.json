@@ -23,7 +23,7 @@
       },
       "accessories": {
         "title": "Accessories",
-    "description": "Bags, watches, jewelry from bloggers."
+        "description": "Bags, watches, jewelry from bloggers."
       }
     },
     "bloggersTrigger": "Bloggers",
@@ -139,20 +139,8 @@
     "account": {
       "account": "Account",
       "orders": "Orders",
-    "notifications": "Notifications",
-    "logout": "Log out"
-  }
-  },
-  "cart": {
-    "title": "Cart",
-    "empty": "Your cart is empty.",
-    "items": "Items: {{count}}",
-    "price": "Price: ${{value}}",
-    "summary": "Summary",
-    "total": "Total",
-    "checkout": "Checkout",
-    "clear": "Clear cart",
-    "perItem": "Per item: ${{value}}",
-    "removeItem": "Remove item"
+      "notifications": "Notifications",
+      "logout": "Log out"
+    }
   }
 }

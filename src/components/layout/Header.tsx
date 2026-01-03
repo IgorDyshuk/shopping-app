@@ -9,6 +9,7 @@ import LogIn from "./Header/LogInForm";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { User } from "lucide-react";
+import { useCartStore } from "@/stores/use-cart";
 
 type HeaderProps = {
   showSidebar?: boolean;
@@ -24,6 +25,7 @@ function Header({ showSidebar = false }: HeaderProps) {
   const { open, openMobile, isMobile } = useSidebar();
   const isSidebarOpen = isMobile ? openMobile : open;
   const [isTabletUp, setIsTabletUp] = useState(false);
+  const cartCount = useCartStore((state) => state.items.length);
 
   useEffect(() => {
     const mql = window.matchMedia("(min-width: 768px)");
@@ -141,8 +143,14 @@ function Header({ showSidebar = false }: HeaderProps) {
                   size="icon"
                   aria-label="Cart"
                   onClick={() => navigate("/cart")}
+                  className="relative"
                 >
                   <ShoppingCart className="size-5" />
+                  {cartCount > 0 && (
+                    <span className="absolute -right-0.5 -top-0.5 min-w-4.5 h-4.5 rounded-full bg-primary text-primary-foreground text-[9px] leading-none flex items-center justify-center px-1">
+                      {cartCount}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>

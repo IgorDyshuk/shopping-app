@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFilteredProduct, useProduct } from "@/hooks/api-hooks/useProducts";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
@@ -39,6 +39,7 @@ function ProductPage() {
     isLoading,
     isError,
   } = useProduct(Number.isFinite(productId) ? productId : undefined);
+  const [searchParams] = useSearchParams();
   const { data: products } = useFilteredProduct(category);
 
   const { t } = useTranslation(["product", "common"]);
@@ -49,6 +50,7 @@ function ProductPage() {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [manualSize, setManualSize] = useState(false);
 
   const viewedProducts = useViewedProductsStore(
     (state) => state.viewedProducts
@@ -100,11 +102,38 @@ function ProductPage() {
     return defaultSizeOptions;
   }, [sizePreset]);
 
+  const cartItems = useCartStore((state) => state.items);
+  const cartMatchedSize = useMemo(() => {
+    const match = cartItems.find((item) => item.product.id === productId);
+    return match?.size;
+  }, [cartItems, productId]);
+
   useEffect(() => {
-    if (!selectedSize && sizeOptions.length) {
+    setManualSize(false);
+  }, [productId]);
+
+  useEffect(() => {
+    if (manualSize) return;
+    if (!sizeOptions.length) return;
+
+    const paramSize = searchParams.get("size");
+    if (paramSize && sizeOptions.some((opt) => opt.id === paramSize)) {
+      if (selectedSize !== paramSize) setSelectedSize(paramSize);
+      return;
+    }
+
+    if (
+      cartMatchedSize &&
+      sizeOptions.some((opt) => opt.id === cartMatchedSize)
+    ) {
+      if (selectedSize !== cartMatchedSize) setSelectedSize(cartMatchedSize);
+      return;
+    }
+
+    if (!selectedSize) {
       setSelectedSize(sizeOptions[2].id);
     }
-  }, [sizeOptions, selectedSize]);
+  }, [sizeOptions, selectedSize, searchParams, cartMatchedSize, manualSize]);
 
   const handleFavoriteToggle = (next: boolean) => {
     setIsFavorite(next);
@@ -148,23 +177,27 @@ function ProductPage() {
 
   const handleAddToCart = useCallback(() => {
     if (!product) return;
-    addCartItem(product, 1);
+    addCartItem(product, 1, selectedSize);
     toast.success(
       t("addedToCart", { ns: "product", defaultValue: "Added to cart" }),
       { description: product.title }
     );
-  }, [addCartItem, product, t]);
-  const cartItems = useCartStore((state) => state.items);
+  }, [addCartItem, product, selectedSize, t]);
+
   const cartQuantity =
-    cartItems.find((item) => item.product.id === productId)?.quantity ?? 0;
+    cartItems.find(
+      (item) =>
+        item.product.id === productId &&
+        (!selectedSize || item.size === selectedSize)
+    )?.quantity ?? 0;
   const handleIncrement = useCallback(() => {
     if (!product) return;
-    addCartItem(product, 1);
-  }, [addCartItem, product]);
+    addCartItem(product, 1, selectedSize);
+  }, [addCartItem, product, selectedSize]);
   const handleDecrement = useCallback(() => {
     if (!product) return;
-    removeCartItem(product.id);
-  }, [removeCartItem, product]);
+    removeCartItem(product.id, selectedSize);
+  }, [removeCartItem, product, selectedSize]);
 
   return (
     <section className="w-full my-18 xl:my-19">
@@ -269,7 +302,10 @@ function ProductPage() {
                 <ProductSizePicker
                   options={sizeOptions}
                   selected={selectedSize}
-                  onSelect={setSelectedSize}
+                  onSelect={(id) => {
+                    setManualSize(true);
+                    setSelectedSize(id);
+                  }}
                 />
 
                 <ProductInfoAccordion />

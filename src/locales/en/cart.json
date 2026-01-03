@@ -1,0 +1,14 @@
+{
+  "title": "Cart",
+  "empty": "Your cart is empty.",
+  "items": "Items: {{count}}",
+  "price": "Price: ${{value}}",
+  "summary": "Summary",
+  "total": "Total",
+  "checkout": "Checkout",
+  "clear": "Clear cart",
+  "perItem": "{{value}} $/item",
+  "removeItem": "Remove item",
+  "size": "Size",
+  "sizeUnknown": "Not selected"
+}

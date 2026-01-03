@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   createContext,
   useContext,
@@ -29,12 +30,17 @@ const ThemeProviderContext =
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "light",
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    if (typeof window === "undefined") return defaultTheme;
+    const stored = localStorage.getItem(storageKey) as Theme | null;
+    if (stored === "light" || stored === "dark" || stored === "system") {
+      return stored;
+    }
+    return defaultTheme;
   });
 
   useEffect(() => {

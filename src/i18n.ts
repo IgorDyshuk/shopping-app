@@ -13,6 +13,8 @@ import ukCatalog from "./locales/uk/catalog.json";
 import ukCategory from "./locales/uk/category.json";
 import ukProduct from "./locales/uk/product.json";
 import ukBlogger from "./locales/uk/blogger.json";
+import ukCart from "./locales/uk/cart.json";
+import enCart from "./locales/en/cart.json";
 import { LANGUAGE_STORAGE_KEY } from "@/stores/use-language";
 
 let initialLanguage = "en";
@@ -38,6 +40,7 @@ void i18n.use(initReactI18next).init({
       category: enCategory,
       product: enProduct,
       blogger: enBlogger,
+      cart: enCart,
     },
     uk: {
       common: ukCommon,
@@ -46,6 +49,7 @@ void i18n.use(initReactI18next).init({
       category: ukCategory,
       product: ukProduct,
       blogger: ukBlogger,
+      cart: ukCart,
     },
   },
   lng: initialLanguage,

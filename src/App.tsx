@@ -19,7 +19,7 @@ function App() {
 
   return (
     <BrowserRouter basename={basename}>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <SidebarProvider defaultOpen={false}>
           <AppLayout>
             <Routes>
