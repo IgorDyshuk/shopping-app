@@ -139,8 +139,20 @@
     "account": {
       "account": "Акаунт",
       "orders": "Замовлення",
-      "notifications": "Сповіщення",
-      "logout": "Вийти"
-    }
+    "notifications": "Сповіщення",
+    "logout": "Вийти"
+  }
+  },
+  "cart": {
+    "title": "Кошик",
+    "empty": "Ваш кошик порожній.",
+    "items": "Товарів: {{count}}",
+    "price": "Ціна: ${{value}}",
+    "summary": "Підсумок",
+    "total": "Разом",
+    "checkout": "Перейти к оформленю",
+    "clear": "Очистити кошик",
+    "perItem": "За шт.: ${{value}}",
+    "removeItem": "Видалити товар"
   }
 }

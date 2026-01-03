@@ -10,6 +10,7 @@
   "inStock": "In stock",
   "seller": "Seller",
   "buy": "Buy",
+  "addedToCart": "Added to cart",
   "descriptionFallback": "Detailed description will be added later.",
   "characteristics": {
     "brand": "Brand",

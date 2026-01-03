@@ -10,6 +10,7 @@
   "inStock": "Є в наявності",
   "seller": "Продавець",
   "buy": "Купити",
+  "addedToCart": "Додано до кошика",
   "descriptionFallback": "Детальний опис товару буде доданий пізніше.",
   "characteristics": {
     "brand": "Бренд",

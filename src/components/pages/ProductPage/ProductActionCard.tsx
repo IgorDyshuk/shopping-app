@@ -1,4 +1,4 @@
-import { ChevronRight, Heart, ShoppingCart } from "lucide-react";
+import { ChevronRight, Heart, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +13,10 @@ type ProductActionCardProps = {
   sellerName?: string;
   isFavorite: boolean;
   onFavoriteToggle: (next: boolean) => void;
+  onAddToCart?: () => void;
+  quantity?: number;
+  onIncrement?: () => void;
+  onDecrement?: () => void;
 };
 
 export function ProductActionCard({
@@ -21,6 +25,10 @@ export function ProductActionCard({
   sellerName = "sdsffs",
   isFavorite,
   onFavoriteToggle,
+  onAddToCart,
+  quantity = 0,
+  onIncrement,
+  onDecrement,
 }: ProductActionCardProps) {
   const { t } = useTranslation("product");
   const isSmallScreen = useMediaQuery("(max-width: 500px)");
@@ -28,6 +36,8 @@ export function ProductActionCard({
   const sellerLabel = t("seller");
   const stockLabel = inStockLabel ?? t("inStock");
   const buyLabel = t("buy");
+  const canBuy = Boolean(onAddToCart);
+  const showCounter = quantity > 0;
 
   return (
     <Card className="py-4">
@@ -43,9 +53,9 @@ export function ProductActionCard({
           />
         </div>
         <Separator className="w-full bg-muted" />
-        <div className="px-4 pt-3 flex flex-col gap-3">
+        <div className="px-4 pt-3 flex flex-col gap-5">
           <div
-            className={`flex flex-wrap items-center gap-5 ${
+            className={`flex flex-wrap items-center gap-10 ${
               isSmallScreen ? "justify-between" : ""
             }`}
           >
@@ -58,11 +68,41 @@ export function ProductActionCard({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              {!isSmallScreen && (
-                <Button className="bg-primary">
-                  <ShoppingCart /> {buyLabel}
-                </Button>
-              )}
+              {!isSmallScreen &&
+                (showCounter ? (
+                  <div className="flex items-center gap-2 bg-muted rounded-md font-semibold px-2 py-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onDecrement}
+                      className="h-8 w-8"
+                    >
+                      <Minus className="size-4" strokeWidth={3} />
+                    </Button>
+                    <span className="text-center text-sm min-w-8">
+                      {quantity}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onIncrement}
+                      className="h-8 w-8"
+                    >
+                      <Plus className="size-4" strokeWidth={3} />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    className="bg-primary"
+                    variant={"default"}
+                    onClick={onAddToCart}
+                    disabled={!canBuy}
+                  >
+                    <span className="px-3 flex items-center gap-2">
+                      <ShoppingCart /> {buyLabel}
+                    </span>
+                  </Button>
+                ))}
               <Toggle
                 aria-label={
                   isFavorite ? t("favorites.removed") : t("favorites.added")
@@ -77,11 +117,36 @@ export function ProductActionCard({
               </Toggle>
             </div>
           </div>
-          {isSmallScreen && (
-            <Button className="bg-primary">
-              <ShoppingCart /> {buyLabel}
-            </Button>
-          )}
+          {isSmallScreen &&
+            (showCounter ? (
+              <div className="flex items-center justify-between  bg-muted rounded-md font-semibold px-2 py-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onDecrement}
+                  className="h-8 w-8"
+                >
+                  <Minus className="size-4" strokeWidth={3} />
+                </Button>
+                <span className="text-center text-sm min-w-8">{quantity}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onIncrement}
+                  className="h-8 w-8"
+                >
+                  <Plus className="size-4" strokeWidth={3} />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                className="bg-primary"
+                onClick={onAddToCart}
+                disabled={!canBuy}
+              >
+                <ShoppingCart /> {buyLabel}
+              </Button>
+            ))}
         </div>
       </CardContent>
     </Card>

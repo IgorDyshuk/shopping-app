@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFilteredProduct, useProduct } from "@/hooks/api-hooks/useProducts";
@@ -29,6 +29,7 @@ import { ProductHeadingCard } from "@/components/pages/ProductPage/ProductHeadin
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
 import { ProductHomeCard } from "@/components/products/ProductHomeCard";
+import { useCartStore } from "@/stores/use-cart";
 
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
@@ -41,6 +42,8 @@ function ProductPage() {
   const { data: products } = useFilteredProduct(category);
 
   const { t } = useTranslation(["product", "common"]);
+  const addCartItem = useCartStore((state) => state.addItem);
+  const removeCartItem = useCartStore((state) => state.removeItem);
 
   const isSmallScreen = useMediaQuery("(max-width: 767px)");
 
@@ -143,6 +146,26 @@ function ProductPage() {
     [selectedSize, t]
   );
 
+  const handleAddToCart = useCallback(() => {
+    if (!product) return;
+    addCartItem(product, 1);
+    toast.success(
+      t("addedToCart", { ns: "product", defaultValue: "Added to cart" }),
+      { description: product.title }
+    );
+  }, [addCartItem, product, t]);
+  const cartItems = useCartStore((state) => state.items);
+  const cartQuantity =
+    cartItems.find((item) => item.product.id === productId)?.quantity ?? 0;
+  const handleIncrement = useCallback(() => {
+    if (!product) return;
+    addCartItem(product, 1);
+  }, [addCartItem, product]);
+  const handleDecrement = useCallback(() => {
+    if (!product) return;
+    removeCartItem(product.id);
+  }, [removeCartItem, product]);
+
   return (
     <section className="w-full my-18 xl:my-19">
       <Breadcrumb>
@@ -237,6 +260,10 @@ function ProductPage() {
                   price={product?.price}
                   isFavorite={isFavorite}
                   onFavoriteToggle={handleFavoriteToggle}
+                  onAddToCart={handleAddToCart}
+                  quantity={cartQuantity}
+                  onIncrement={handleIncrement}
+                  onDecrement={handleDecrement}
                 />
 
                 <ProductSizePicker

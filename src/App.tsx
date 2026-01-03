@@ -12,6 +12,7 @@ import LoginPage from "@/pages/Login";
 import SignupPage from "@/pages/Signup";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
+import CartPage from "@/pages/Cart";
 
 function App() {
   const basename = import.meta.env.BASE_URL ?? "/";
@@ -30,6 +31,7 @@ function App() {
               <Route path="/bloggers/:id" element={<BloggerPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/cart" element={<CartPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AppLayout>

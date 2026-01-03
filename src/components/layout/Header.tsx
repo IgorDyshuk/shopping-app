@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { SearchIcon, X } from "lucide-react";
+import { SearchIcon, X, ShoppingCart } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMenu";
 import { SearchBar } from "@/components/layout/Header/SearchBar";
@@ -15,6 +15,7 @@ type HeaderProps = {
 };
 
 function Header({ showSidebar = false }: HeaderProps) {
+  const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isHiding, setIsHiding] = useState(false);
   const [isEntering, setIsEntering] = useState(false);
@@ -134,6 +135,15 @@ function Header({ showSidebar = false }: HeaderProps) {
                     }
                   />
                 )}
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Cart"
+                  onClick={() => navigate("/cart")}
+                >
+                  <ShoppingCart className="size-5" />
+                </Button>
               </div>
             </div>
           </div>
