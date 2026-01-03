@@ -542,8 +542,8 @@ function Category({ presetCategory }: CategoryPageProps) {
                 <div
                   className={`grid grid-cols-2 gap-y-5 md:gap-y-7  ${
                     layout === "dense"
-                      ? "md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-                      : "md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                      ? "md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+                      : "md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
                   }`}
                 >
                   {sortedProducts.length === 0 ? (

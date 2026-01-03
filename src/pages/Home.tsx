@@ -57,7 +57,7 @@ function Home() {
 
             <div className="flex flex-col gap-0 md:gap-1">
               <h1 className="text-2xl">{t("carousels.newArrivals")}</h1>
-              <div className="flex overflow-x-auto py-3 md:py-6 md:grid md:grid-cols-4 md:gap-y-7 md:overflow-visible xl:grid-cols-4">
+              <div className="flex overflow-x-auto py-3 md:py-6 md:grid md:grid-cols-3 md:gap-y-7 md:overflow-visible xl:grid-cols-4">
                 {products?.slice(0, productsArrivalsCount).map((product) => (
                   <div
                     key={product.id}

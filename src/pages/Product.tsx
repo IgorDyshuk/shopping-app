@@ -293,7 +293,7 @@ function ProductPage() {
                 title={t("carousels.recentlyViewed", { ns: "common" })}
                 items={viewedProducts}
                 getItemKey={(product) => product.id}
-                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 5 }}
+                perRow={{ base: 2, xs: 3, sm: 4, md: 5, lg: 5, xl: 5 }}
                 peekNext
                 controlsInline
                 renderItem={(product) => (

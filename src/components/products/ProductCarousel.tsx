@@ -101,8 +101,8 @@ export function ItemsCarousel<T>({
   }, [perRow.base, perRow.xs, perRow.sm, perRow.md, perRow.lg, perRow.xl]);
 
   const hideControls = isMobile && isSmallScreen;
-  const itemClasses = "px-0 md:px-0.5";
-  const peekOffsetPx = !isBelowMd && peekNext ? 16 : 0;
+  const itemClasses = "px-0 md:px-0.5 overflow-visible";
+  const peekOffsetPx = peekNext ? 16 : 0;
   const itemStyle = useMemo(
     () => ({
       flexBasis: `calc(100% / ${clampCount(columns)} - ${peekOffsetPx}px)`,
@@ -144,7 +144,7 @@ export function ItemsCarousel<T>({
   }
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       <Carousel
         opts={{ align: "start", loop: loop, slidesToScroll }}
         plugins={autoplayPlugin ? [autoplayPlugin] : []}
@@ -174,9 +174,9 @@ export function ItemsCarousel<T>({
           )}
         </div>
 
-        <div className="relative">
+        <div className="relative overflow-visible">
           <CarouselContent
-            className={`ml-0 py-2 md:py-6 gap-1 ${contentClass}`}
+            className={`ml-0 py-2 md:py-6 gap-1 overflow-visible ${contentClass}`}
           >
             {items.map((item, index) => (
               <CarouselItem
