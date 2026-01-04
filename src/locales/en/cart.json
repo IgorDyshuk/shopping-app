@@ -10,6 +10,7 @@
   "goToCart": "Go to cart",
   "perItem": "{{value}} $/item",
   "removeItem": "Remove item",
+  "removed": "Removed from cart",
   "size": "Size",
   "sizeUnknown": "Not selected"
 }

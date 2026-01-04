@@ -25,7 +25,7 @@ type CartLineItemProps = {
   onRemove: () => void;
   onRemoveLine: () => void;
   onSizeChange: (next: string) => void;
-  onToggleFavorite: () => void;
+  onToggleFavorite: (next: boolean) => void;
   t: TFunction<["cart", "common"]>;
 };
 
@@ -132,7 +132,12 @@ export function CartLineItem({
             }
             pressed={isFavorite}
             onPressedChange={onToggleFavorite}
-            className="hover:cursor-pointer text-muted-foreground hover:text-foreground hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 transition-colors duration-150"
+            variant={"default"}
+            size={"lg"}
+            className="bg-transparent data-[state=on]:*:[svg]:fill-red-500 
+            data-[state=off]:*:[svg]:stroke-black/57 data-[state=on]:*:[svg]:stroke-red-500 
+            hover:cursor-pointer hover:data-[state=off]:*:[svg]:stroke-black 
+            transition-colors duration-150"
           >
             <Heart className="size-5" />
           </Toggle>

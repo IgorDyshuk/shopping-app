@@ -10,6 +10,7 @@
   "goToCart": "Перейти до кошика",
   "perItem": "{{value}} $/шт",
   "removeItem": "Видалити товар",
+  "removed": "Видалено з кошика",
   "size": "Розмір",
   "sizeUnknown": "Не вибрано"
 }

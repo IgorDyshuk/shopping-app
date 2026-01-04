@@ -18,6 +18,7 @@ import { CartTotals } from "@/components/pages/Cart/CartTotals";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
+import { toast } from "sonner";
 
 function CartPage() {
   const { t } = useTranslation(["cart", "common"]);
@@ -36,6 +37,16 @@ function CartPage() {
       ),
     [items]
   );
+
+  const handleRemove = (productId: number, size?: string) => {
+    const target = items.find(
+      (item) => item.product.id === productId && item.size === size
+    );
+    removeItem(productId, size);
+    if (target && target.quantity <= 1) {
+      toast.message(t("removed"), { description: target.product.title });
+    }
+  };
 
   return (
     <section className="w-full my-18 xl:my-20 space-y-4">
@@ -66,7 +77,7 @@ function CartPage() {
               items={items}
               favoriteIds={favoriteIds}
               onAdd={(product, size) => addItem(product, 1, size)}
-              onRemove={(productId, size) => removeItem(productId, size)}
+              onRemove={handleRemove}
               onRemoveLine={(productId, size) => removeLine(productId, size)}
               onUpdateSize={updateItemSize}
               onToggleFavorite={toggleFavoriteId}
@@ -98,9 +109,7 @@ function CartPage() {
             perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
             peekNext
             controlsInline
-            renderItem={(product) => (
-              <ProductSmallHomeCard product={product as any} />
-            )}
+            renderItem={(product) => <ProductSmallHomeCard product={product} />}
           />
         )}
       </div>

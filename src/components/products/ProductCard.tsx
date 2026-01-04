@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
+import { useFavoritesStore } from "@/stores/use-favorites";
 
 type ProductCardProps = {
   product: Product;
@@ -14,7 +15,8 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product, bordered = false }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { ids, toggle } = useFavoritesStore();
+  const isFavorite = ids.includes(product.id);
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const productUrl = useMemo(
@@ -23,8 +25,8 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
   );
 
   const handleFavoriteToggle = (next: boolean) => {
-    setIsFavorite(next);
-    toast.success(next ? t("favorites.added") : t("favorites.removed"), {
+    toggle(product.id);
+    toast.message(next ? t("favorites.added") : t("favorites.removed"), {
       description: product.title,
     });
   };
@@ -51,7 +53,9 @@ export function ProductCard({ product, bordered = false }: ProductCardProps) {
           onPressedChange={handleFavoriteToggle}
           variant="outline"
           size="sm"
-          className="absolute right-1 top-1 z-10 rounded-full bg-muted/90 hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer transition-colors duration-150"
+          className={`absolute right-1 top-1 z-10 rounded-full bg-muted/90 hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer transition-colors duration-150 ${
+            isFavorite ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
         >

@@ -11,6 +11,7 @@
   "seller": "Продавець",
   "buy": "Купити",
   "addedToCart": "Додано до кошика",
+  "removedFromCart": "Видалено з кошика",
   "descriptionFallback": "Детальний опис товару буде доданий пізніше.",
   "characteristics": {
     "brand": "Бренд",

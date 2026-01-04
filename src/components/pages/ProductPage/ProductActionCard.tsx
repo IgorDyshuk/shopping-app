@@ -109,9 +109,13 @@ export function ProductActionCard({
                 }
                 pressed={isFavorite}
                 onPressedChange={onFavoriteToggle}
-                variant="outline"
-                size="lg"
-                className="rounded-full bg-muted/90 hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 transition-colors duration-150 hover:cursor-pointer"
+                value="heart"
+                variant={"default"}
+                size={"lg"}
+                className="bg-transparent data-[state=on]:*:[svg]:fill-red-500 
+            data-[state=off]:*:[svg]:stroke-black/60 data-[state=on]:*:[svg]:stroke-red-500 
+            hover:cursor-pointer hover:data-[state=off]:*:[svg]:stroke-black 
+            transition-colors duration-150"
               >
                 <Heart className="size-5" />
               </Toggle>

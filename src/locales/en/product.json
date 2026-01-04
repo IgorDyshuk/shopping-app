@@ -11,6 +11,7 @@
   "seller": "Seller",
   "buy": "Buy",
   "addedToCart": "Added to cart",
+  "removedFromCart": "Removed to cart",
   "descriptionFallback": "Detailed description will be added later.",
   "characteristics": {
     "brand": "Brand",

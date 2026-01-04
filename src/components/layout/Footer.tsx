@@ -4,7 +4,7 @@ import { useLanguageStore } from "@/stores/use-language";
 
 const footerLinks = {
   marketplace: [
-    { labelKey: "footer.links.home", href: "#" },
+    { labelKey: "footer.links.home", href: "/shopping-app" },
     { labelKey: "footer.links.catalog", href: "/shopping-app/catalog" },
     { labelKey: "footer.links.bloggers", href: "/shopping-app/bloggers" },
   ],
@@ -24,7 +24,7 @@ export function Footer({ showLanguage = true }: FooterProps) {
 
   return (
     <footer className="border-t bg-black text-white">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-10">
+      <div className="mx-auto flex w-full max-w-[1464px] flex-col gap-8 px-4 py-10">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm space-y-3">
             <div className="text-xl font-semibold">{t("footer.brand")}</div>

@@ -30,6 +30,8 @@ import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
 import { ProductHomeCard } from "@/components/products/ProductHomeCard";
 import { useCartStore } from "@/stores/use-cart";
+import { useFavoritesStore } from "@/stores/use-favorites";
+import type { Product as ProductType } from "@/types/product";
 
 function ProductPage() {
   const { id, category = "" } = useParams<{ id: string; category: string }>();
@@ -45,10 +47,11 @@ function ProductPage() {
   const { t } = useTranslation(["product", "common"]);
   const addCartItem = useCartStore((state) => state.addItem);
   const removeCartItem = useCartStore((state) => state.removeItem);
+  const favoriteIds = useFavoritesStore((state) => state.ids);
+  const toggleFavoriteId = useFavoritesStore((state) => state.toggle);
 
   const isSmallScreen = useMediaQuery("(max-width: 767px)");
 
-  const [isFavorite, setIsFavorite] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [manualSize, setManualSize] = useState(false);
 
@@ -135,9 +138,12 @@ function ProductPage() {
     }
   }, [sizeOptions, selectedSize, searchParams, cartMatchedSize, manualSize]);
 
+  const isFavorite = favoriteIds.includes(productId);
+
   const handleFavoriteToggle = (next: boolean) => {
-    setIsFavorite(next);
-    toast.success(
+    if (!productId) return;
+    toggleFavoriteId(productId);
+    toast.message(
       next
         ? t("favorites.added", { ns: "common" })
         : t("favorites.removed", { ns: "common" }),
@@ -150,7 +156,7 @@ function ProductPage() {
   const galleryImages = useMemo(() => {
     if (!product?.image) return [];
     return Array.from({ length: 5 }).map(() => product.image);
-  }, [product?.image]);
+  }, [product]);
 
   const characteristics = useMemo(
     () => [
@@ -178,7 +184,7 @@ function ProductPage() {
   const handleAddToCart = useCallback(() => {
     if (!product) return;
     addCartItem(product, 1, selectedSize);
-    toast.success(
+    toast.message(
       t("addedToCart", { ns: "product", defaultValue: "Added to cart" }),
       { description: product.title }
     );
@@ -190,14 +196,19 @@ function ProductPage() {
         item.product.id === productId &&
         (!selectedSize || item.size === selectedSize)
     )?.quantity ?? 0;
+
   const handleIncrement = useCallback(() => {
     if (!product) return;
     addCartItem(product, 1, selectedSize);
   }, [addCartItem, product, selectedSize]);
+
   const handleDecrement = useCallback(() => {
     if (!product) return;
     removeCartItem(product.id, selectedSize);
-  }, [removeCartItem, product, selectedSize]);
+    if (cartQuantity <= 1) {
+      toast.message(t("removedFromCart"), { description: product.title });
+    }
+  }, [cartQuantity, product, selectedSize, removeCartItem, t]);
 
   return (
     <section className="w-full my-18 xl:my-19">
@@ -324,8 +335,8 @@ function ProductPage() {
                 peekNext
                 disableMobileCarousel
                 controlsInline
-                renderItem={(product) => (
-                  <ProductHomeCard inCarousel product={product as any} />
+                renderItem={(product: ProductType) => (
+                  <ProductHomeCard inCarousel product={product} />
                 )}
               />
             </div>
@@ -359,8 +370,8 @@ function ProductPage() {
                 perRow={{ base: 2, xs: 3, sm: 4, md: 5, lg: 5, xl: 5 }}
                 peekNext
                 controlsInline
-                renderItem={(product) => (
-                  <ProductSmallHomeCard product={product as any} />
+                renderItem={(product: ProductType) => (
+                  <ProductSmallHomeCard product={product} />
                 )}
               />
             )}

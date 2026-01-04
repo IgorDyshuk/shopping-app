@@ -12,6 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/stores/use-cart";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import { toast } from "sonner";
 
 export function CartPopover() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export function CartPopover() {
 
   const scheduleClose = () => {
     clearCloseTimer();
-    closeTimer.current = window.setTimeout(() => setOpen(false), 100);
+    closeTimer.current = window.setTimeout(() => setOpen(false), 120);
   };
 
   const handleOpen = () => {
@@ -107,7 +108,7 @@ export function CartPopover() {
                   key={`${product.id}-${size ?? "default"}`}
                   className="p-2.5"
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-center gap-3">
                     <Link
                       to={`/category/${encodeURIComponent(product.category)}/${
                         product.id
@@ -121,7 +122,7 @@ export function CartPopover() {
                         className="h-full w-full object-contain"
                       />
                     </Link>
-                    <div className="flex flex-col gap-1 min-w-0 flex-1">
+                    <div className="flex flex-col gap-1 min-w-0 flex-1 justify-center">
                       <div className="flex items-center gap-2 text-sm font-semibold">
                         <span>{(product.price ?? 0).toFixed(2)}$</span>
                         {quantity > 1 && (
@@ -145,19 +146,20 @@ export function CartPopover() {
                         {size ? `${t("size")}: ${size}` : t("sizeUnknown")}
                       </span>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="shrink-0 text-muted-foreground hover:text-foreground"
+                    <button
+                      className="flex items-center justify-center hover:cursor-pointer text-muted-foreground hover:text-foreground transition-colors duration-150"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         removeLine(product.id, size);
+                        toast.message(t("removed"), {
+                          description: product.title,
+                        });
                       }}
                       title={t("removeItem")}
                     >
-                      <Trash2 className="size-4" />
-                    </Button>
+                      <Trash2 className="size-4.5" />
+                    </button>
                   </div>
                 </li>
               ))}

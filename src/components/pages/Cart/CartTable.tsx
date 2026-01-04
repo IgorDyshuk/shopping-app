@@ -8,6 +8,7 @@ import {
   sneakerSizeOptions,
 } from "@/constants/filters-presets";
 import type { Product } from "@/types/product";
+import { toast } from "sonner";
 
 type CartEntry = {
   product: Product;
@@ -21,7 +22,11 @@ type CartTableProps = {
   onAdd: (product: Product, size?: string) => void;
   onRemove: (productId: number, size?: string) => void;
   onRemoveLine: (productId: number, size?: string) => void;
-  onUpdateSize: (productId: number, prevSize: string | undefined, next: string) => void;
+  onUpdateSize: (
+    productId: number,
+    prevSize: string | undefined,
+    next: string
+  ) => void;
   onToggleFavorite: (productId: number) => void;
   t: TFunction<["cart", "common"]>;
 };
@@ -58,6 +63,21 @@ export function CartTable({
               const preset = resolveSizePreset(product.category);
               const sizeOptions = getSizeOptions(preset);
               const currentSize = size ?? sizeOptions[0]?.id;
+
+              const handleFavoriteToggle = (next: boolean) => {
+                onToggleFavorite(product.id);
+                toast.message(
+                  next
+                    ? t("favorites.added", { ns: "common" })
+                    : t("favorites.removed", { ns: "common" }),
+                  { description: product.title }
+                );
+              };
+
+              const handleRemoveLine = () => {
+                onRemoveLine(product.id, currentSize);
+                toast.message(t("removed"), { description: product.title });
+              };
               return (
                 <CartLineItem
                   key={`${product.id}-${size ?? "default"}`}
@@ -69,11 +89,11 @@ export function CartTable({
                   isFavorite={favoriteIds.includes(product.id)}
                   onAdd={() => onAdd(product, currentSize)}
                   onRemove={() => onRemove(product.id, currentSize)}
-                  onRemoveLine={() => onRemoveLine(product.id, currentSize)}
+                  onRemoveLine={handleRemoveLine}
                   onSizeChange={(next) =>
                     onUpdateSize(product.id, currentSize, next)
                   }
-                  onToggleFavorite={() => onToggleFavorite(product.id)}
+                  onToggleFavorite={handleFavoriteToggle}
                   t={t}
                 />
               );

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import { useFavoritesStore } from "@/stores/use-favorites";
 
 type ProductCardProps = {
   product: Product;
@@ -18,7 +19,8 @@ export function ProductHomeCard({
   product,
   inCarousel = false,
 }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { ids, toggle } = useFavoritesStore();
+  const isFavorite = ids.includes(product.id);
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const productUrl = useMemo(
@@ -27,8 +29,8 @@ export function ProductHomeCard({
   );
 
   const handleFavoriteToggle = (next: boolean) => {
-    setIsFavorite(next);
-    toast.success(next ? t("favorites.added") : t("favorites.removed"), {
+    toggle(product.id);
+    toast.message(next ? t("favorites.added") : t("favorites.removed"), {
       description: product.title,
     });
   };
@@ -64,17 +66,19 @@ export function ProductHomeCard({
             }
             pressed={isFavorite}
             onPressedChange={handleFavoriteToggle}
-            variant="outline"
-            size="sm"
-            className={`absolute right-3 top-3 z-10 ${
-              isBelowMd
-                ? "right-2 top-2 opacity-100"
-                : "right-3 top-3 opacity-0 group-hover:opacity-100"
-            }  transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer`}
+            value="heart"
+            variant={"default"}
+            size={"lg"}
+            className={`absolute right-1 sm:right-2.5 top-1 sm:top-2.5 z-10 
+              transition-all duration-150 bg-transparent data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500 hover:cursor-pointer ${
+                isBelowMd || isFavorite
+                  ? "opacity-100"
+                  : "opacity-0 group-hover:opacity-100"
+              }`}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
-            <Heart className="size-4" />
+            <Heart className="size-4.5" />
           </Toggle>
           <div className="relative py-6 md:py-18 px-8 sm:px-6 xl:px-10 xl:mb-1 w-full rounded-sm bg-[#f0f0f3] md:bg-[#f7f7f7] flex justify-center">
             <img

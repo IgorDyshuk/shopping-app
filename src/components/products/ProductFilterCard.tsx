@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -7,13 +7,16 @@ import { toast } from "sonner";
 
 import { Toggle } from "@/components/ui/toggle";
 import type { Product } from "@/types/product";
+import { useFavoritesStore } from "@/stores/use-favorites";
+import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
 type ProductCardProps = {
   product: Product;
 };
 
 export function ProductFilterCard({ product }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { ids, toggle } = useFavoritesStore();
+  const isFavorite = ids.includes(product.id);
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const productUrl = useMemo(
@@ -21,9 +24,11 @@ export function ProductFilterCard({ product }: ProductCardProps) {
     [product.category, product.id]
   );
 
+  const isBelowMd = useMediaQuery("(max-width: 767px)");
+
   const handleFavoriteToggle = (next: boolean) => {
-    setIsFavorite(next);
-    toast.success(next ? t("favorites.added") : t("favorites.removed"), {
+    toggle(product.id);
+    toast.message(next ? t("favorites.added") : t("favorites.removed"), {
       description: product.title,
     });
   };
@@ -53,9 +58,14 @@ export function ProductFilterCard({ product }: ProductCardProps) {
             }
             pressed={isFavorite}
             onPressedChange={handleFavoriteToggle}
-            variant="outline"
-            size="sm"
-            className="absolute right-3 top-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-150 rounded-full bg-muted hover:bg-chart-1 data-[state=on]:bg-rose-100 data-[state=on]:text-rose-600 hover:cursor-pointer"
+            value="heart"
+            variant={"default"}
+            size={"lg"}
+            className={`absolute right-px sm:right-1 top-px sm:top-1 z-10 transition-all duration-150 bg-transparent data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500 hover:cursor-pointer ${
+              isBelowMd || isFavorite
+                ? "opacity-100"
+                : "opacity-0 group-hover:opacity-100"
+            }`}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
