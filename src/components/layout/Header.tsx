@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { SearchIcon, X, ShoppingCart } from "lucide-react";
+import { SearchIcon, X } from "lucide-react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { NavigationMenuComplete } from "@/components/layout/Header/NavigationMenu";
 import { SearchBar } from "@/components/layout/Header/SearchBar";
@@ -9,14 +9,13 @@ import LogIn from "./Header/LogInForm";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { User } from "lucide-react";
-import { useCartStore } from "@/stores/use-cart";
+import { CartPopover } from "@/components/layout/Header/CartPopover";
 
 type HeaderProps = {
   showSidebar?: boolean;
 };
 
 function Header({ showSidebar = false }: HeaderProps) {
-  const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isHiding, setIsHiding] = useState(false);
   const [isEntering, setIsEntering] = useState(false);
@@ -25,7 +24,21 @@ function Header({ showSidebar = false }: HeaderProps) {
   const { open, openMobile, isMobile } = useSidebar();
   const isSidebarOpen = isMobile ? openMobile : open;
   const [isTabletUp, setIsTabletUp] = useState(false);
-  const cartCount = useCartStore((state) => state.items.length);
+
+  const startEnterAnimation = () => {
+    setIsEntering(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsEntering(false));
+    });
+  };
+
+  const startHide = () => {
+    setIsHiding(true);
+    setTimeout(() => {
+      setShowSearchBar(false);
+      setIsHiding(false);
+    }, 180);
+  };
 
   useEffect(() => {
     const mql = window.matchMedia("(min-width: 768px)");
@@ -37,17 +50,6 @@ function Header({ showSidebar = false }: HeaderProps) {
 
   const headerLeft =
     showSidebar && isTabletUp ? (isSidebarOpen ? "255px" : "47px") : "0px";
-
-  useEffect(() => {
-    if (!showSearchBar) {
-      setIsEntering(false);
-      return;
-    }
-    setIsEntering(true);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => setIsEntering(false));
-    });
-  }, [showSearchBar]);
 
   useEffect(() => {
     if (!showSearchBar) return;
@@ -68,14 +70,6 @@ function Header({ showSidebar = false }: HeaderProps) {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [showSearchBar]);
-
-  const startHide = () => {
-    setIsHiding(true);
-    setTimeout(() => {
-      setShowSearchBar(false);
-      setIsHiding(false);
-    }, 180);
-  };
 
   return (
     <header
@@ -110,6 +104,7 @@ function Header({ showSidebar = false }: HeaderProps) {
                         startHide();
                         return prev;
                       }
+                      startEnterAnimation();
                       return true;
                     })
                   }
@@ -138,20 +133,7 @@ function Header({ showSidebar = false }: HeaderProps) {
                   />
                 )}
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Cart"
-                  onClick={() => navigate("/cart")}
-                  className="relative"
-                >
-                  <ShoppingCart className="size-5" />
-                  {cartCount > 0 && (
-                    <span className="absolute -right-0.5 -top-0.5 min-w-4.5 h-4.5 rounded-full bg-primary text-primary-foreground text-[9px] leading-none flex items-center justify-center px-1">
-                      {cartCount}
-                    </span>
-                  )}
-                </Button>
+                <CartPopover />
               </div>
             </div>
           </div>

@@ -67,7 +67,9 @@ export function CartLineItem({
 
           <div className="flex flex-col flex-1 min-w-0">
             <Link to={productUrl}>
-              <span className="line-clamp-2">{product.title}</span>
+              <span className="line-clamp-2 hover:text-primary">
+                {product.title}
+              </span>
             </Link>
 
             <div className="flex flex-wrap gap-1 mt-1 sm:mt-2">

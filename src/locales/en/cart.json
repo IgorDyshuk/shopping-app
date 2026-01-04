@@ -7,6 +7,7 @@
   "total": "Total",
   "checkout": "Checkout",
   "clear": "Clear cart",
+  "goToCart": "Go to cart",
   "perItem": "{{value}} $/item",
   "removeItem": "Remove item",
   "size": "Size",
