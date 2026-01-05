@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { User } from "lucide-react";
 import { CartPopover } from "@/components/layout/Header/CartPopover";
+import { useAuthStore } from "@/stores/use-auth";
 
 type HeaderProps = {
   showSidebar?: boolean;
@@ -24,6 +25,7 @@ function Header({ showSidebar = false }: HeaderProps) {
   const { open, openMobile, isMobile } = useSidebar();
   const isSidebarOpen = isMobile ? openMobile : open;
   const [isTabletUp, setIsTabletUp] = useState(false);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const startEnterAnimation = () => {
     setIsEntering(true);
@@ -118,20 +120,33 @@ function Header({ showSidebar = false }: HeaderProps) {
                   )}
                 </Button>
 
-                {!showSidebar && (
-                  <LogIn
-                    trigger={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Account"
-                        className=" text-white hover:cursor-po"
-                      >
+                {!showSidebar &&
+                  (isAuthenticated ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Profile"
+                      className="text-white"
+                      asChild
+                    >
+                      <Link to="/profile">
                         <User className="size-6 text-foreground" />
-                      </Button>
-                    }
-                  />
-                )}
+                      </Link>
+                    </Button>
+                  ) : (
+                    <LogIn
+                      trigger={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Account"
+                          className=" text-white hover:cursor-po"
+                        >
+                          <User className="size-6 text-foreground" />
+                        </Button>
+                      }
+                    />
+                  ))}
 
                 <CartPopover />
               </div>

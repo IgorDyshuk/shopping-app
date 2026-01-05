@@ -54,8 +54,20 @@
     "signup": "Sign up",
     "authorization": "Authorization"
   },
+  "usersPage": {
+    "title": "Users",
+    "description": "Existing users from the API",
+    "id": "ID",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading users...",
+    "error": "Failed to load users"
+  },
   "authForm": {
     "fields": {
+      "username": "Username",
+      "usernamePlaceholder": "your_username",
       "email": "Email",
       "password": "Password",
       "name": "Full Name",

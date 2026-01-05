@@ -54,8 +54,20 @@
     "signup": "Реєстрація",
     "authorization": "Авторизація"
   },
+  "usersPage": {
+    "title": "Користувачі",
+    "description": "Наявні користувачі з API",
+    "id": "ID",
+    "username": "Ім'я користувача",
+    "email": "Email",
+    "password": "Пароль",
+    "loading": "Завантаження користувачів...",
+    "error": "Не вдалося завантажити користувачів"
+  },
   "authForm": {
     "fields": {
+      "username": "Ім'я користувача",
+      "usernamePlaceholder": "username",
       "email": "Email",
       "password": "Пароль",
       "name": "Повне ім'я",

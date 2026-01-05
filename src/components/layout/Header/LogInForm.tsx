@@ -2,12 +2,14 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import { GalleryVerticalEnd } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { LoginForm } from "@/components/login-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/use-auth";
 
 type LogInProps = {
   className?: string;
@@ -17,16 +19,30 @@ type LogInProps = {
 export default function LogIn({ className, trigger }: LogInProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+      if (isAuthenticated) return;
+      setOpen(true);
+    };
     document.addEventListener("open-login", handleOpen as EventListener);
     return () =>
       document.removeEventListener("open-login", handleOpen as EventListener);
-  }, []);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) setOpen(false);
+  }, [isAuthenticated]);
+
+  const handleOpenChange = (next: boolean) => {
+    if (isAuthenticated && next) return;
+    setOpen(next);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={!isAuthenticated && open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {trigger ?? (
           <Button
@@ -36,7 +52,8 @@ export default function LogIn({ className, trigger }: LogInProps) {
               "rounded-full border border-input bg-white px-4 text-foreground shadow-none hover:bg-accent hover:text-foreground",
               className
             )}
-            onClick={() => setOpen(true)}
+            onClick={() => handleOpenChange(true)}
+            disabled={isAuthenticated}
           >
             {t("auth.login")}
           </Button>
@@ -54,7 +71,13 @@ export default function LogIn({ className, trigger }: LogInProps) {
               </div>
               website name.
             </a>
-            <LoginForm onClose={() => setOpen(false)} />
+            <LoginForm
+              onClose={() => setOpen(false)}
+              onSuccess={() => {
+                setOpen(false);
+                navigate("/profile");
+              }}
+            />
           </div>
         </div>
       </DialogContent>

@@ -27,6 +27,7 @@ import {
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 import { useTranslation } from "react-i18next";
 import LogIN_SignUp from "./LoginSugnupButtons";
+import { useAuthStore } from "@/stores/use-auth";
 
 const clothingCategory = CATALOG_CATEGORIES.clothing;
 const electronicsCategory = CATALOG_CATEGORIES.electronics;
@@ -35,12 +36,15 @@ const jeweleryCategory = CATALOG_CATEGORIES.jewelery;
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, isMobile } = useSidebar();
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuthStore();
+  const showAuthButtons =
+    (state === "expanded" || isMobile) && !isAuthenticated;
 
   const data = React.useMemo(
     () => ({
       user: {
-        name: "Guest",
-        email: "guest@example.com",
+        name: user?.username ?? "Guest",
+        email: user?.email ?? "guest@example.com",
         avatar: "/avatars/shadcn.jpg",
       },
       teams: [
@@ -119,14 +123,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
       ],
     }),
-    [t]
+    [t, user?.username, user?.email]
   );
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        {(state === "expanded" || isMobile) && <LogIN_SignUp />}
-        {state === "collapsed" && !isMobile && (
+        {showAuthButtons && <LogIN_SignUp />}
+        {state === "collapsed" && !isMobile && !isAuthenticated && (
           <div className="flex justify-center py-1">
             <Button
               size="icon"
@@ -138,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </Button>
           </div>
         )}
-        <NavUser user={data.user} />
+        {isAuthenticated && <NavUser user={data.user} />}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

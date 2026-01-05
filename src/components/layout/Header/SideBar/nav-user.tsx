@@ -23,6 +23,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/stores/use-auth";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({
   user,
@@ -35,6 +37,8 @@ export function NavUser({
 }) {
   const { isMobile, state } = useSidebar();
   const { t } = useTranslation();
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
 
   const compactButton = (
     <SidebarMenuButton className="justify-center px-0">
@@ -89,7 +93,7 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => navigate("/profile")}>
                 <BadgeCheck />
                 {t("sidebar.account.account")}
               </DropdownMenuItem>
@@ -103,7 +107,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout()}>
               <LogOut />
               {t("sidebar.account.logout")}
             </DropdownMenuItem>

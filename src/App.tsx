@@ -10,6 +10,8 @@ import BloggersPage from "@/pages/Bloggers";
 import BloggerPage from "@/pages/Blogger";
 import LoginPage from "@/pages/Login";
 import SignupPage from "@/pages/Signup";
+import UsersPage from "@/pages/Users";
+import ProfilePage from "@/pages/Profile";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 import CartPage from "@/pages/Cart";
@@ -31,6 +33,8 @@ function App() {
               <Route path="/bloggers/:id" element={<BloggerPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
