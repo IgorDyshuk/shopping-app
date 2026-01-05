@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { HomeSkeleton } from "@/components/layout/skeletons/HomeSkeleton";
+import { CatalogSkeleton } from "@/components/layout/skeletons/CatalogSkeleton";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
 import { useFilteredProduct } from "@/hooks/api-hooks/useProducts";
 import {
@@ -64,7 +64,7 @@ function Catalog() {
         </div>
 
         {isLoading ? (
-          <HomeSkeleton />
+          <CatalogSkeleton />
         ) : isError ? (
           <p className="text-destructive">{t("error")}</p>
         ) : !menClothes ? (
@@ -171,7 +171,7 @@ function Catalog() {
                 peekNext
                 controlsInline
                 renderItem={(product) => (
-                  <ProductSmallHomeCard product={product as any} />
+                  <ProductSmallHomeCard product={product} />
                 )}
               />
             )}

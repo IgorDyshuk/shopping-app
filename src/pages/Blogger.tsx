@@ -19,7 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useArtistInfo } from "@/hooks/api-hooks/useArtists";
 import { Button } from "@/components/ui/button";
 import Category from "./Category";
-import { BloggerSkeleton } from "@/components/pages/Blogger/BloggerSkeleton";
+import { BloggerSkeleton } from "@/components/layout/skeletons/BloggerSkeleton";
 import {
   Tooltip,
   TooltipContent,

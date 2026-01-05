@@ -12,7 +12,7 @@ export function ProductSkeleton() {
       <div className="grid w-full gap-2 lg:grid-cols-2 items-start">
         <Card>
           <CardContent className="p-4 space-y-4">
-            <Skeleton className="h-80 sm:h-[420px] w-full rounded-lg" />
+            <Skeleton className="h-100 sm:h-140 md:h-100 lg:h-120 xl:h-140 w-full rounded-lg" />
             <div className="flex flex-wrap gap-2">
               {Array.from({ length: THUMB_COUNT }).map((_, idx) => (
                 <Skeleton key={idx} className="h-12 w-12 rounded-md" />

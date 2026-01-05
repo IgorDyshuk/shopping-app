@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import BloggerSkeleton from "@/components/pages/Blogger/BloggersSkeleton";
+import BloggerSkeleton from "@/components/layout/skeletons/BloggersSkeleton";
 import { BloggerCard } from "@/components/pages/Blogger/BloggerCard";
 import { TOP_BLOGGER_IDS } from "@/constants/blogger-ids";
 
