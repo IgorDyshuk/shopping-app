@@ -12,12 +12,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/use-auth";
 import { findCountryByCode } from "@/lib/country";
+import { useOrdersStore } from "@/stores/use-orders";
+import { Separator } from "@/components/ui/separator";
 
 function ProfilePage() {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuthStore();
   const countryInfo = findCountryByCode(user?.country);
+  const orders = useOrdersStore((state) => state.orders);
 
   const handleLogOut = () => {
     logout();
@@ -104,6 +107,43 @@ function ProfilePage() {
                   <Button variant="destructive" onClick={handleLogOut}>
                     Logout
                   </Button>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold">Orders</p>
+                  {orders.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      No orders yet.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {orders.map((order) => (
+                        <div
+                          key={order.id}
+                          className="rounded-lg border p-3 space-y-2"
+                        >
+                          <div className="flex justify-between text-sm">
+                            <span className="font-medium">
+                              Order #{order.id}
+                            </span>
+                            <span className="text-muted-foreground">
+                              {new Date(order.createdAt).toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>{order.items.length} items</span>
+                            <span className="font-semibold">
+                              ${order.grandTotal.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Delivery: {order.deliveryMethod}, Payment:{" "}
+                            {order.paymentMethod}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </>
             ) : (

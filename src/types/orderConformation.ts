@@ -18,3 +18,25 @@ export type CheckoutOrder = {
   items: CartItem[];
   subtotal: number;
 };
+
+export type PlacedOrder = {
+  id: number;
+  createdAt: string;
+  items: CartItem[];
+  grandTotal: number;
+  deliveryMethod: DeliveryId;
+  paymentMethod: PaymentId;
+  contact: {
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+    countryCode: string;
+  };
+  shipping: {
+    city: string;
+    address: string;
+    comment?: string;
+  };
+  promo?: string;
+};

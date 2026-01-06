@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 import {
   Breadcrumb,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useCartStore } from "@/stores/use-cart";
 import { useAuthStore } from "@/stores/use-auth";
+import { useOrdersStore } from "@/stores/use-orders";
 import { findCountryByCode } from "@/lib/country";
 import { LoginForm } from "@/components/login-form";
 import { ContactDetailsCard } from "@/components/pages/OrderConfirmation/ContactDetailsCard";
@@ -49,8 +49,9 @@ const defaultOrderForm = (): OrderFormState => ({
 function OrderConfirmationPage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["checkout", "common"]);
-  const { items, totalCount } = useCartStore();
+  const { items, totalCount, clear } = useCartStore();
   const { user, isAuthenticated } = useAuthStore();
+  const addOrder = useOrdersStore((state) => state.addOrder);
 
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
   const parsePhone = (value?: string) => {
@@ -202,42 +203,43 @@ function OrderConfirmationPage() {
 
   const canConfirm = isAuthenticated && missingFields.length === 0;
 
-  const deliveryLabels = useMemo(
-    () =>
-      orders.map((order) =>
-        getDeliveryLabel((orderForms[order.id] ?? defaultOrderForm()).delivery)
-      ),
-    [orderForms, orders, getDeliveryLabel]
-  );
-
-  const paymentLabels = useMemo(
-    () =>
-      orders.map((order) =>
-        getPaymentLabel((orderForms[order.id] ?? defaultOrderForm()).payment)
-      ),
-    [orderForms, orders, getPaymentLabel]
-  );
-
   const handleConfirm = () => {
-    const deliveryLabel = deliveryLabels.join(", ");
-    const paymentLabel = paymentLabels.join(", ");
-    toast.success(t("toast.confirmed", { ns: "checkout" }), {
-      description: t("toast.desc", {
-        ns: "checkout",
-        delivery: deliveryLabel,
-        payment: paymentLabel,
-      }),
+    orders.forEach((order) => {
+      const form = orderForms[order.id] ?? defaultOrderForm();
+      const orderDeliveryPrice = getDeliveryPrice(form.delivery);
+      addOrder({
+        items: order.items,
+        grandTotal: order.subtotal + orderDeliveryPrice,
+        deliveryMethod: form.delivery,
+        paymentMethod: form.payment,
+        contact: {
+          email,
+          phone: `${countryCode} ${formatLocalPhone(phoneNumber)}`,
+          firstName,
+          lastName,
+          countryCode,
+        },
+        shipping: {
+          city: form.city,
+          address: form.address,
+          comment: form.comment,
+        },
+        promo: form.promo || undefined,
+      });
     });
+
     setShowSuccess(true);
   };
 
   const handleContinueShopping = () => {
     setShowSuccess(false);
+    clear();
     navigate("/");
   };
 
   const handleViewCart = () => {
     setShowSuccess(false);
+    clear();
     navigate("/cart");
   };
 
