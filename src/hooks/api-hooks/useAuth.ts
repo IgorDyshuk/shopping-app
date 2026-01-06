@@ -42,10 +42,24 @@ export const useLogin = () =>
 
 export const useRegister = () =>
   useMutation<User, unknown, CreateUserPayload>({
-    mutationFn: userApi.create,
-    onSuccess: (data) => {
-      console.debug("[useRegister] user created", data);
-      // Keep user in auth store for immediate UI updates if needed
-      useAuthStore.getState().setUser(data);
+    mutationFn: async (variables) => {
+      const newUser: User = {
+        id: Date.now(),
+        username: variables.username,
+        email: variables.email,
+        password: variables.password,
+        phone: variables.phone,
+        country: variables.country,
+        role: variables.role,
+        name: variables.name,
+      };
+
+      const authStore = useAuthStore.getState();
+      const token = `local-token-${newUser.id}`;
+      localStorage.setItem(API_CONFIG.authTokenKey, token);
+      authStore.login({ token, user: newUser });
+      authStore.setUser(newUser);
+
+      return newUser;
     },
   });

@@ -71,8 +71,19 @@
       "email": "Email",
       "password": "Password",
       "name": "Full Name",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
       "emailPlaceholder": "m@example.com",
-      "namePlaceholder": "John Doe"
+      "namePlaceholder": "John Doe",
+      "firstNamePlaceholder": "John",
+      "lastNamePlaceholder": "Doe",
+      "phonePlaceholder": "00 000 00 00",
+      "role": "Role",
+      "roles": {
+        "buyer": "Buyer",
+        "seller": "Seller"
+      }
     },
     "login": {
       "title": "Welcome back",
@@ -87,7 +98,7 @@
     },
     "signup": {
       "title": "Create your account",
-      "subtitle": "Enter your email below to create your account",
+      "subtitle": "Join the marketplace — create an account in a minute",
       "password": "Password",
       "confirmPassword": "Confirm Password",
       "helper": "Must be at least 8 characters long.",

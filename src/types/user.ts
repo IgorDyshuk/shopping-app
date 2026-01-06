@@ -2,8 +2,14 @@ export type User = {
   id: number;
   username: string;
   email: string;
-  // Password may not be returned from every endpoint; keep optional on the entity
   password?: string;
+  phone?: string;
+  country?: string;
+  role?: "seller" | "buyer";
+  name?: {
+    firstname?: string;
+    lastname?: string;
+  };
 };
 
 export type CreateUserPayload = {
@@ -11,6 +17,13 @@ export type CreateUserPayload = {
   email: string;
   password: string;
   id?: number;
+  phone?: string;
+  country?: string;
+  role?: "seller" | "buyer";
+  name?: {
+    firstname?: string;
+    lastname?: string;
+  };
 };
 
 export type UpdateUserPayload = {
@@ -18,4 +31,11 @@ export type UpdateUserPayload = {
   username: string;
   email: string;
   password: string;
+  phone?: string;
+  country?: string;
+  role?: "seller" | "buyer";
+  name?: {
+    firstname?: string;
+    lastname?: string;
+  };
 };

@@ -71,8 +71,19 @@
       "email": "Email",
       "password": "Пароль",
       "name": "Повне ім'я",
+      "firstName": "Ім'я",
+      "lastName": "Прізвище",
+      "phone": "Телефон",
       "emailPlaceholder": "m@example.com",
-      "namePlaceholder": "Іван Петренко"
+      "namePlaceholder": "Іван Петренко",
+      "firstNamePlaceholder": "Іван",
+      "lastNamePlaceholder": "Петренко",
+      "phonePlaceholder": "00 000 00 00",
+      "role": "Роль",
+      "roles": {
+        "buyer": "Покупець",
+        "seller": "Продавець"
+      }
     },
     "login": {
       "title": "З поверненням",
@@ -87,7 +98,7 @@
     },
     "signup": {
       "title": "Створіть обліковий запис",
-      "subtitle": "Введіть email, щоб створити акаунт",
+      "subtitle": "Долучайтесь до маркетплейсу — створіть акаунт за хвилину",
       "password": "Пароль",
       "confirmPassword": "Підтвердіть пароль",
       "helper": "Мінімум 8 символів.",

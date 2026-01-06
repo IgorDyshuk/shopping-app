@@ -3,6 +3,7 @@
 React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Query, общий хедер, поиск и навигация под маркетплейс перепродажи вещей инфлюенсеров.
 
 ## Технологии
+
 - React 19, TypeScript, Vite
 - Tailwind, shadcn/ui (Navigation Menu, кнопки, Tooltip и др.)
 - i18next + react-i18next (EN/UK, per-page namespaces, язык хранится в zustand)
@@ -10,6 +11,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - Zustand + persist (recently viewed товары, выбранный язык, корзина, избранное)
 
 ## Структура
+
 - `src/i18n.ts` — инициализация i18n, namespaces `common`, `home`, `catalog`, `category`, `product`, `blogger`; стартовый язык берётся из zustand.
 - `src/locales/{en,uk}/` — переводы (`common.json`, `home.json`, `catalog.json`, `category.json`, `product.json`, `blogger.json`).
 - `src/stores/use-language.ts` — zustand-persist для выбранного языка (используется в i18n и `LanguageSwitcher`).
@@ -38,18 +40,23 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/pages/Bloggers.tsx` — список блогеров (artists из Spotify, временно) с карточками и скелетоном.
 - `src/pages/Blogger.tsx` — страница блогера: обложка с тултипом “Verified blogger”, счётчик подписчиков, жанры/описание, соцкнопки, встроенная категория мужской одежды (`Category presetCategory="clothing"`).
 - `src/pages/Cart.tsx` + `src/components/pages/Cart/*` — таблица позиций (размеры, количество, избранное), анимированные суммы, итог, очистка, мини-просмотр в хедере.
+- `src/pages/Users.tsx` — список пользователей fakestore + отображение их корзин из API.
+- `src/pages/Profile.tsx` — профиль с username/email/id, кнопка logout, отображение корзин текущего пользователя и навигация в корзину.
 - `src/App.tsx` — роутинг Home/Catalog/Category/Product/Bloggers/Blogger, обёртка AppLayout + Toaster.
 
 ## Запуск
+
 - Установка: `npm install` (или `npm ci`).
 - Дев-сервер: `npm run dev` и открыть URL Vite.
 - Билд: `npm run build` (при необходимости перенастроить `tsBuildInfoFile`).
 
 ## Переключение API
+
 - `VITE_API_URL` — другой бэкенд (по умолчанию `https://fakestoreapi.com`).
 - `VITE_API_TIMEOUT` — таймаут запросов в мс.
 - `VITE_SPOTIFY_CLIENT_ID` / `VITE_SPOTIFY_CLIENT_SECRET` — client credentials Spotify (для блоков блогеров). Опционально `VITE_SPOTIFY_ACCESS_TOKEN` для заранее полученного токена.
 
 ## Дополнительно
+
 - GH Pages: `npm run deploy` (используется `homepage` в `package.json`).
 - CSP: избегайте инлайн-скриптов; все скрипты должны быть модульными (`src/main.tsx`), favicon — с того же origin или добавить домен в `img-src`.
