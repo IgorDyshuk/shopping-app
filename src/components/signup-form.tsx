@@ -27,6 +27,7 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { Eye, EyeOff } from "lucide-react";
+import { findCountryByCode } from "@/lib/country";
 
 export function SignupForm({
   className,
@@ -54,14 +55,7 @@ export function SignupForm({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const selectedCountry = useMemo(() => {
     return (
-      (
-        countryCodes as {
-          dial_code: string;
-          emoji?: string;
-          code: string;
-          name: string;
-        }[]
-      ).find((c) => c.dial_code === countryCode) ?? {
+      findCountryByCode(countryCode) ?? {
         dial_code: countryCode,
         emoji: "",
         code: "",

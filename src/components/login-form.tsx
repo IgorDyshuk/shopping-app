@@ -29,12 +29,14 @@ export function LoginForm({
   onSuccess,
   isPage = false,
   onClose,
+  titleOverride,
   ...props
 }: React.ComponentProps<"div"> & {
   onSwitchToSignup?: () => void;
   onSuccess?: () => void;
   isPage?: boolean;
   onClose?: () => void;
+  titleOverride?: string;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { mutateAsync, isPending } = useLogin();
+  const heading = titleOverride ?? t("authForm.login.title");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,7 +71,7 @@ export function LoginForm({
       <Card className={`${isPage ? "border-none" : ""}`}>
         <CardHeader className="text-center">
           <CardTitle className={`${isPage ? "text-3xl" : "text-xl"}`}>
-            {t("authForm.login.title")}
+            {heading}
           </CardTitle>
           <CardDescription>{t("authForm.login.subtitle")}</CardDescription>
         </CardHeader>

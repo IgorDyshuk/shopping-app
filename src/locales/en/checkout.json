@@ -1,0 +1,69 @@
+{
+  "title": "Checkout",
+  "contact": {
+    "title": "Contact details",
+    "phone": "Phone",
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phonePlaceholder": "+380 00 000 00 00",
+    "emailPlaceholder": "you@example.com",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe"
+  },
+  "order": {
+    "title": "Order #{{num}}",
+    "seller": "Seller",
+    "sumLabel": "Total",
+    "empty": "Your cart is empty.",
+    "edit": "Edit cart",
+    "size": "Size",
+    "qty": "Qty"
+  },
+  "delivery": {
+    "title": "Delivery",
+    "city": "City",
+    "address": "Address",
+    "comment": "Comment",
+    "free": "Free",
+    "options": {
+      "pickup": "Store pickup",
+      "courier": "Courier",
+      "post": "Postal service"
+    },
+    "cityPlaceholder": "City",
+    "addressPlaceholder": "Street, house, apt",
+    "commentPlaceholder": "Entrance, floor, delivery window..."
+  },
+  "payment": {
+    "title": "Payment",
+    "cod": "Pay on delivery",
+    "card": "Card now",
+    "invoice": "Invoice for business"
+  },
+  "promo": {
+    "title": "Promo code",
+    "placeholder": "Enter promo code",
+    "apply": "Apply"
+  },
+  "summary": {
+    "title": "Total",
+    "productsWorth": "{{count}} products worth",
+    "deliveryCost": "Delivery cost",
+    "toPay": "To pay",
+    "confirm": "Confirm order",
+    "disclaimer": "By confirming, you agree to the terms of service and personal data processing.",
+    "fillFields": "Fill required fields: {{fields}}"
+  },
+  "toast": {
+    "confirmed": "Order confirmed",
+    "desc": "Delivery: {{delivery}}, payment: {{payment}}"
+  },
+  "continueShopping": "Continue shopping",
+  "viewCart": "View cart",
+  "loginForCheckout": "Log in to place your order",
+  "success": {
+    "title": "Order placed!",
+    "desc": "We received your order. We’ll send updates to {{email}}"
+  }
+}

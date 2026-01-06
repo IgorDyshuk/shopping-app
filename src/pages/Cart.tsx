@@ -49,7 +49,7 @@ function CartPage() {
   };
 
   return (
-    <section className="w-full my-18 xl:my-20 space-y-4">
+    <section className="w-full my-18 xl:my-19 space-y-4">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

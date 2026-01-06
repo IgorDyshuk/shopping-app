@@ -12,6 +12,7 @@ import LoginPage from "@/pages/Login";
 import SignupPage from "@/pages/Signup";
 import UsersPage from "@/pages/Users";
 import ProfilePage from "@/pages/Profile";
+import OrderConfirmationPage from "@/pages/OrderConfirmation";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 import CartPage from "@/pages/Cart";
@@ -35,6 +36,7 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/order/confirmation" element={<OrderConfirmationPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

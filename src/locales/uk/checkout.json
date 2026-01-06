@@ -1,0 +1,69 @@
+{
+  "title": "Оформлення замовлення",
+  "contact": {
+    "title": "Контактні дані",
+    "phone": "Телефон",
+    "email": "Email",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "phonePlaceholder": "+380 00 000 00 00",
+    "emailPlaceholder": "you@example.com",
+    "firstNamePlaceholder": "Іван",
+    "lastNamePlaceholder": "Петренко"
+  },
+  "order": {
+    "title": "Замовлення №{{num}}",
+    "seller": "Продавець",
+    "sumLabel": "На суму",
+    "empty": "Ваш кошик порожній.",
+    "edit": "Редагувати кошик",
+    "size": "Розмір",
+    "qty": "Кількість"
+  },
+  "delivery": {
+    "title": "Доставка",
+    "city": "Місто",
+    "address": "Адреса",
+    "comment": "Коментар",
+    "free": "Безкоштовно",
+    "options": {
+      "pickup": "Самовивіз з магазину",
+      "courier": "Кур'єр",
+      "post": "Поштова служба"
+    },
+    "cityPlaceholder": "Місто",
+    "addressPlaceholder": "Вулиця, будинок, квартира",
+    "commentPlaceholder": "Під'їзд, поверх, час доставки..."
+  },
+  "payment": {
+    "title": "Оплата",
+    "cod": "Оплата при отриманні",
+    "card": "Карткою зараз",
+    "invoice": "Рахунок для бізнесу"
+  },
+  "promo": {
+    "title": "Промокод",
+    "placeholder": "Введіть промокод",
+    "apply": "Застосувати"
+  },
+  "summary": {
+    "title": "Разом",
+    "productsWorth": "{{count}} товар(и) на суму",
+    "deliveryCost": "Вартість доставки",
+    "toPay": "До сплати",
+    "confirm": "Підтвердити замовлення",
+    "disclaimer": "Підтверджуючи, ви погоджуєтесь з умовами сервісу та обробкою персональних даних.",
+    "fillFields": "Заповніть обов'язкові поля: {{fields}}"
+  },
+  "toast": {
+    "confirmed": "Замовлення підтверджено",
+    "desc": "Доставка: {{delivery}}, оплата: {{payment}}"
+  },
+  "continueShopping": "Продовжити покупки",
+  "viewCart": "До кошика",
+  "loginForCheckout": "Увійдіть, щоб оформити замовлення",
+  "success": {
+    "title": "Замовлення оформлено!",
+    "desc": "Ми отримали ваше замовлення. Надішлемо оновлення на {{email}}"
+  }
+}

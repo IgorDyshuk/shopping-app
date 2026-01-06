@@ -11,19 +11,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/use-auth";
-import countryCodes from "@/constants/CountriesCode.json";
+import { findCountryByCode } from "@/lib/country";
 
 function ProfilePage() {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuthStore();
-  const countryInfo = (
-    (user?.country &&
-      (countryCodes as { code: string; dial_code: string; name: string; emoji?: string }[]).find(
-        (c) => c.code === user.country || c.dial_code === user.country
-      )) ||
-    null
-  );
+  const countryInfo = findCountryByCode(user?.country);
 
   const handleLogOut = () => {
     logout();

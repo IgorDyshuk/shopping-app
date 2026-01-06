@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 import type { Product } from "@/types/product";
 
-type CartItem = {
+export type CartItem = {
   product: Product;
   quantity: number;
   size?: string;
