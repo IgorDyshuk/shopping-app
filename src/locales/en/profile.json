@@ -3,17 +3,51 @@
   "tabs": {
     "profile": "Personal info",
     "favorites": "Favorites",
-    "orders": "Orders"
+    "orders": "Orders",
+    "myItems": "My items"
   },
   "pageTitle": {
     "profile": "Profile",
     "favorites": "Favorites",
-    "orders": "My orders"
+    "orders": "My orders",
+    "myItems": "My items"
   },
   "auth": {
     "notLogged": "You are not logged in.",
     "login": "Log in",
     "signup": "Sign up"
+  },
+  "myItems": {
+    "loading": "Loading...",
+    "empty": "No items to show yet.",
+    "addButton": "Add product",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "addItem": {
+    "title": "Title",
+    "price": "Price, $",
+    "description": "Description",
+    "mainCategory": "Main category",
+    "subCategory": "Sub category",
+    "gender": "Gender",
+    "selectOption": "Select",
+    "images": "Product photos",
+    "selectedImages": "{{count}} file(s) selected",
+    "brand": "Brand",
+    "material": "Material",
+    "size": "Size (select all that apply)",
+    "state": "State",
+    "stateNew": "New",
+    "stateUsed": "Used",
+    "quantity": "Quantity",
+    "isNewArrival": "Mark as new arrival (7 days)",
+    "ratingRate": "Rating (0-5)",
+    "ratingCount": "Rating count",
+    "save": "Save",
+    "cancel": "Cancel",
+    "fillNumbers": "Fill price and quantity",
+    "success": "Product draft saved locally"
   },
   "fields": {
     "username": "Username",

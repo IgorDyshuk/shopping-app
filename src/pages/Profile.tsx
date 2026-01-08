@@ -8,7 +8,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { User, Heart, ShoppingBag } from "lucide-react";
+import { User, Heart, ShoppingBag, Boxes } from "lucide-react";
 
 import { useAuthStore } from "@/stores/use-auth";
 import { useOrdersStore } from "@/stores/use-orders";
@@ -24,8 +24,10 @@ import {
 import { ProfileInfoSection } from "@/components/pages/Profile/ProfileInfoSection";
 import { FavoritesSection } from "@/components/pages/Profile/FavoritesSection";
 import { OrdersSection } from "@/components/pages/Profile/OrdersSection";
+import { MyItemsSection } from "@/components/pages/Profile/MyItemsSection";
+import { AddItemForm } from "@/components/pages/Profile/AddItemForm";
 
-type ProfileTab = "profile" | "favorites" | "orders";
+type ProfileTab = "profile" | "favorites" | "orders" | "my-items" | "add-item";
 
 function ProfilePage() {
   const { t } = useTranslation(["profile", "common"]);
@@ -38,7 +40,12 @@ function ProfilePage() {
   const favoriteIds = useFavoritesStore((state) => state.ids);
 
   const parseTab = (value: string | null): ProfileTab =>
-    value === "favorites" || value === "orders" ? value : "profile";
+    value === "favorites" ||
+    value === "orders" ||
+    value === "my-items" ||
+    value === "add-item"
+      ? value
+      : "profile";
   const [activeTab, setActiveTab] = useState<ProfileTab>(() =>
     parseTab(searchParams.get("tab"))
   );
@@ -140,6 +147,11 @@ function ProfilePage() {
         label: t("tabs.orders", { ns: "profile" }),
         icon: ShoppingBag,
       },
+      {
+        id: "my-items",
+        label: t("tabs.myItems", { ns: "profile" }),
+        icon: Boxes,
+      },
     ],
     [t]
   );
@@ -195,18 +207,27 @@ function ProfilePage() {
         </Card>
 
         <Card
-          className={`gap-4  ${
+          className={` ${activeTab === "my-items" ? "gap-0" : "gap-4"} ${
             activeTab === "profile" ? "border py-6" : "border-none py-6 sm:py-0"
           }`}
         >
           <CardHeader className={`${activeTab === "profile" ? "" : "px-1"}`}>
-            <CardTitle>
-              {activeTab === "profile"
-                ? t("pageTitle.profile", { ns: "profile" })
-                : activeTab === "favorites"
-                ? t("pageTitle.favorites", { ns: "profile" })
-                : t("pageTitle.orders", { ns: "profile" })}
-            </CardTitle>
+            <div className="flex justify-between items-start">
+              <CardTitle>
+                {activeTab === "profile"
+                  ? t("pageTitle.profile", { ns: "profile" })
+                  : activeTab === "favorites"
+                  ? t("pageTitle.favorites", { ns: "profile" })
+                  : activeTab === "orders"
+                  ? t("pageTitle.orders", { ns: "profile" })
+                  : t("pageTitle.myItems", { ns: "profile" })}
+              </CardTitle>
+              {activeTab === "my-items" && (
+                <Button onClick={() => handleTabChange("add-item")}>
+                  + {t("myItems.addButton", { ns: "profile" })}
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent
             className={`space-y-4 ${activeTab === "profile" ? "" : "px-0"}`}
@@ -272,6 +293,19 @@ function ProfilePage() {
                 isLoading={isLoadingProducts}
                 emptyText={t("favorites.empty", { ns: "profile" })}
                 loadingText={t("favorites.loading", { ns: "profile" })}
+              />
+            ) : activeTab === "my-items" ? (
+              <MyItemsSection
+                products={allProducts}
+                isLoading={isLoadingProducts}
+                emptyText={t("myItems.empty", { ns: "profile" })}
+                loadingText={t("myItems.loading", { ns: "profile" })}
+                onAdd={() => handleTabChange("add-item")}
+              />
+            ) : activeTab === "add-item" ? (
+              <AddItemForm
+                onCancel={() => handleTabChange("my-items")}
+                onSaved={() => handleTabChange("my-items")}
               />
             ) : (
               <OrdersSection orders={orders} t={t} />

@@ -3,17 +3,51 @@
   "tabs": {
     "profile": "Особиста інформація",
     "favorites": "Обрані",
-    "orders": "Замовлення"
+    "orders": "Замовлення",
+    "myItems": "Мої товари"
   },
   "pageTitle": {
     "profile": "Профіль",
     "favorites": "Обрані",
-    "orders": "Мої замовлення"
+    "orders": "Мої замовлення",
+    "myItems": "Мої товари"
   },
   "auth": {
     "notLogged": "Ви не авторизовані.",
     "login": "Увійти",
     "signup": "Зареєструватися"
+  },
+  "myItems": {
+    "loading": "Завантаження...",
+    "empty": "Немає товарів для відображення.",
+    "addButton": "Додати товар",
+    "edit": "Редагувати",
+    "delete": "Видалити"
+  },
+  "addItem": {
+    "title": "Назва",
+    "price": "Ціна, $",
+    "description": "Опис",
+    "mainCategory": "Основна категорія",
+    "subCategory": "Підкатегорія",
+    "gender": "Стать",
+    "selectOption": "Виберіть",
+    "images": "Фото товару",
+    "selectedImages": "{{count}} файл(и) вибрано",
+    "brand": "Бренд",
+    "material": "Матеріал",
+    "size": "Розмір (оберіть усі, що підходять)",
+    "state": "Стан",
+    "stateNew": "Новий",
+    "stateUsed": "Б/в",
+    "quantity": "Кількість",
+    "isNewArrival": "Позначити як новинку (7 днів)",
+    "ratingRate": "Рейтинг (0-5)",
+    "ratingCount": "К-сть голосів",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "fillNumbers": "Заповніть ціну та кількість",
+    "success": "Чернетку товару збережено локально"
   },
   "fields": {
     "username": "Ім'я користувача",

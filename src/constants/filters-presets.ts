@@ -63,6 +63,11 @@ export const presetCategoryOptions: Record<string, FilterPresetOption[]> = {
       label: "Pants & Shorts",
       labelKey: "filters.options.categories.bottoms",
     },
+    {
+      id: "other-clothing",
+      label: "Other",
+      labelKey: "filters.options.categories.other",
+    },
   ],
   sneakers: [
     {
@@ -85,6 +90,11 @@ export const presetCategoryOptions: Record<string, FilterPresetOption[]> = {
       label: "Trail / Hiking",
       labelKey: "filters.options.categories.trail",
     },
+    {
+      id: "other-sneakers",
+      label: "Other",
+      labelKey: "filters.options.categories.other",
+    },
   ],
   accessories: [
     { id: "bags", label: "Bags", labelKey: "filters.options.categories.bags" },
@@ -102,6 +112,11 @@ export const presetCategoryOptions: Record<string, FilterPresetOption[]> = {
       id: "tech",
       label: "Tech accessories",
       labelKey: "filters.options.categories.tech",
+    },
+    {
+      id: "other-accessories",
+      label: "Other",
+      labelKey: "filters.options.categories.other",
     },
   ],
 };
