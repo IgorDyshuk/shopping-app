@@ -25,6 +25,7 @@ export type PlacedOrder = {
   items: CartItem[];
   grandTotal: number;
   deliveryMethod: DeliveryId;
+  deliveryCost?: number;
   paymentMethod: PaymentId;
   contact: {
     email: string;

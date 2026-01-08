@@ -60,7 +60,7 @@
     "desc": "Delivery: {{delivery}}, payment: {{payment}}"
   },
   "continueShopping": "Continue shopping",
-  "viewCart": "View cart",
+  "viewOrders": "View orders",
   "loginForCheckout": "Log in to place your order",
   "success": {
     "title": "Order placed!",

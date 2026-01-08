@@ -1,0 +1,58 @@
+{
+  "menuTitle": "Меню",
+  "tabs": {
+    "profile": "Особиста інформація",
+    "favorites": "Обрані",
+    "orders": "Замовлення"
+  },
+  "pageTitle": {
+    "profile": "Профіль",
+    "favorites": "Обрані",
+    "orders": "Мої замовлення"
+  },
+  "auth": {
+    "notLogged": "Ви не авторизовані.",
+    "login": "Увійти",
+    "signup": "Зареєструватися"
+  },
+  "fields": {
+    "username": "Ім'я користувача",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "email": "Email",
+    "password": "Пароль",
+    "phone": "Телефон",
+    "country": "Країна",
+    "role": "Роль"
+  },
+  "actions": {
+    "logout": "Вийти",
+    "edit": "Редагувати",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "review": "Залишити відгук"
+  },
+  "favorites": {
+    "loading": "Завантаження...",
+    "empty": "Немає обраних товарів."
+  },
+  "orders": {
+    "empty": "Немає замовлень.",
+    "number": "Замовлення № {{id}}",
+    "datePrefix": "від {{date}}",
+    "statusDone": "Виконано",
+    "amount": "Сума",
+    "itemsShort": "тов.",
+    "productsTotal": "Вартість товарів",
+    "delivery": "Доставка",
+    "total": "Разом",
+    "payment": "Оплата",
+    "seller": "Продавець",
+    "phone": "Телефон",
+    "deliveryAddress": "Адреса доставки",
+    "comment": "Коментар",
+    "receiver": "Отримувач",
+    "size": "Розмір",
+    "qty": "Кількість"
+  }
+}

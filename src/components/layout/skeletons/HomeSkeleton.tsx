@@ -13,7 +13,7 @@ export function HomeSkeleton() {
           {Array.from({ length: HERO_CARD_COUNT }).map((_, idx) => (
             <div
               key={idx}
-              className="min-w-[260px] sm:min-w-[320px] md:min-w-[420px] rounded-2xl border bg-card shadow-sm overflow-hidden flex-1"
+              className="h-45 sm:h-60 md:h-70 lg:h-90 rounded-2xl border bg-card shadow-sm overflow-hidden flex-1"
             >
               <Skeleton className="h-52 sm:h-60 md:h-72 w-full" />
               <div className=" p-4 space-y-2">

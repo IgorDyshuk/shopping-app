@@ -211,6 +211,7 @@ function OrderConfirmationPage() {
         items: order.items,
         grandTotal: order.subtotal + orderDeliveryPrice,
         deliveryMethod: form.delivery,
+        deliveryCost: orderDeliveryPrice,
         paymentMethod: form.payment,
         contact: {
           email,
@@ -240,7 +241,7 @@ function OrderConfirmationPage() {
   const handleViewCart = () => {
     setShowSuccess(false);
     clear();
-    navigate("/cart");
+    navigate("/profile?tab=orders");
   };
 
   return (

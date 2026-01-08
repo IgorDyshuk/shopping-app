@@ -9,6 +9,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - i18next + react-i18next (EN/UK, per-page namespaces, язык хранится в zustand)
 - Axios + TanStack React Query (fakestore API + Spotify API)
 - Zustand + persist (recently viewed товары, выбранный язык, корзина, избранное)
+- Отдельный namespace `profile` для локализации страницы профиля; checkout/успех — namespace `checkout`
 
 ## Структура
 
@@ -21,6 +22,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/lib/apiConfig.ts` — базовый URL/таймауты (`VITE_API_URL`, `VITE_API_TIMEOUT`).
 - `src/api/client.ts` — axios-инстанс с auth-header.
 - `src/api/{products,auth}.ts` — сервисы fakestore.
+- `src/stores/use-orders.ts` — история оформленных заказов (persist), используется на странице профиля.
 - `src/api/spotify.ts` — client-credentials Spotify (`VITE_SPOTIFY_CLIENT_ID`, `VITE_SPOTIFY_CLIENT_SECRET`, опционально `VITE_SPOTIFY_ACCESS_TOKEN`), кэш токена в рантайме. Временное решение до готовности собственного API.
 - `src/hooks/api-hooks/{useProducts,useAuth,useArtists,useSellers}.ts` — хуки React Query.
 - `src/types/{product,artist}.ts` — типы товара и артиста Spotify.
@@ -33,6 +35,8 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/components/pages/ProductPage/*` — галерея, рейтинг, карточки действия/размера, аккордеон информации, характеристики, липкое меню секций.
 - `src/components/pages/Blogger/*` — карточки блогеров (для списка и главной), скелетон.
 - `src/components/categories/*` — фильтры категории (панель и drawer), чипы активных фильтров.
+- `src/components/pages/OrderConfirmation/*` — разбитый на компоненты checkout (контакты, заказы по продавцам, итог, модалка успеха), поддержка авторизации/валидации и локализации.
+- `src/components/pages/Profile/*` — переиспользуемые секции профиля: сайдбар табов, профильные поля, избранное, история заказов.
 - `src/pages/Home.tsx` — главная: карусели товаров, recently viewed, блок популярных блогеров (Spotify) и скелетон при любой загрузке/placeholder данных.
 - `src/pages/Catalog.tsx` — каталог с секциями и блоком recently viewed.
 - `src/pages/Category.tsx` — категория с фильтрами/сортировкой/чипами; поддерживает проп `presetCategory` (при передаче хлебные крошки скрываются и используется указанная категория).
@@ -41,7 +45,8 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/pages/Blogger.tsx` — страница блогера: обложка с тултипом “Verified blogger”, счётчик подписчиков, жанры/описание, соцкнопки, встроенная категория мужской одежды (`Category presetCategory="clothing"`).
 - `src/pages/Cart.tsx` + `src/components/pages/Cart/*` — таблица позиций (размеры, количество, избранное), анимированные суммы, итог, очистка, мини-просмотр в хедере.
 - `src/pages/Users.tsx` — список пользователей fakestore + отображение их корзин из API.
-- `src/pages/Profile.tsx` — профиль с username/email/id, кнопка logout, отображение корзин текущего пользователя и навигация в корзину.
+- `src/pages/Profile.tsx` — страница профиля разбита на табы (личная инфа, избранное, заказы), использует новые компоненты и namespace `profile` для переводов.
+- `src/pages/OrderConfirmation.tsx` — страница подтверждения заказа с контактами/доставкой/оплатой, поддержкой авторизации, валидацией обязательных полей и модальным подтверждением.
 - `src/App.tsx` — роутинг Home/Catalog/Category/Product/Bloggers/Blogger, обёртка AppLayout + Toaster.
 
 ## Запуск

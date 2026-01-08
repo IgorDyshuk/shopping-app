@@ -1,0 +1,58 @@
+{
+  "menuTitle": "Menu",
+  "tabs": {
+    "profile": "Personal info",
+    "favorites": "Favorites",
+    "orders": "Orders"
+  },
+  "pageTitle": {
+    "profile": "Profile",
+    "favorites": "Favorites",
+    "orders": "My orders"
+  },
+  "auth": {
+    "notLogged": "You are not logged in.",
+    "login": "Log in",
+    "signup": "Sign up"
+  },
+  "fields": {
+    "username": "Username",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "country": "Country",
+    "role": "Role"
+  },
+  "actions": {
+    "logout": "Logout",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "review": "Leave a review"
+  },
+  "favorites": {
+    "loading": "Loading...",
+    "empty": "No favorite products."
+  },
+  "orders": {
+    "empty": "No orders.",
+    "number": "Order № {{id}}",
+    "datePrefix": "from {{date}}",
+    "statusDone": "Completed",
+    "amount": "Amount",
+    "itemsShort": "items",
+    "productsTotal": "Items total",
+    "delivery": "Delivery",
+    "total": "Total",
+    "payment": "Payment",
+    "seller": "Seller",
+    "phone": "Phone",
+    "deliveryAddress": "Delivery address",
+    "comment": "Comment",
+    "receiver": "Receiver",
+    "size": "Size",
+    "qty": "Qty"
+  }
+}

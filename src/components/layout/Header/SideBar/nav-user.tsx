@@ -1,8 +1,8 @@
 import {
   BadgeCheck,
-  Bell,
   ChevronsUpDown,
   CreditCard,
+  Heart,
   LogOut,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -35,7 +35,7 @@ export function NavUser({
     avatar: string;
   };
 }) {
-  const { isMobile, state } = useSidebar();
+  const { isMobile, state, closeSidebar } = useSidebar();
   const { t } = useTranslation();
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -93,17 +93,28 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => navigate("/profile")}>
+              <DropdownMenuItem
+                onSelect={() => navigate("/profile")}
+                onClick={closeSidebar}
+              >
                 <BadgeCheck />
                 {t("sidebar.account.account")}
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={closeSidebar}
+                onSelect={() => navigate("/profile?tab=favorites")}
+              >
+                <Heart />
+                {t("sidebar.account.favorites", {
+                  defaultValue: "Favorites",
+                })}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={closeSidebar}
+                onSelect={() => navigate("/profile?tab=orders")}
+              >
                 <CreditCard />
                 {t("sidebar.account.orders")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                {t("sidebar.account.notifications")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

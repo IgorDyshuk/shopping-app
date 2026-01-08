@@ -60,7 +60,7 @@
     "desc": "Доставка: {{delivery}}, оплата: {{payment}}"
   },
   "continueShopping": "Продовжити покупки",
-  "viewCart": "До кошика",
+  "viewOrders": "До замовлень",
   "loginForCheckout": "Увійдіть, щоб оформити замовлення",
   "success": {
     "title": "Замовлення оформлено!",

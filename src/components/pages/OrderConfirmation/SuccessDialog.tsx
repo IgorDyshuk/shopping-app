@@ -60,7 +60,7 @@ export function SuccessDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onViewCart}>
-            {t("viewCart", { ns: "checkout" })}
+            {t("viewOrders", { ns: "checkout", defaultValue: "View orders" })}
           </Button>
           <Button onClick={onContinueShopping}>
             {t("continueShopping", { ns: "checkout" })}

@@ -7,6 +7,7 @@ import enCatalog from "./locales/en/catalog.json";
 import enCategory from "./locales/en/category.json";
 import enProduct from "./locales/en/product.json";
 import enBlogger from "./locales/en/blogger.json";
+import enProfile from "./locales/en/profile.json";
 import ukCommon from "./locales/uk/common.json";
 import ukHome from "./locales/uk/home.json";
 import ukCatalog from "./locales/uk/catalog.json";
@@ -17,6 +18,7 @@ import ukCart from "./locales/uk/cart.json";
 import enCart from "./locales/en/cart.json";
 import enCheckout from "./locales/en/checkout.json";
 import ukCheckout from "./locales/uk/checkout.json";
+import ukProfile from "./locales/uk/profile.json";
 import { LANGUAGE_STORAGE_KEY } from "@/stores/use-language";
 
 let initialLanguage = "en";
@@ -44,6 +46,7 @@ void i18n.use(initReactI18next).init({
       blogger: enBlogger,
       cart: enCart,
       checkout: enCheckout,
+      profile: enProfile,
     },
     uk: {
       common: ukCommon,
@@ -54,6 +57,7 @@ void i18n.use(initReactI18next).init({
       blogger: ukBlogger,
       cart: ukCart,
       checkout: ukCheckout,
+      profile: ukProfile,
     },
   },
   lng: initialLanguage,
