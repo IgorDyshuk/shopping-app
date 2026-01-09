@@ -6,7 +6,8 @@ type MyItemsSectionProps = {
   isLoading: boolean;
   loadingText: string;
   emptyText: string;
-  onAdd: () => void;
+  onEdit?: (product: Product) => void;
+  onDelete?: (product: Product) => void;
 };
 
 export function MyItemsSection({
@@ -14,6 +15,8 @@ export function MyItemsSection({
   isLoading,
   loadingText,
   emptyText,
+  onEdit,
+  onDelete,
 }: MyItemsSectionProps) {
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">{loadingText}</p>;
@@ -29,8 +32,8 @@ export function MyItemsSection({
             <MyItemCard
               key={product.id}
               product={product}
-              onEdit={() => {}}
-              onDelete={() => {}}
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           ))}
         </div>

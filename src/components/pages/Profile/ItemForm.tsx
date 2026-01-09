@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -22,10 +22,12 @@ import {
   accessorySizeOptions,
 } from "@/constants/filters-presets";
 import { ChevronDown } from "lucide-react";
+import type { Product } from "@/types/product";
 
-type AddItemFormProps = {
+type ItemFormProps = {
   onCancel: () => void;
   onSaved?: () => void;
+  initialProduct?: Product;
 };
 
 type ProductDraft = {
@@ -33,6 +35,7 @@ type ProductDraft = {
   price: number | "";
   description: string;
   images: File[];
+  existingImages: string[];
   category: {
     mainCategory: string;
     subCategory: string;
@@ -48,11 +51,12 @@ type ProductDraft = {
   };
 };
 
-const defaultDraft: ProductDraft = {
+const createDefaultDraft = (): ProductDraft => ({
   title: "",
   price: "",
   description: "",
   images: [],
+  existingImages: [],
   category: { mainCategory: "", subCategory: "" },
   gender: "",
   characteristics: {
@@ -63,11 +67,11 @@ const defaultDraft: ProductDraft = {
     quantity: "",
     isNewArrival: true,
   },
-};
+});
 
-export function AddItemForm({ onCancel, onSaved }: AddItemFormProps) {
+export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
   const { t } = useTranslation("profile");
-  const [draft, setDraft] = useState<ProductDraft>(defaultDraft);
+  const [draft, setDraft] = useState<ProductDraft>(createDefaultDraft());
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [sizeMenuOpen, setSizeMenuOpen] = useState(false);
   const [tempSizes, setTempSizes] = useState<string[]>([]);
@@ -118,6 +122,73 @@ export function AddItemForm({ onCancel, onSaved }: AddItemFormProps) {
     { id: "unisex", label: "Unisex" },
   ];
 
+  const productToDraft = (product: Product): ProductDraft => {
+    const mainKeys = Object.keys(presetCategoryOptions);
+    let mainCategory = "";
+    let subCategory = "";
+
+    if (mainKeys.includes(product.category)) {
+      mainCategory = product.category;
+    } else {
+      for (const key of mainKeys) {
+        const found = presetCategoryOptions[key]?.find(
+          (opt) =>
+            opt.id.toLowerCase() === product.category.toLowerCase() ||
+            opt.label.toLowerCase() === product.category.toLowerCase()
+        );
+        if (found) {
+          mainCategory = key;
+          subCategory = found.id;
+          break;
+        }
+      }
+    }
+
+    if (!mainCategory) {
+      // heuristic match
+      const lower = product.category.toLowerCase();
+      if (lower.includes("cloth")) mainCategory = "clothing";
+      else if (lower.includes("sneaker") || lower.includes("shoe"))
+        mainCategory = "sneakers";
+      else if (lower.includes("accessor")) mainCategory = "accessories";
+    }
+
+    const initialImages: string[] = Array.isArray((product as any).images)
+      ? ((product as any).images as string[]).filter(Boolean)
+      : product.image
+      ? [product.image]
+      : [];
+
+    return {
+      title: product.title ?? "",
+      price: product.price ?? "",
+      description: product.description ?? "",
+      images: [],
+      existingImages: initialImages,
+      category: { mainCategory, subCategory },
+      gender: "",
+      characteristics: {
+        brand: "",
+        state: "",
+        material: "",
+        sizes: [],
+        quantity: "",
+        isNewArrival: true,
+      },
+    };
+  };
+
+  useEffect(() => {
+    if (initialProduct) {
+      const next = productToDraft(initialProduct);
+      setDraft(next);
+      setTempSizes(next.characteristics.sizes);
+    } else {
+      setDraft(createDefaultDraft());
+      setTempSizes([]);
+    }
+  }, [initialProduct]);
+
   const handleChange = <K extends keyof ProductDraft>(
     key: K,
     value: ProductDraft[K]
@@ -163,7 +234,7 @@ export function AddItemForm({ onCancel, onSaved }: AddItemFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (draft.images.length === 0) {
+    if (draft.images.length === 0 && draft.existingImages.length === 0) {
       toast.error(
         t("addItem.imagesRequired", {
           defaultValue: "Add at least one product photo",
@@ -251,15 +322,35 @@ export function AddItemForm({ onCancel, onSaved }: AddItemFormProps) {
             {t("addItem.browse", { defaultValue: "Browse..." })}
           </Button>
         </div>
-        {draft.images.length > 0 && (
+        {(draft.images.length > 0 || draft.existingImages.length > 0) && (
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">
-              {t("addItem.selectedImages", {
-                count: draft.images.length,
-                defaultValue: "{{count}} file(s) selected",
-              })}
-            </p>
             <div className="flex flex-wrap gap-2">
+              {draft.existingImages.map((url, idx) => (
+                <div
+                  key={`existing-${idx}`}
+                  className="relative size-20 rounded-md overflow-hidden border bg-muted/30 flex items-center justify-center"
+                >
+                  <img
+                    src={url}
+                    alt={`existing-${idx}`}
+                    className="h-full w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-1 right-1 rounded-full flex items-center justify-center bg-white/80 px-1 pb-px sm:pb-0.5 text-xs font-semibold leading-none text-destructive shadow hover:bg-white"
+                    onClick={() =>
+                      setDraft((prev) => ({
+                        ...prev,
+                        existingImages: prev.existingImages.filter(
+                          (_, i) => i !== idx
+                        ),
+                      }))
+                    }
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
               {draft.images.map((file, idx) => {
                 const url = URL.createObjectURL(file);
                 return (

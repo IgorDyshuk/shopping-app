@@ -10,7 +10,9 @@
     "profile": "Profile",
     "favorites": "Favorites",
     "orders": "My orders",
-    "myItems": "My items"
+    "myItems": "My items",
+    "addItem": "Add product",
+    "editItem": "Edit product"
   },
   "auth": {
     "notLogged": "You are not logged in.",
@@ -22,7 +24,8 @@
     "empty": "No items to show yet.",
     "addButton": "Add product",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "fakeDelete": "Product removed (demo)"
   },
   "addItem": {
     "title": "Title",

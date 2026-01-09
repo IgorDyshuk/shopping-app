@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Heart, Pencil, Trash2 } from "lucide-react";
@@ -8,7 +8,17 @@ import type { Product } from "@/types/product";
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { useFavoritesStore } from "@/stores/use-favorites";
-import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type MyItemCardProps = {
   product: Product;
@@ -21,7 +31,7 @@ export function MyItemCard({ product, onEdit, onDelete }: MyItemCardProps) {
   const { t } = useTranslation(["common", "profile"]);
   const { ids, toggle } = useFavoritesStore();
   const isFavorite = ids.includes(product.id);
-  const isBelowMd = useMediaQuery("(max-width: 767px)");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const productUrl = useMemo(
     () => `/category/${encodeURIComponent(product.category)}/${product.id}`,
@@ -42,7 +52,7 @@ export function MyItemCard({ product, onEdit, onDelete }: MyItemCardProps) {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDelete?.(product);
+    setConfirmOpen(true);
   };
 
   return (
@@ -93,18 +103,69 @@ export function MyItemCard({ product, onEdit, onDelete }: MyItemCardProps) {
               >
                 <Pencil className="h-4 w-4" />
               </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8"
-                onClick={handleDelete}
-                title={t("myItems.delete", {
-                  ns: "profile",
-                  defaultValue: "Delete",
-                })}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
+              <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    onClick={handleDelete}
+                    title={t("myItems.delete", {
+                      ns: "profile",
+                      defaultValue: "Delete",
+                    })}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {t("myItems.confirmDeleteTitle", {
+                        ns: "profile",
+                        defaultValue: "Delete product?",
+                      })}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t("myItems.confirmDeleteDesc", {
+                        ns: "profile",
+                        defaultValue:
+                          "Are you sure you want to delete this product? This action can't be undone later.",
+                      })}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel
+                      onClick={() => {
+                        setConfirmOpen(false);
+                      }}
+                    >
+                      {t("actions.cancel", {
+                        ns: "profile",
+                        defaultValue: "Cancel",
+                      })}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        setConfirmOpen(false);
+                        onDelete?.(product);
+                        toast.success(
+                          t("myItems.fakeDelete", {
+                            ns: "profile",
+                            defaultValue: "Product removed (demo)",
+                          }),
+                          { description: product.title }
+                        );
+                      }}
+                    >
+                      {t("actions.delete", {
+                        ns: "profile",
+                        defaultValue: "Delete",
+                      })}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
 

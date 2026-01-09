@@ -25,7 +25,8 @@ import { ProfileInfoSection } from "@/components/pages/Profile/ProfileInfoSectio
 import { FavoritesSection } from "@/components/pages/Profile/FavoritesSection";
 import { OrdersSection } from "@/components/pages/Profile/OrdersSection";
 import { MyItemsSection } from "@/components/pages/Profile/MyItemsSection";
-import { AddItemForm } from "@/components/pages/Profile/AddItemForm";
+import { ItemForm } from "@/components/pages/Profile/ItemForm";
+import type { Product } from "@/types/product";
 
 type ProfileTab = "profile" | "favorites" | "orders" | "my-items" | "add-item";
 
@@ -51,6 +52,9 @@ function ProfilePage() {
   );
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | undefined>(
+    undefined
+  );
 
   const parsePhone = (value?: string) => {
     const match = value?.match(/^(\+\d+)\s*(.*)$/);
@@ -164,6 +168,9 @@ function ProfilePage() {
   }, [searchParams]);
 
   const handleTabChange = (tab: ProfileTab) => {
+    if (tab !== "add-item") {
+      setEditingProduct(undefined);
+    }
     setActiveTab(tab);
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
@@ -220,10 +227,19 @@ function ProfilePage() {
                   ? t("pageTitle.favorites", { ns: "profile" })
                   : activeTab === "orders"
                   ? t("pageTitle.orders", { ns: "profile" })
-                  : t("pageTitle.myItems", { ns: "profile" })}
+                  : activeTab === "my-items"
+                  ? t("pageTitle.myItems", { ns: "profile" })
+                  : editingProduct
+                  ? t("pageTitle.editItem", { ns: "profile" })
+                  : t("pageTitle.addItem", { ns: "profile" })}
               </CardTitle>
               {activeTab === "my-items" && (
-                <Button onClick={() => handleTabChange("add-item")}>
+                <Button
+                  onClick={() => {
+                    setEditingProduct(undefined);
+                    handleTabChange("add-item");
+                  }}
+                >
                   + {t("myItems.addButton", { ns: "profile" })}
                 </Button>
               )}
@@ -300,12 +316,19 @@ function ProfilePage() {
                 isLoading={isLoadingProducts}
                 emptyText={t("myItems.empty", { ns: "profile" })}
                 loadingText={t("myItems.loading", { ns: "profile" })}
-                onAdd={() => handleTabChange("add-item")}
+                onEdit={(product) => {
+                  setEditingProduct(product);
+                  handleTabChange("add-item");
+                }}
               />
             ) : activeTab === "add-item" ? (
-              <AddItemForm
+              <ItemForm
                 onCancel={() => handleTabChange("my-items")}
-                onSaved={() => handleTabChange("my-items")}
+                onSaved={() => {
+                  setEditingProduct(undefined);
+                  handleTabChange("my-items");
+                }}
+                initialProduct={editingProduct}
               />
             ) : (
               <OrdersSection orders={orders} t={t} />

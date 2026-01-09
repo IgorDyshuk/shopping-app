@@ -5,6 +5,7 @@ export type Product = {
   description: string;
   category: string;
   image: string;
+  images?: string[];
   // fakestore often includes rating; keep optional to stay compatible
   rating?: {
     rate: number;

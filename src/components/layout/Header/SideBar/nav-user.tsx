@@ -118,7 +118,13 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()}>
+            <DropdownMenuItem
+              onClick={() => {
+                logout();
+                closeSidebar();
+                navigate("/");
+              }}
+            >
               <LogOut />
               {t("sidebar.account.logout")}
             </DropdownMenuItem>
