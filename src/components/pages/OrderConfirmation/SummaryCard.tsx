@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,6 @@ type SummaryCardProps = {
   itemsTotal: number;
   deliveryCostTotal: number;
   grandTotal: number;
-  canConfirm: boolean;
   isAuthenticated: boolean;
   missingFields: string[];
   onConfirm: () => void;
@@ -20,12 +20,33 @@ export function SummaryCard({
   itemsTotal,
   deliveryCostTotal,
   grandTotal,
-  canConfirm,
   isAuthenticated,
   missingFields,
   onConfirm,
 }: SummaryCardProps) {
   const { t } = useTranslation(["checkout"]);
+  const handleClick = () => {
+    if (!isAuthenticated) {
+      toast.error(
+        t("loginForCheckout", {
+          ns: "checkout",
+          defaultValue: "Log in to place your order.",
+        })
+      );
+      return;
+    }
+    if (missingFields.length) {
+      toast.error(
+        t("summary.fillFields", {
+          ns: "checkout",
+          defaultValue: "Fill required fields: {{fields}}",
+          fields: missingFields.join(", "),
+        })
+      );
+      return;
+    }
+    onConfirm();
+  };
 
   return (
     <Card className="gap-3">
@@ -62,27 +83,11 @@ export function SummaryCard({
         <Button
           className="w-full mt-2"
           size="lg"
-          onClick={onConfirm}
-          disabled={!canConfirm}
+          onClick={handleClick}
+          disabled={!totalCount}
         >
           {t("summary.confirm", { ns: "checkout" })}
         </Button>
-        {!isAuthenticated ? (
-          <p className="text-xs text-destructive">
-            {t("loginForCheckout", {
-              ns: "checkout",
-              defaultValue: "Log in to place your order.",
-            })}
-          </p>
-        ) : missingFields.length ? (
-          <p className="text-xs text-destructive">
-            {t("summary.fillFields", {
-              ns: "checkout",
-              defaultValue: "Fill required fields: {{fields}}",
-              fields: missingFields.join(", "),
-            })}
-          </p>
-        ) : null}
         <p className="text-xs text-muted-foreground">
           {t("summary.disclaimer", { ns: "checkout" })}
         </p>

@@ -201,8 +201,6 @@ function OrderConfirmationPage() {
     t,
   ]);
 
-  const canConfirm = isAuthenticated && missingFields.length === 0;
-
   const handleConfirm = () => {
     orders.forEach((order) => {
       const form = orderForms[order.id] ?? defaultOrderForm();
@@ -325,7 +323,6 @@ function OrderConfirmationPage() {
           itemsTotal={itemsTotal}
           deliveryCostTotal={deliveryCostTotal}
           grandTotal={grandTotal}
-          canConfirm={!!items.length && canConfirm}
           isAuthenticated={isAuthenticated}
           missingFields={missingFields}
           onConfirm={handleConfirm}
