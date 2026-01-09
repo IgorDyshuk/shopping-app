@@ -1,5 +1,6 @@
 import {
   BadgeCheck,
+  Boxes,
   ChevronsUpDown,
   CreditCard,
   Heart,
@@ -37,8 +38,10 @@ export function NavUser({
 }) {
   const { isMobile, state, closeSidebar } = useSidebar();
   const { t } = useTranslation();
-  const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
+  const authUser = useAuthStore((state) => state.user);
+  const canManageItems = authUser?.role === "seller";
 
   const compactButton = (
     <SidebarMenuButton className="justify-center px-0">
@@ -116,6 +119,17 @@ export function NavUser({
                 <CreditCard />
                 {t("sidebar.account.orders")}
               </DropdownMenuItem>
+              {canManageItems && (
+                <DropdownMenuItem
+                  onClick={closeSidebar}
+                  onSelect={() => navigate("/profile?tab=my-items")}
+                >
+                  <Boxes />
+                  {t("sidebar.account.myItems", {
+                    defaultValue: "My items",
+                  })}
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem

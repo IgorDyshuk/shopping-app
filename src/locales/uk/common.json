@@ -162,6 +162,7 @@
     "account": {
       "account": "Акаунт",
       "orders": "Замовлення",
+      "myItems": "Мої товари",
       "notifications": "Сповіщення",
       "logout": "Вийти"
     }

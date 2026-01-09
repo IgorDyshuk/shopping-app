@@ -162,6 +162,7 @@
     "account": {
       "account": "Account",
       "orders": "Orders",
+      "myItems": "My items",
       "notifications": "Notifications",
       "logout": "Log out"
     }

@@ -39,14 +39,13 @@ function ProfilePage() {
     useProducts();
   const orders = useOrdersStore((state) => state.orders);
   const favoriteIds = useFavoritesStore((state) => state.ids);
+  const isSeller = user?.role === "seller";
 
-  const parseTab = (value: string | null): ProfileTab =>
-    value === "favorites" ||
-    value === "orders" ||
-    value === "my-items" ||
-    value === "add-item"
-      ? value
-      : "profile";
+  const parseTab = (value: string | null): ProfileTab => {
+    if (value === "favorites" || value === "orders") return value;
+    if ((value === "my-items" || value === "add-item") && isSeller) return value;
+    return "profile";
+  };
   const [activeTab, setActiveTab] = useState<ProfileTab>(() =>
     parseTab(searchParams.get("tab"))
   );
@@ -135,29 +134,34 @@ function ProfilePage() {
   };
 
   const sidebarItems = useMemo(
-    () => [
-      {
-        id: "profile",
-        label: t("tabs.profile", { ns: "profile" }),
-        icon: User,
-      },
-      {
-        id: "favorites",
-        label: t("tabs.favorites", { ns: "profile" }),
-        icon: Heart,
-      },
-      {
-        id: "orders",
-        label: t("tabs.orders", { ns: "profile" }),
-        icon: ShoppingBag,
-      },
-      {
-        id: "my-items",
-        label: t("tabs.myItems", { ns: "profile" }),
-        icon: Boxes,
-      },
-    ],
-    [t]
+    () => {
+      const base: SidebarItem[] = [
+        {
+          id: "profile",
+          label: t("tabs.profile", { ns: "profile" }),
+          icon: User,
+        },
+        {
+          id: "favorites",
+          label: t("tabs.favorites", { ns: "profile" }),
+          icon: Heart,
+        },
+        {
+          id: "orders",
+          label: t("tabs.orders", { ns: "profile" }),
+          icon: ShoppingBag,
+        },
+      ];
+      if (isSeller) {
+        base.push({
+          id: "my-items",
+          label: t("tabs.myItems", { ns: "profile" }),
+          icon: Boxes,
+        });
+      }
+      return base;
+    },
+    [t, isSeller]
   );
 
   useEffect(() => {
@@ -165,9 +169,12 @@ function ProfilePage() {
     const next = parseTab(tabParam);
     if (next !== activeTab) setActiveTab(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, isSeller]);
 
   const handleTabChange = (tab: ProfileTab) => {
+    if (!isSeller && (tab === "my-items" || tab === "add-item")) {
+      tab = "profile";
+    }
     if (tab !== "add-item") {
       setEditingProduct(undefined);
     }
@@ -233,7 +240,7 @@ function ProfilePage() {
                   ? t("pageTitle.editItem", { ns: "profile" })
                   : t("pageTitle.addItem", { ns: "profile" })}
               </CardTitle>
-              {activeTab === "my-items" && (
+              {activeTab === "my-items" && isSeller && (
                 <Button
                   onClick={() => {
                     setEditingProduct(undefined);
@@ -321,7 +328,7 @@ function ProfilePage() {
                   handleTabChange("add-item");
                 }}
               />
-            ) : activeTab === "add-item" ? (
+            ) : activeTab === "add-item" && isSeller ? (
               <ItemForm
                 onCancel={() => handleTabChange("my-items")}
                 onSaved={() => {

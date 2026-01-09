@@ -64,7 +64,8 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                       ${order.grandTotal.toFixed(2)}
                     </div>
                     <div className="text-muted-foreground text-xs">
-                      {order.items.length} {t("orders.itemsShort", { ns: "profile" })}
+                      {order.items.length}{" "}
+                      {t("orders.itemsShort", { ns: "profile" })}
                     </div>
                   </div>
                   <ChevronDown className="hidden group-open:block h-4 w-4 text-muted-foreground transition-transform rotate-180 mt-1" />
@@ -76,7 +77,9 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                   <div className="flex gap-2 overflow-x-auto">
                     {order.items.slice(0, 6).map((item) => (
                       <div
-                        key={`${order.id}-${item.product.id}-${item.size ?? "default"}`}
+                        key={`${order.id}-${item.product.id}-${
+                          item.size ?? "default"
+                        }`}
                         className="size-12 md:size-14 lg:size-16 xl:size-18 2xl:size-20 flex-shrink-0 p-0.5"
                       >
                         <img
@@ -99,7 +102,9 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                     <p className="text-emerald-600 font-semibold">
                       {t("orders.statusDone", { ns: "profile" })}
                     </p>
-                    <p className="text-muted-foreground text-xs">{createdDate}</p>
+                    <p className="text-muted-foreground text-xs">
+                      {createdDate}
+                    </p>
                   </div>
                   <Button variant="outline" size="sm">
                     {t("actions.review", { ns: "profile" })}
@@ -154,11 +159,15 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                   {order.items.map((item) => {
                     const productUrl = `/category/${encodeURIComponent(
                       item.product.category
-                    )}/${item.product.id}?size=${encodeURIComponent(item.size ?? "")}`;
+                    )}/${item.product.id}?size=${encodeURIComponent(
+                      item.size ?? ""
+                    )}`;
 
                     return (
                       <div
-                        key={`${order.id}-${item.product.id}-${item.size ?? "default"}`}
+                        key={`${order.id}-${item.product.id}-${
+                          item.size ?? "default"
+                        }`}
                         className="flex gap-3 items-start rounded-lg pt-2 hover:cursor-pointer"
                         onClick={() => navigate(productUrl)}
                       >
@@ -177,11 +186,15 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                             </p>
                           )}
                           <p className="text-muted-foreground text-xs">
-                            {t("orders.qty", { ns: "profile" })}: {item.quantity}
+                            {t("orders.qty", { ns: "profile" })}:{" "}
+                            {item.quantity}
                           </p>
                         </div>
                         <div className="text-sm font-semibold">
-                          ${((item.product.price ?? 0) * item.quantity).toFixed(2)}
+                          $
+                          {((item.product.price ?? 0) * item.quantity).toFixed(
+                            2
+                          )}
                         </div>
                       </div>
                     );
