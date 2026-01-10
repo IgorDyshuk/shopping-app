@@ -13,7 +13,6 @@ import SignupPage from "@/pages/Signup";
 import UsersPage from "@/pages/Users";
 import ProfilePage from "@/pages/Profile";
 import OrderConfirmationPage from "@/pages/OrderConfirmation";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 import CartPage from "@/pages/Cart";
 
@@ -22,28 +21,26 @@ function App() {
 
   return (
     <BrowserRouter basename={basename}>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <SidebarProvider defaultOpen={false}>
-          <AppLayout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/catalog" element={<Catalog />} />
-              <Route path="/category/:category" element={<Category />} />
-              <Route path="/category/:category/:id" element={<ProductPage />} />
-              <Route path="/bloggers" element={<BloggersPage />} />
-              <Route path="/bloggers/:id" element={<BloggerPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/order/confirmation" element={<OrderConfirmationPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </AppLayout>
-          <Toaster richColors theme="light" />
-        </SidebarProvider>
-      </ThemeProvider>
+      <SidebarProvider defaultOpen={false}>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="/category/:category" element={<Category />} />
+            <Route path="/category/:category/:id" element={<ProductPage />} />
+            <Route path="/bloggers" element={<BloggersPage />} />
+            <Route path="/bloggers/:id" element={<BloggerPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/order/confirmation" element={<OrderConfirmationPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AppLayout>
+        <Toaster richColors theme="light" />
+      </SidebarProvider>
     </BrowserRouter>
   );
 }
