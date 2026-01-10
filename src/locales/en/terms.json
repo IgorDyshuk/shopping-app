@@ -1,0 +1,52 @@
+{
+  "title": "Terms of Service",
+  "updated": "Last updated: Today",
+  "intro": "Please read these Terms carefully. By accessing or using the marketplace you agree to be bound by them. If you do not agree, do not use the service.",
+  "sections": {
+    "intro": {
+      "title": "1. Introduction",
+      "body": "These Terms of Service govern your access to and use of the marketplace. By using the site you agree to these Terms and to our policies referenced below."
+    },
+    "accounts": {
+      "title": "2. Accounts & Eligibility",
+      "body": "You must provide accurate information and keep it updated. You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account."
+    },
+    "listings": {
+      "title": "3. Listings & Transactions",
+      "body": "When listing or buying items, you agree to follow local laws, provide truthful descriptions, and honor your commitments. Prices, fees, and availability may change at any time."
+    },
+    "payments": {
+      "title": "4. Payments & Fees",
+      "body": "We may charge service fees for certain transactions. Taxes, duties, and payment processing fees may apply. All payments are subject to verification and anti-fraud checks."
+    },
+    "content": {
+      "title": "5. Content & IP",
+      "body": "You retain rights to the content you submit but grant us a license to display it in connection with the service. Do not upload content that violates others’ rights or applicable law."
+    },
+    "prohibited": {
+      "title": "6. Prohibited Conduct",
+      "body": "Do not misuse the service, interfere with its operation, attempt unauthorized access, or engage in fraud, harassment, or illegal activities."
+    },
+    "liability": {
+      "title": "7. Disclaimers & Liability",
+      "body": "The service is provided “as is” without warranties. To the maximum extent permitted by law, we are not liable for indirect or consequential damages arising from your use of the service."
+    },
+    "termination": {
+      "title": "8. Termination",
+      "body": "We may suspend or terminate access if you violate these Terms or pose risk to the platform or other users. You may stop using the service at any time."
+    },
+    "changes": {
+      "title": "9. Changes",
+      "body": "We may update these Terms periodically. Continued use after changes means you accept the updated Terms."
+    },
+    "contact": {
+      "title": "10. Contact",
+      "body": "Questions? Contact support via the help center or email us using the contact details in the app."
+    }
+  },
+  "help": {
+    "title": "Need help?",
+    "body": "If you have questions about these Terms or how your data is used, reach out via our help center.",
+    "link": "Go to help center"
+  }
+}

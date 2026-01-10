@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/native-select";
 import countryCodes from "@/constants/CountriesCode.json";
 import { findCountryByCode } from "@/lib/country";
+import { useTranslation } from "react-i18next";
 
 type Name = { firstname?: string; lastname?: string };
 
@@ -88,7 +90,43 @@ export function ProfileInfoSection({
   onCancel,
   labels,
 }: ProfileInfoSectionProps) {
+  const { t } = useTranslation();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const PHONE_REQUIRED_LENGTH = 9;
+
+  const formatLocalPhone = (digits: string) => {
+    const clean = digits.replace(/\D/g, "");
+    const parts: string[] = [];
+    if (clean.length > 0) parts.push(clean.slice(0, 2));
+    if (clean.length > 2) parts.push(clean.slice(2, 5));
+    if (clean.length > 5) parts.push(clean.slice(5, 7));
+    if (clean.length > 7) parts.push(clean.slice(7, 9));
+    return parts.join(" ");
+  };
+
+  const formatViewPhone = (raw?: string) => {
+    if (!raw) return "";
+    const codeDigits = countryCode.replace(/\D/g, "");
+    const clean = raw.replace(/\D/g, "");
+    const local =
+      codeDigits && clean.startsWith(codeDigits)
+        ? clean.slice(codeDigits.length)
+        : clean;
+    return `${countryCode} ${formatLocalPhone(local)}`.trim();
+  };
+
+  const handleSave = () => {
+    if (phoneInput.trim().length < PHONE_REQUIRED_LENGTH) {
+      toast.error(
+        t("authForm.signup.phoneRequired", {
+          defaultValue: "Please enter your full phone number.",
+        })
+      );
+      phoneInputRef.current?.focus();
+      return;
+    }
+    onSave();
+  };
 
   return (
     <>
@@ -151,7 +189,11 @@ export function ProfileInfoSection({
         {!isEditing ? (
           <div className="flex items-center gap-2">
             <span className="text-base font-medium">
-              {showPassword ? user?.password || "—" : user?.password ? "••••••••" : "—"}
+              {showPassword
+                ? user?.password || "—"
+                : user?.password
+                ? "••••••••"
+                : "—"}
             </span>
             {user?.password ? (
               <button
@@ -159,7 +201,11 @@ export function ProfileInfoSection({
                 onClick={() => setShowPassword(!showPassword)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             ) : null}
           </div>
@@ -176,7 +222,11 @@ export function ProfileInfoSection({
               onClick={() => setShowPassword(!showPassword)}
               className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
         )}
@@ -195,13 +245,21 @@ export function ProfileInfoSection({
                 aria-label="Country code"
                 className="text-transparent w-[70px] bg-muted border-none rounded-none rounded-l-lg"
               >
-                {(countryCodes as { code: string; dial_code: string; name: string; emoji?: string }[]).map(
-                  (country) => (
-                    <NativeSelectOption key={country.code} value={country.dial_code}>
-                      {country.emoji ?? ""} {country.name} {country.dial_code}
-                    </NativeSelectOption>
-                  )
-                )}
+                {(
+                  countryCodes as {
+                    code: string;
+                    dial_code: string;
+                    name: string;
+                    emoji?: string;
+                  }[]
+                ).map((country) => (
+                  <NativeSelectOption
+                    key={country.code}
+                    value={country.dial_code}
+                  >
+                    {country.emoji ?? ""} {country.name} {country.dial_code}
+                  </NativeSelectOption>
+                ))}
               </NativeSelect>
               <div className="pointer-events-none absolute inset-0 flex items-center gap-2 px-3 text-sm">
                 <span className="text-lg leading-none">
@@ -211,20 +269,23 @@ export function ProfileInfoSection({
             </div>
             <Input
               ref={phoneInputRef}
-              value={`${countryCode} ${phoneInput}`}
+              value={`${countryCode} ${formatLocalPhone(phoneInput)}`}
               onChange={(e) => {
                 const raw = e.target.value;
                 const stripped = raw.startsWith(countryCode)
                   ? raw.slice(countryCode.length).trimStart()
                   : raw.replace(/^\\+?\\d+\\s*/, "");
-                onPhoneChange(stripped.replace(/\\D/g, ""));
+                const digits = stripped.replace(/\D/g, "");
+                onPhoneChange(digits.slice(0, PHONE_REQUIRED_LENGTH));
               }}
               placeholder={`${countryCode} 00 000 00 00`}
               className="flex-1 rounded-none border-none rounded-r-lg"
             />
           </div>
         ) : (
-          <p className="text-base font-medium">{user?.phone || "—"}</p>
+          <p className="text-base font-medium">
+            {formatViewPhone(user?.phone) || "—"}
+          </p>
         )}
       </div>
       <div>
@@ -237,13 +298,18 @@ export function ProfileInfoSection({
               aria-label="Country"
               className="text-transparent bg-muted border rounded-lg"
             >
-              {(countryCodes as { code: string; dial_code: string; name: string; emoji?: string }[]).map(
-                (country) => (
-                  <NativeSelectOption key={country.code} value={country.code}>
-                    {country.emoji ?? ""} {country.name}
-                  </NativeSelectOption>
-                )
-              )}
+              {(
+                countryCodes as {
+                  code: string;
+                  dial_code: string;
+                  name: string;
+                  emoji?: string;
+                }[]
+              ).map((country) => (
+                <NativeSelectOption key={country.code} value={country.code}>
+                  {country.emoji ?? ""} {country.name}
+                </NativeSelectOption>
+              ))}
             </NativeSelect>
             <div className="pointer-events-none absolute inset-0 flex items-center gap-2 px-3 text-sm">
               <span className="text-lg leading-none">
@@ -273,7 +339,9 @@ export function ProfileInfoSection({
       <div>
         <p className="text-sm text-muted-foreground">{labels.role}</p>
         <p className="text-base font-medium">
-          {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "—"}
+          {user?.role
+            ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+            : "—"}
         </p>
       </div>
       <div className="flex gap-2">
@@ -284,7 +352,7 @@ export function ProfileInfoSection({
           <Button onClick={onStartEdit}>{labels.edit}</Button>
         ) : (
           <>
-            <Button onClick={onSave}>{labels.save}</Button>
+            <Button onClick={handleSave}>{labels.save}</Button>
             <Button variant="ghost" onClick={onCancel}>
               {labels.cancel}
             </Button>

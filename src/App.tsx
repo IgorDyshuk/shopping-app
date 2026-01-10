@@ -15,6 +15,7 @@ import ProfilePage from "@/pages/Profile";
 import OrderConfirmationPage from "@/pages/OrderConfirmation";
 import { Toaster } from "./components/ui/sonner";
 import CartPage from "@/pages/Cart";
+import TermsPage from "@/pages/Terms";
 
 function App() {
   const basename = import.meta.env.BASE_URL ?? "/";
@@ -36,6 +37,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/order/confirmation" element={<OrderConfirmationPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/terms" element={<TermsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AppLayout>

@@ -1,17 +1,18 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 import { useLanguageStore } from "@/stores/use-language";
 
 const footerLinks = {
   marketplace: [
-    { labelKey: "footer.links.home", href: "/shopping-app" },
-    { labelKey: "footer.links.catalog", href: "/shopping-app/catalog" },
-    { labelKey: "footer.links.bloggers", href: "/shopping-app/bloggers" },
+    { labelKey: "footer.links.home", to: "/" },
+    { labelKey: "footer.links.catalog", to: "/catalog" },
+    { labelKey: "footer.links.bloggers", to: "/bloggers" },
   ],
   support: [
-    { labelKey: "footer.links.faq", href: "#faq" },
-    { labelKey: "footer.links.help", href: "#support" },
-    { labelKey: "footer.links.returns", href: "#returns" },
+    { labelKey: "footer.links.faq", to: "/faq" },
+    { labelKey: "footer.links.help", to: "/support" },
+    { labelKey: "footer.links.terms", to: "/terms" },
   ],
 };
 
@@ -59,7 +60,7 @@ export function Footer({ showLanguage = true }: FooterProps) {
 
 type FooterColumnProps = {
   title: string;
-  links: { labelKey: string; href: string }[];
+  links: { labelKey: string; to: string }[];
 };
 
 function FooterColumn({ title, links }: FooterColumnProps) {
@@ -73,12 +74,12 @@ function FooterColumn({ title, links }: FooterColumnProps) {
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.labelKey}>
-            <a
-              href={link.href}
+            <Link
+              to={link.to}
               className="text-sm transition-colors duration-150 text-muted-foreground hover:text-white "
             >
               {t(link.labelKey)}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

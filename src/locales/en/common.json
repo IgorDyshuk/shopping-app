@@ -102,6 +102,9 @@
       "password": "Password",
       "confirmPassword": "Confirm Password",
       "helper": "Must be at least 8 characters long.",
+      "acceptTermsPrefix": "I agree to the",
+      "termsPrefix": "Terms of Service",
+      "phoneRequired": "Please enter your full phone number.",
       "submit": "Create Account",
       "footer": "Already have an account?",
       "footerLink": "Sign in"
@@ -124,7 +127,7 @@
       "help": "Help center",
       "returns": "Returns",
       "about": "About",
-      "terms": "Terms",
+      "terms": "Terms of Service",
       "privacy": "Privacy"
     },
     "rights": "All rights reserved."

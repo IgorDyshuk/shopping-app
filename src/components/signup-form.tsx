@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/native-select";
 import { Eye, EyeOff } from "lucide-react";
 import { findCountryByCode } from "@/lib/country";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from "react-router-dom";
 
 export function SignupForm({
   className,
@@ -42,6 +44,7 @@ export function SignupForm({
   const navigate = useNavigate();
   const { mutate, isPending } = useRegister();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const PHONE_REQUIRED_LENGTH = 9;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -53,6 +56,7 @@ export function SignupForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const selectedCountry = useMemo(() => {
     return (
       findCountryByCode(countryCode) ?? {
@@ -79,6 +83,21 @@ export function SignupForm({
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
+      return;
+    }
+
+    if (phoneNumber.trim().length < PHONE_REQUIRED_LENGTH) {
+      toast.error(
+        t("authForm.signup.phoneRequired", {
+          defaultValue: "Please enter your full phone number.",
+        })
+      );
+      phoneInputRef.current?.focus();
+      return;
+    }
+
+    if (!acceptedTerms) {
+      toast.error("Please accept the Terms to continue.");
       return;
     }
 
@@ -235,7 +254,7 @@ export function SignupForm({
                         ? raw.slice(countryCode.length).trimStart()
                         : raw.replace(/^\+?\d+\s*/, "");
                       const digits = stripped.replace(/\D/g, "");
-                      setPhoneNumber(digits);
+                      setPhoneNumber(digits.slice(0, PHONE_REQUIRED_LENGTH));
                     }}
                     disabled={isPending}
                     className="flex-1 rounded-none border-none rounded-r-lg"
@@ -327,6 +346,33 @@ export function SignupForm({
                       <Eye className="size-4" />
                     )}
                   </button>
+                </div>
+              </Field>
+              <Field>
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="accept-terms"
+                    checked={acceptedTerms}
+                    onCheckedChange={(val) => setAcceptedTerms(!!val)}
+                    required
+                    disabled={isPending}
+                  />
+                  <label
+                    htmlFor="accept-terms"
+                    className="text-sm leading-snug text-muted-foreground"
+                  >
+                    {t("authForm.signup.acceptTermsPrefix", {
+                      defaultValue: "I agree to the",
+                    })}{" "}
+                    <Link
+                      to="/terms"
+                      className="text-primary underline underline-offset-2"
+                    >
+                      {t("authForm.signup.termsPrefix", {
+                        defaultValue: "Terms",
+                      })}
+                    </Link>
+                  </label>
                 </div>
               </Field>
               <Field>
