@@ -16,7 +16,7 @@ import { useFavoritesStore } from "@/stores/use-favorites";
 import { CartTable } from "@/components/pages/Cart/CartTable";
 import { CartTotals } from "@/components/pages/Cart/CartTotals";
 import { ItemsCarousel } from "@/components/products/ProductCarousel";
-import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
 import { toast } from "sonner";
 
@@ -109,7 +109,9 @@ function CartPage() {
             perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
             peekNext
             controlsInline
-            renderItem={(product) => <ProductSmallHomeCard product={product} />}
+            renderItem={(product) => (
+              <ProductVariantCard variant="small" product={product} />
+            )}
           />
         )}
       </div>

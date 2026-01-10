@@ -8,8 +8,7 @@ import { useViewedProductsStore } from "@/stores/use-viewed-products";
 import { TOP_BLOGGER_IDS } from "@/constants/blogger-ids";
 import { useTopArtists } from "@/hooks/api-hooks/useArtists";
 import { BloggerHomeCard } from "@/components/pages/Blogger/BloggerHomeCard";
-import { ProductHomeCard } from "@/components/products/ProductHomeCard";
-import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 import { BloggerCard } from "@/components/pages/Blogger/BloggerCard";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
 
@@ -63,7 +62,11 @@ function Home() {
                     key={product.id}
                     className="min-w-60 sm:min-w-[280px] md:min-w-0"
                   >
-                    <ProductHomeCard inCarousel={false} product={product} />
+                    <ProductVariantCard
+                      variant="home"
+                      inCarousel={false}
+                      product={product}
+                    />
                   </div>
                 ))}
               </div>
@@ -96,7 +99,8 @@ function Home() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -114,7 +118,8 @@ function Home() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -136,14 +141,17 @@ function Home() {
                 title={t("carousels.recentlyViewed", { ns: "common" })}
                 items={viewedProducts}
                 getItemKey={(product) => product.id}
-                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
-                peekNext
-                controlsInline
-                renderItem={(product) => (
-                  <ProductSmallHomeCard product={product as any} />
-                )}
-              />
-            )}
+              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+              peekNext
+              controlsInline
+              renderItem={(product) => (
+                <ProductVariantCard
+                  variant="small"
+                  product={product as any}
+                />
+              )}
+            />
+          )}
           </>
         )}
       </div>

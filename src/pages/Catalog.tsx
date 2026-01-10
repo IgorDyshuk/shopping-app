@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { CATALOG_CATEGORIES } from "@/constants/catalog-categories";
 import { useViewedProductsStore } from "@/stores/use-viewed-products";
-import { ProductHomeCard } from "@/components/products/ProductHomeCard";
-import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 
 function Catalog() {
   const menCategory = CATALOG_CATEGORIES.men;
@@ -81,7 +80,8 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -99,7 +99,8 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -117,7 +118,8 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -137,7 +139,8 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -155,7 +158,8 @@ function Catalog() {
               controlsInline
               disableMobileCarousel
               renderItem={(product) => (
-                <ProductHomeCard
+                <ProductVariantCard
+                  variant="home"
                   inCarousel
                   key={product.id}
                   product={product}
@@ -171,7 +175,7 @@ function Catalog() {
                 peekNext
                 controlsInline
                 renderItem={(product) => (
-                  <ProductSmallHomeCard product={product} />
+                  <ProductVariantCard variant="small" product={product} />
                 )}
               />
             )}

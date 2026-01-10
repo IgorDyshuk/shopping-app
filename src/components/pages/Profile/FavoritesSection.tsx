@@ -1,4 +1,4 @@
-import { ProductFilterCard } from "@/components/products/ProductFilterCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 import type { Product } from "@/types/product";
 
 type FavoritesSectionProps = {
@@ -25,7 +25,11 @@ export function FavoritesSection({
   return (
     <div className="grid grid-cols-2 gap-y-5 md:gap-y-7 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((product) => (
-        <ProductFilterCard key={product.id} product={product} />
+        <ProductVariantCard
+          key={product.id}
+          product={product}
+          variant="filter"
+        />
       ))}
     </div>
   );

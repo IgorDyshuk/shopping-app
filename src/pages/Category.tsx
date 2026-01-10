@@ -39,7 +39,7 @@ import { FilterChips } from "@/components/categories/FilterChips";
 import { useFilterChips } from "@/hooks/category-hooks/use-filter-chips";
 import { useSortOptions } from "@/hooks/category-hooks/use-sort-options";
 import { deriveCategoryId } from "@/utils/derive-product-category";
-import { ProductFilterCard } from "@/components/products/ProductFilterCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 
 type CategoryPageProps = {
   presetCategory?: string;
@@ -552,7 +552,11 @@ function Category({ presetCategory }: CategoryPageProps) {
                     </div>
                   ) : (
                     sortedProducts.map((product) => (
-                      <ProductFilterCard key={product.id} product={product} />
+                      <ProductVariantCard
+                        key={product.id}
+                        product={product}
+                        variant="filter"
+                      />
                     ))
                   )}
                 </div>

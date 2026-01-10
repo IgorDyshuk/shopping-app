@@ -27,8 +27,7 @@ import { ProductInfoAccordion } from "@/components/pages/ProductPage/ProductInfo
 import { ProductSectionsNav } from "@/components/pages/ProductPage/ProductSectionsNav";
 import { ProductHeadingCard } from "@/components/pages/ProductPage/ProductHeadingCard";
 import { useMediaQuery } from "@/hooks/media-hooks/use-media-query";
-import { ProductSmallHomeCard } from "@/components/products/ProductSmallHomeCard";
-import { ProductHomeCard } from "@/components/products/ProductHomeCard";
+import { ProductVariantCard } from "@/components/products/ProductVariantCard";
 import { useCartStore } from "@/stores/use-cart";
 import { useFavoritesStore } from "@/stores/use-favorites";
 import type { Product as ProductType } from "@/types/product";
@@ -336,7 +335,11 @@ function ProductPage() {
                 disableMobileCarousel
                 controlsInline
                 renderItem={(product: ProductType) => (
-                  <ProductHomeCard inCarousel product={product} />
+                  <ProductVariantCard
+                    inCarousel
+                    product={product}
+                    variant="home"
+                  />
                 )}
               />
             </div>
@@ -371,7 +374,7 @@ function ProductPage() {
                 peekNext
                 controlsInline
                 renderItem={(product: ProductType) => (
-                  <ProductSmallHomeCard product={product} />
+                  <ProductVariantCard product={product} variant="small" />
                 )}
               />
             )}

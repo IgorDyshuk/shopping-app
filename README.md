@@ -28,6 +28,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/types/{product,artist}.ts` — типы товара и артиста Spotify.
 - `src/lib/queryClient.ts` — QueryClient; подключён в `src/main.tsx`.
 - `src/constants/{filters-presets,blogger-ids}.ts` — пресеты фильтров и список ID блогеров.
+- `src/components/pages/Profile/ItemForm.tsx` — форма добавления/редактирования товара (категории, размеры, изображения с предпросмотром/удалением, состояние и обязательные поля).
 - `src/components/layout/Header.tsx` — фиксированный хедер с адаптивным поиском и навигацией; `LanguageSwitcher` читает язык из zustand; кнопка корзины с бейджем количества позиций и CartPopover (мини-корзина на десктопе).
 - `src/components/layout/Header/SideBar/*` — сайдбар (моб/десктоп) с навигацией и сменой языка.
 - `src/components/layout/skeletons/{HomeSkeleton,ProductSkeleton,BloggerSkeleton,CategorySkeleton,CatalogSkeleton}.tsx` — скелетоны главной, товара, блогера, категории (с десктопной панелью фильтров) и каталога (адаптивное число карточек).
@@ -36,7 +37,7 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 - `src/components/pages/Blogger/*` — карточки блогеров (для списка и главной), скелетон.
 - `src/components/categories/*` — фильтры категории (панель и drawer), чипы активных фильтров.
 - `src/components/pages/OrderConfirmation/*` — разбитый на компоненты checkout (контакты, заказы по продавцам, итог, модалка успеха), поддержка авторизации/валидации и локализации.
-- `src/components/pages/Profile/*` — переиспользуемые секции профиля: сайдбар табов, профильные поля, избранное, история заказов.
+- `src/components/pages/Profile/*` — переиспользуемые секции профиля: сайдбар табов, профильные поля, избранное, история заказов; seller-only таб “My items” с карточками товаров, диалогом подтверждения удаления и переходом в форму `ItemForm`.
 - `src/pages/Home.tsx` — главная: карусели товаров, recently viewed, блок популярных блогеров (Spotify) и скелетон при любой загрузке/placeholder данных.
 - `src/pages/Catalog.tsx` — каталог с секциями и блоком recently viewed.
 - `src/pages/Category.tsx` — категория с фильтрами/сортировкой/чипами; поддерживает проп `presetCategory` (при передаче хлебные крошки скрываются и используется указанная категория).
