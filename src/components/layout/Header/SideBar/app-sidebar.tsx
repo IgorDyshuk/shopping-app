@@ -6,7 +6,6 @@ import {
   CircleDollarSign,
   GalleryVerticalEnd,
   Home,
-  LifeBuoy,
   Send,
   UserRound,
   Users,
@@ -107,11 +106,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
       ],
       navFooter: [
-        {
-          title: t("sidebar.footer.support"),
-          url: "#",
-          icon: LifeBuoy,
-        },
         {
           title: t("sidebar.footer.faq"),
           url: "/faq",

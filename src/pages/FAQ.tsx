@@ -1,5 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 function FAQPage() {
   const { t } = useTranslation("faq");
@@ -7,6 +11,25 @@ function FAQPage() {
     q: string;
     a: string;
   }[];
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      toast.error(
+        t("form.error", { defaultValue: "Please fill out all fields." })
+      );
+      return;
+    }
+    toast.success(
+      t("form.success", { defaultValue: "Your message has been sent." })
+    );
+    setName("");
+    setEmail("");
+    setMessage("");
+  };
 
   return (
     <section className="w-full my-18 sm:my-20 md:my-24">
@@ -28,12 +51,68 @@ function FAQPage() {
           ))}
         </div>
 
-        <div className="border rounded-lg p-4 bg-card/60 space-y-2">
-          <h3 className="text-lg font-semibold">{t("help.title")}</h3>
-          <p className="text-muted-foreground">{t("help.body")}</p>
-          <Link to="/support" className="text-primary hover:underline">
-            {t("help.link")}
-          </Link>
+        <div className="border rounded-lg p-4 bg-card/60 space-y-4">
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold">{t("form.title")}</h3>
+            <p className="text-muted-foreground">{t("form.subtitle")}</p>
+          </div>
+          <form className="space-y-3" onSubmit={handleSubmit}>
+            <div className="space-y-1">
+              <label
+                className="text-sm text-muted-foreground"
+                htmlFor="faq-name"
+              >
+                {t("form.name")}
+              </label>
+              <Input
+                id="faq-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder={t("form.placeholderName")}
+                className="bg-muted/60"
+              />
+            </div>
+            <div className="space-y-1">
+              <label
+                className="text-sm text-muted-foreground"
+                htmlFor="faq-email"
+              >
+                {t("form.email")}
+              </label>
+              <Input
+                id="faq-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder={t("form.placeholderEmail")}
+                className="bg-muted/60"
+              />
+            </div>
+            <div className="space-y-1">
+              <label
+                className="text-sm text-muted-foreground"
+                htmlFor="faq-message"
+              >
+                {t("form.message")}
+              </label>
+              <Textarea
+                id="faq-message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                placeholder={t("form.placeholderMessage")}
+                className="bg-muted/60"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-muted-foreground"></div>
+              <Button type="submit" variant="outline">
+                {t("form.submit")}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

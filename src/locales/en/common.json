@@ -123,7 +123,7 @@
       "home": "Home",
       "catalog": "Catalog",
       "bloggers": "Bloggers",
-      "faq": "FAQ",
+      "faq": "FAQ & Support",
       "help": "Help center",
       "returns": "Returns",
       "about": "About",
@@ -160,7 +160,7 @@
     },
     "footer": {
       "support": "Support",
-      "faq": "FAQ"
+      "faq": "FAQ & Support"
     },
     "account": {
       "account": "Account",

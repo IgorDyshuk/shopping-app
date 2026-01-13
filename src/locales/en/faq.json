@@ -1,6 +1,19 @@
 {
   "title": "FAQ",
   "intro": "Quick answers to common questions about accounts, orders, payments, and shipping.",
+  "form": {
+    "title": "Need something else?",
+    "subtitle": "Send your question and we’ll get back to you.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Your question",
+    "placeholderName": "Enter your name",
+    "placeholderEmail": "Enter a valid email address",
+    "placeholderMessage": "Enter your message",
+    "submit": "Send",
+    "success": "Your message has been sent.",
+    "error": "Please fill out all fields."
+  },
   "items": [
     {
       "q": "How do I create an account?",
