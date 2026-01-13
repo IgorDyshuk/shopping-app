@@ -13,6 +13,7 @@ const footerLinks = {
     { labelKey: "footer.links.faq", to: "/faq" },
     { labelKey: "footer.links.help", to: "/support" },
     { labelKey: "footer.links.terms", to: "/terms" },
+    { labelKey: "footer.links.privacy", to: "/privacy" },
   ],
 };
 

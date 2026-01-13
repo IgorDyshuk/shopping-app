@@ -21,6 +21,8 @@ import ukCheckout from "./locales/uk/checkout.json";
 import ukProfile from "./locales/uk/profile.json";
 import enTerms from "./locales/en/terms.json";
 import ukTerms from "./locales/uk/terms.json";
+import enPrivacy from "./locales/en/privacy.json";
+import ukPrivacy from "./locales/uk/privacy.json";
 import { LANGUAGE_STORAGE_KEY } from "@/stores/use-language";
 
 let initialLanguage = "en";
@@ -50,6 +52,7 @@ void i18n.use(initReactI18next).init({
       checkout: enCheckout,
       profile: enProfile,
       terms: enTerms,
+      privacy: enPrivacy,
     },
     uk: {
       common: ukCommon,
@@ -62,6 +65,7 @@ void i18n.use(initReactI18next).init({
       checkout: ukCheckout,
       profile: ukProfile,
       terms: ukTerms,
+      privacy: ukPrivacy,
     },
   },
   lng: initialLanguage,
