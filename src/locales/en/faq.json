@@ -1,0 +1,31 @@
+{
+  "title": "FAQ",
+  "intro": "Quick answers to common questions about accounts, orders, payments, and shipping.",
+  "items": [
+    {
+      "q": "How do I create an account?",
+      "a": "Go to Sign up, enter your details, confirm your email, and accept the Terms. You can edit your profile later in Account settings."
+    },
+    {
+      "q": "How do I track my order?",
+      "a": "Open your Orders in the profile. Each order shows status and items. Shipping updates are sent by the seller and appear in notifications."
+    },
+    {
+      "q": "What payment methods are supported?",
+      "a": "We support major cards and wallets via our payment provider. Availability may vary by region."
+    },
+    {
+      "q": "Can I return an item?",
+      "a": "Return eligibility depends on seller policy. Check the listing details. If eligible, start a return from the order details page."
+    },
+    {
+      "q": "How do I contact support?",
+      "a": "Use the help center link below or open the support chat from your account. Include your order ID for faster help."
+    }
+  ],
+  "help": {
+    "title": "Need more help?",
+    "body": "If your question isn’t listed here, contact support and we’ll respond as soon as possible.",
+    "link": "Go to help center"
+  }
+}

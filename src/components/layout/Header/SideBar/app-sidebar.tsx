@@ -103,10 +103,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               title: t("sidebar.main.bloggersTop"),
               url: "/bloggers",
             },
-            {
-              title: t("sidebar.main.bloggersCollabs"),
-              url: "#creators-collabs",
-            },
           ],
         },
       ],
@@ -118,7 +114,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
           title: t("sidebar.footer.faq"),
-          url: "#",
+          url: "/faq",
           icon: Send,
         },
       ],

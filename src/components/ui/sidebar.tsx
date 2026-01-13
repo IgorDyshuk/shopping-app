@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Link } from "react-router-dom";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -372,17 +373,20 @@ function SidebarFooter({
   }[];
   children?: React.ReactNode;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const { closeSidebar } = useSidebar();
+  const normalizeTo = (url: string) => (url.startsWith("#") ? `/${url}` : url);
+
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
-                <a href={item.url}>
-                  <item.icon />
+              <SidebarMenuButton asChild onClick={closeSidebar} size="sm">
+                <Link to={normalizeTo(item.url)}>
+                  {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

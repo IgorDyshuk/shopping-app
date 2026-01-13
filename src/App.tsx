@@ -17,6 +17,7 @@ import { Toaster } from "./components/ui/sonner";
 import CartPage from "@/pages/Cart";
 import TermsPage from "@/pages/Terms";
 import PrivacyPage from "@/pages/Privacy";
+import FAQPage from "@/pages/FAQ";
 
 function App() {
   const basename = import.meta.env.BASE_URL ?? "/";
@@ -40,6 +41,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/faq" element={<FAQPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AppLayout>

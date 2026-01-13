@@ -19,7 +19,7 @@ function TermsPage() {
 
   return (
     <section className="w-full my-16 sm:my-20 md:my-24">
-      <div className="mx-auto w-full max-w-[960px] px-4 space-y-8">
+      <div className="mx-auto w-full max-w-[960px] space-y-8">
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">{t("updated")}</p>
           <h1 className="text-3xl font-semibold">{t("title")}</h1>

@@ -123,7 +123,7 @@ export function NavigationMenuComplete() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="#support">{t("nav.support")}</Link>
+            <Link to="/faq">{t("nav.support")}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
