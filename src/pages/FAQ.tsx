@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,8 @@ import { Button } from "@/components/ui/button";
 
 function FAQPage() {
   const { t } = useTranslation("faq");
+  const { hash, search } = useLocation();
+  const formRef = useRef<HTMLDivElement | null>(null);
   const items = t("items", { returnObjects: true }) as {
     q: string;
     a: string;
@@ -31,6 +34,19 @@ function FAQPage() {
     setMessage("");
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const scrollToForm =
+      hash === "#contact" || params.get("section") === "contact";
+    if (scrollToForm && formRef.current) {
+      const y =
+        formRef.current.getBoundingClientRect().top +
+        window.scrollY -
+        80; /* offset from top */
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  }, [hash, search]);
+
   return (
     <section className="w-full my-18 sm:my-20 md:my-24">
       <div className="mx-auto w-full max-w-[960px] space-y-8">
@@ -51,7 +67,11 @@ function FAQPage() {
           ))}
         </div>
 
-        <div className="border rounded-lg p-4 bg-card/60 space-y-4">
+        <div
+          ref={formRef}
+          id="contact"
+          className="border rounded-lg p-4 bg-card/60 space-y-4"
+        >
           <div className="space-y-1">
             <h3 className="text-lg font-semibold">{t("form.title")}</h3>
             <p className="text-muted-foreground">{t("form.subtitle")}</p>

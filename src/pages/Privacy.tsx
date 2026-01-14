@@ -41,7 +41,10 @@ function PrivacyPage() {
         <div className="border rounded-lg p-4 bg-card/60 space-y-2">
           <h3 className="text-lg font-semibold">{t("help.title")}</h3>
           <p className="text-muted-foreground">{t("help.body")}</p>
-          <Link to="/support" className="text-primary hover:underline">
+          <Link
+            to="/faq?section=contact"
+            className="text-primary hover:underline"
+          >
             {t("help.link")}
           </Link>
         </div>
