@@ -1,16 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 const ROW_CARD_COUNT = 6;
-const HERO_CARD_COUNT = 2;
+const HERO_CARD_COUNT_DESKTOP = 2;
+const HERO_CARD_COUNT_MOBILE = 1;
 
 export function HomeSkeleton() {
   return (
     <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-14 xl:gap-16">
       {/* Hero bloggers carousel */}
       <div className="space-y-3">
-        <Skeleton className="h-8 w-40" />
         <div className="flex w-full  overflow-x-auto gap-3 sm:gap-4 pb-2">
-          {Array.from({ length: HERO_CARD_COUNT }).map((_, idx) => (
+          {Array.from({ length: HERO_CARD_COUNT_MOBILE }).map((_, idx) => (
             <div
               key={idx}
               className="h-45 sm:h-60 md:h-70 lg:h-90 rounded-2xl border bg-card shadow-sm overflow-hidden flex-1"
@@ -22,6 +22,20 @@ export function HomeSkeleton() {
               </div>
             </div>
           ))}
+          <div className="hidden md:flex w-full  overflow-x-auto gap-3 sm:gap-4">
+            {Array.from({ length: HERO_CARD_COUNT_DESKTOP }).map((_, idx) => (
+              <div
+                key={idx}
+                className="h-45 sm:h-60 md:h-70 lg:h-90 rounded-2xl border bg-card shadow-sm overflow-hidden flex-1"
+              >
+                <Skeleton className="h-52 sm:h-60 md:h-72 w-full" />
+                <div className=" p-4 space-y-2">
+                  <Skeleton className="h-5 w-1/2" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

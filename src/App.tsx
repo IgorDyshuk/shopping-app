@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { AppLayout } from "@/components/layout/AppLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -18,6 +18,7 @@ import CartPage from "@/pages/Cart";
 import TermsPage from "@/pages/Terms";
 import PrivacyPage from "@/pages/Privacy";
 import FAQPage from "@/pages/FAQ";
+import NotFoundPage from "@/pages/NotFound";
 
 function App() {
   const basename = import.meta.env.BASE_URL ?? "/";
@@ -37,12 +38,15 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/order/confirmation" element={<OrderConfirmationPage />} />
+            <Route
+              path="/order/confirmation"
+              element={<OrderConfirmationPage />}
+            />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </AppLayout>
         <Toaster richColors theme="light" />
