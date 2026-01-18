@@ -50,7 +50,7 @@ function Category({ presetCategory }: CategoryPageProps) {
   const rawCategory = presetCategory ?? categoryParam;
   const decodedCategory = useMemo(
     () => decodeURIComponent(rawCategory),
-    [rawCategory]
+    [rawCategory],
   );
   const { t } = useTranslation(["category", "common"]);
   const categoryNameKey = useMemo(() => {
@@ -91,7 +91,7 @@ function Category({ presetCategory }: CategoryPageProps) {
 
     return [
       ...new Set(
-        (products ?? []).map((p) => p.category || "Other").filter(Boolean)
+        (products ?? []).map((p) => p.category || "Other").filter(Boolean),
       ),
     ].map((value) => ({
       id: value,
@@ -117,13 +117,13 @@ function Category({ presetCategory }: CategoryPageProps) {
     Set<string>
   >(() => new Set());
   const [activeSizeFilters, setActiveSizeFilters] = useState<Set<string>>(
-    () => new Set()
+    () => new Set(),
   );
   const [activeConditionFilters, setActiveConditionFilters] = useState<
     Set<string>
   >(() => new Set());
   const [activeGenderFilters, setActiveGenderFilters] = useState<Set<string>>(
-    () => new Set()
+    () => new Set(),
   );
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -227,7 +227,7 @@ function Category({ presetCategory }: CategoryPageProps) {
     getLabel: useCallback(
       (opt?: { label: string; labelKey?: string }) =>
         opt ? (opt.labelKey ? t(opt.labelKey) : opt.label) : "",
-      [t]
+      [t],
     ),
   });
 
@@ -255,13 +255,13 @@ function Category({ presetCategory }: CategoryPageProps) {
       const sizePass =
         !hasSizeFilters ||
         Array.from(activeSizeFilters).some(
-          (id) => deriveSize(p.id) === id || !id
+          (id) => deriveSize(p.id) === id || !id,
         );
 
       const conditionPass =
         !hasConditionFilters ||
         Array.from(activeConditionFilters).some(
-          (id) => deriveCondition(p.id) === id || !id
+          (id) => deriveCondition(p.id) === id || !id,
         );
 
       const genderPass =
@@ -295,11 +295,11 @@ function Category({ presetCategory }: CategoryPageProps) {
         return copy.sort((a, b) => b.price - a.price);
       case "rating":
         return copy.sort(
-          (a, b) => (b.rating?.rate ?? 0) - (a.rating?.rate ?? 0)
+          (a, b) => (b.rating?.rate ?? 0) - (a.rating?.rate ?? 0),
         );
       case "popularity":
         return copy.sort(
-          (a, b) => (b.rating?.count ?? 0) - (a.rating?.count ?? 0)
+          (a, b) => (b.rating?.count ?? 0) - (a.rating?.count ?? 0),
         );
       default:
         return copy;
@@ -445,7 +445,7 @@ function Category({ presetCategory }: CategoryPageProps) {
                         <span className="text-muted-foreground text-xs">
                           {
                             sortOptions.find(
-                              (option) => option.value === sortBy
+                              (option) => option.value === sortBy,
                             )?.label
                           }
                         </span>
