@@ -21,7 +21,7 @@ function Home() {
   } = useTopArtists(TOP_BLOGGER_IDS);
   const { t } = useTranslation(["home", "common"]);
   const viewedProducts = useViewedProductsStore(
-    (state) => state.viewedProducts
+    (state) => state.viewedProducts,
   );
   const isMdOnly = useMediaQuery("(min-width: 768px) and (max-width: 1280px)");
   const isSmOnly = useMediaQuery("(min-width: 768px) and (max-width: 1024px)");
@@ -141,17 +141,17 @@ function Home() {
                 title={t("carousels.recentlyViewed", { ns: "common" })}
                 items={viewedProducts}
                 getItemKey={(product) => product.id}
-              perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
-              peekNext
-              controlsInline
-              renderItem={(product) => (
-                <ProductVariantCard
-                  variant="small"
-                  product={product as any}
-                />
-              )}
-            />
-          )}
+                perRow={{ base: 2, xs: 3, sm: 3, md: 4, lg: 5, xl: 6 }}
+                peekNext
+                controlsInline
+                renderItem={(product) => (
+                  <ProductVariantCard
+                    variant="small"
+                    product={product as any}
+                  />
+                )}
+              />
+            )}
           </>
         )}
       </div>
