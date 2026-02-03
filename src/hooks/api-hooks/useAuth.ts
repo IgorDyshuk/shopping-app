@@ -1,65 +1,203 @@
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 import { authApi } from "@/api/auth";
 import { useAuthStore } from "@/stores/use-auth";
 import { userApi } from "@/api/users";
+import { profileApi } from "@/api/profile";
 import { API_CONFIG } from "@/lib/apiConfig";
-import type { AuthToken, LoginPayload } from "@/types/auth";
-import type { CreateUserPayload, User } from "@/types/user";
+import type {
+  LoginPayload,
+  RegisterClientResponse,
+  RegisterSellerPayload,
+} from "@/types/auth";
+import type { ClientProfile, CreateUserPayload, User } from "@/types/user";
 
 export const useLogin = () =>
-  useMutation<AuthToken, unknown, LoginPayload>({
-    mutationFn: authApi.login,
-    onSuccess: async (data, variables) => {
-      localStorage.setItem(API_CONFIG.authTokenKey, data.token);
-      const authStore = useAuthStore.getState();
-      authStore.login({ token: data.token });
-
+  useMutation<User | null, Error, LoginPayload>({
+    mutationFn: async (payload) => {
       try {
-        const users = await userApi.list();
-        const matched = users.find((user) => {
-          const byUsername = user.username === variables.username;
-          const byEmail =
-            user.email?.toLowerCase() === variables.username.toLowerCase();
-          return byUsername || byEmail;
+        const data = await authApi.login(payload);
+        const authStore = useAuthStore.getState();
+        localStorage.setItem(API_CONFIG.authTokenKey, data.access_token);
+        localStorage.setItem(API_CONFIG.refreshTokenKey, data.refresh_token);
+        authStore.login({
+          token: data.access_token,
+          refreshToken: data.refresh_token,
         });
-        if (matched) {
-          authStore.setUser(matched);
-          return;
-        }
-      } catch {
-        // ignore, fallback below
-      }
 
-      // Fallback: store minimal info from the login form
-      authStore.setUser({
-        id: -1,
-        username: variables.username,
-        email: "",
-      });
+        // Try to load current profile from identity service
+        try {
+          const profile: ClientProfile = await profileApi.getClientMe();
+          const profileUser: User = {
+            id: payload.email,
+            username: profile.username ?? payload.email,
+            email: profile.email ?? payload.email,
+            phone: profile.phone,
+            accepts_marketing: profile.accepts_marketing,
+          };
+          authStore.setUser(profileUser);
+          return profileUser;
+        } catch {
+          // ignore and fallback to existing enrichment / minimal user
+        }
+
+        // Attempt to enrich user from existing API if available
+        try {
+          const users = await userApi.list();
+          const matched = users.find(
+            (user) =>
+              user.email?.toLowerCase() === payload.email.toLowerCase() ||
+              user.username?.toLowerCase() === payload.email.toLowerCase(),
+          );
+          if (matched) {
+            authStore.setUser(matched);
+            return matched;
+          }
+        } catch {
+          // Ignore enrichment failures
+        }
+
+        // Minimal user fallback
+        const fallbackUser: User = {
+          id: payload.email,
+          username: payload.email,
+          email: payload.email,
+        };
+        authStore.setUser(fallbackUser);
+        return fallbackUser;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (!error.response) {
+            throw new Error(
+              "Network error: no response from identity service. Check URL/CORS/VPN.",
+            );
+          }
+
+          const data = error.response?.data as {
+            message?: string;
+            detail?: unknown;
+          };
+          const detail = Array.isArray(data?.detail)
+            ? data.detail
+                .map((item: { msg?: string }) => item.msg)
+                .filter(Boolean)
+                .join("; ")
+            : typeof data?.detail === "string"
+              ? data.detail
+              : "";
+          const baseMessage = data?.message ?? error.message;
+          const combined = detail
+            ? `${baseMessage}${baseMessage ? ": " : ""}${detail}`
+            : baseMessage;
+          throw new Error(combined || "Validation error");
+        }
+        throw error as Error;
+      }
     },
   });
 
 export const useRegister = () =>
-  useMutation<User, unknown, CreateUserPayload>({
+  useMutation<User, Error, CreateUserPayload>({
     mutationFn: async (variables) => {
-      const newUser: User = {
-        id: Date.now(),
-        username: variables.username,
-        email: variables.email,
-        password: variables.password,
-        phone: variables.phone,
-        country: variables.country,
-        role: variables.role,
-        name: variables.name,
-      };
+      try {
+        const clientPayload = {
+          email: variables.email,
+          password: variables.password,
+          phone: variables.phone ?? "",
+          accepts_marketing: false,
+          first_name: variables.name?.firstname ?? "",
+          last_name: variables.name?.lastname ?? "",
+          username: variables.username,
+        };
 
+        const sellerPayload: RegisterSellerPayload | null =
+          variables.role === "seller" && variables.company_name
+            ? {
+                ...clientPayload,
+                company_name: variables.company_name,
+              }
+            : null;
+
+        const data: RegisterClientResponse =
+          variables.role === "seller"
+            ? await authApi.registerSeller(
+                sellerPayload as RegisterSellerPayload,
+              )
+            : await authApi.registerClient(clientPayload);
+
+        // Immediately log in to obtain access token after successful registration
+        const loginResponse = await authApi.login({
+          email: variables.email,
+          password: variables.password,
+        });
+
+        const newUser: User = {
+          id: data.id,
+          username: variables.username,
+          email: data.email ?? variables.email,
+          password: variables.password,
+          phone: variables.phone,
+          country: variables.country,
+          role: variables.role,
+          company_name: variables.company_name,
+          accepts_marketing: false,
+          name: variables.name,
+        };
+
+        const authStore = useAuthStore.getState();
+        const token = loginResponse.access_token;
+        localStorage.setItem(API_CONFIG.authTokenKey, token);
+        localStorage.setItem(
+          API_CONFIG.refreshTokenKey,
+          loginResponse.refresh_token
+        );
+        authStore.login({
+          token,
+          refreshToken: loginResponse.refresh_token,
+          user: newUser,
+        });
+
+        return newUser;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (!error.response) {
+            throw new Error(
+              "Network error: no response from identity service. Check URL/CORS/VPN.",
+            );
+          }
+
+          const data = error.response?.data as {
+            message?: string;
+            detail?: unknown;
+          };
+          const detail = Array.isArray(data?.detail)
+            ? data.detail
+                .map((item: { msg?: string }) => item.msg)
+                .filter(Boolean)
+                .join("; ")
+            : typeof data?.detail === "string"
+              ? data.detail
+              : "";
+          const baseMessage = data?.message ?? error.message;
+          const combined = detail
+            ? `${baseMessage}${baseMessage ? ": " : ""}${detail}`
+            : baseMessage;
+          throw new Error(combined || "Validation error");
+        }
+        throw error;
+      }
+    },
+  });
+
+export const useLogout = () =>
+  useMutation<string | void, Error>({
+    mutationFn: () => {
+      const refreshToken = localStorage.getItem(API_CONFIG.refreshTokenKey);
+      return authApi.logout(refreshToken || undefined);
+    },
+    onSettled: () => {
       const authStore = useAuthStore.getState();
-      const token = `local-token-${newUser.id}`;
-      localStorage.setItem(API_CONFIG.authTokenKey, token);
-      authStore.login({ token, user: newUser });
-      authStore.setUser(newUser);
-
-      return newUser;
+      authStore.logout();
     },
   });

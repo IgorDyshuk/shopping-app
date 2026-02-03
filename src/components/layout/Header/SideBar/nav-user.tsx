@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/stores/use-auth";
 import { useNavigate } from "react-router-dom";
+import { useLogout } from "@/hooks/api-hooks/useAuth";
 
 export function NavUser({
   user,
@@ -39,7 +40,8 @@ export function NavUser({
   const { isMobile, state, closeSidebar } = useSidebar();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const logout = useAuthStore((state) => state.logout);
+  const storeLogout = useAuthStore((state) => state.logout);
+  const { mutate: logoutRequest } = useLogout();
   const authUser = useAuthStore((state) => state.user);
   const canManageItems = authUser?.role === "seller";
 
@@ -134,9 +136,13 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                logout();
-                closeSidebar();
-                navigate("/");
+                logoutRequest(undefined, {
+                  onSettled: () => {
+                    storeLogout();
+                    closeSidebar();
+                    navigate("/");
+                  },
+                });
               }}
             >
               <LogOut />

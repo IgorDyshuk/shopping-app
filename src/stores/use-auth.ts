@@ -7,8 +7,13 @@ import type { User } from "@/types/user";
 type AuthState = {
   user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
-  login: (params: { token: string; user?: User | null }) => void;
+  login: (params: {
+    token: string;
+    refreshToken?: string | null;
+    user?: User | null;
+  }) => void;
   logout: () => void;
   setUser: (user: User | null) => void;
 };
@@ -20,14 +25,24 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       token: null,
+      refreshToken: null,
       isAuthenticated: false,
-      login: ({ token, user = null }) => {
+      login: ({ token, refreshToken = null, user = null }) => {
         localStorage.setItem(API_CONFIG.authTokenKey, token);
-        set({ token, user, isAuthenticated: true });
+        if (refreshToken) {
+          localStorage.setItem(API_CONFIG.refreshTokenKey, refreshToken);
+        }
+        set({ token, refreshToken, user, isAuthenticated: true });
       },
       logout: () => {
         localStorage.removeItem(API_CONFIG.authTokenKey);
-        set({ token: null, user: null, isAuthenticated: false });
+        localStorage.removeItem(API_CONFIG.refreshTokenKey);
+        set({
+          token: null,
+          refreshToken: null,
+          user: null,
+          isAuthenticated: false,
+        });
       },
       setUser: (user) => set((state) => ({ ...state, user })),
     }),
@@ -35,18 +50,21 @@ export const useAuthStore = create<AuthState>()(
       name: AUTH_STORAGE_KEY,
       partialize: (state) => ({
         token: state.token,
+        refreshToken: state.refreshToken,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export const mapTokenToAuthState = (
   token: string,
-  user?: User | null
-): Pick<AuthState, "token" | "user" | "isAuthenticated"> => ({
+  user?: User | null,
+  refreshToken?: string | null,
+): Pick<AuthState, "token" | "user" | "isAuthenticated" | "refreshToken"> => ({
   token,
   user: user ?? null,
+  refreshToken: refreshToken ?? null,
   isAuthenticated: Boolean(token),
 });

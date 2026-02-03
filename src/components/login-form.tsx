@@ -40,7 +40,7 @@ export function LoginForm({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { mutateAsync, isPending } = useLogin();
@@ -49,7 +49,7 @@ export function LoginForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await mutateAsync({ username: username.trim(), password });
+      await mutateAsync({ email: email.trim(), password });
       toast.success("Logged in");
 
       if (onSuccess) {
@@ -58,7 +58,11 @@ export function LoginForm({
         navigate("/profile");
       }
     } catch (error) {
-      toast.error("Login failed");
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : "Login failed";
+      toast.error(message);
     }
   };
 
@@ -102,17 +106,17 @@ export function LoginForm({
                 {t("authForm.login.separator")}
               </FieldSeparator>
               <Field>
-                <FieldLabel htmlFor="username">
-                  {t("authForm.fields.username")}
+                <FieldLabel htmlFor="email">
+                  {t("authForm.fields.email")}
                 </FieldLabel>
                 <Input
-                  id="username"
-                  type="text"
-                  placeholder={t("authForm.fields.usernamePlaceholder")}
+                  id="email"
+                  type="email"
+                  placeholder={t("authForm.fields.emailPlaceholder")}
                   required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="username"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   disabled={isPending}
                 />
               </Field>

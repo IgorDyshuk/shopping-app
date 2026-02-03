@@ -15,8 +15,10 @@ import { useOrdersStore } from "@/stores/use-orders";
 import { useFavoritesStore } from "@/stores/use-favorites";
 import countryCodes from "@/constants/CountriesCode.json";
 import { useProducts } from "@/hooks/api-hooks/useProducts";
+import { useLogout } from "@/hooks/api-hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   ProfileSidebar,
   type SidebarItem,
@@ -35,6 +37,13 @@ function ProfilePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated, logout, setUser } = useAuthStore();
+  const { mutate: logoutRequest, isPending: isLogoutPending } = useLogout();
+  // Redirect unauthenticated users to login
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
   const { data: allProducts = [], isLoading: isLoadingProducts } =
     useProducts();
   const orders = useOrdersStore((state) => state.orders);
@@ -68,6 +77,26 @@ function ProfilePage() {
   const [firstNameInput, setFirstNameInput] = useState(
     user?.name?.firstname ?? ""
   );
+  const handleShowTokenInfo = () => {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      toast.error("Access token not found");
+      return;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const msToExp = payload.exp * 1000 - Date.now();
+      const expiresAt = new Date(payload.exp * 1000);
+      toast.message("Token info", {
+        description: `exp in ${(msToExp / 1000).toFixed(0)}s (${expiresAt.toLocaleString()})`,
+      });
+      // also log full payload for debugging
+      // eslint-disable-next-line no-console
+      console.log("[auth token payload]", payload);
+    } catch (error) {
+      toast.error("Cannot parse token");
+    }
+  };
   const [lastNameInput, setLastNameInput] = useState(
     user?.name?.lastname ?? ""
   );
@@ -85,8 +114,12 @@ function ProfilePage() {
   );
 
   const handleLogOut = () => {
-    logout();
-    navigate("/");
+    logoutRequest(undefined, {
+      onSettled: () => {
+        logout();
+        navigate("/");
+      },
+    });
   };
 
   const startEdit = () => {
@@ -238,20 +271,27 @@ function ProfilePage() {
                   ? t("pageTitle.myItems", { ns: "profile" })
                   : editingProduct
                   ? t("pageTitle.editItem", { ns: "profile" })
-                  : t("pageTitle.addItem", { ns: "profile" })}
-              </CardTitle>
-              {activeTab === "my-items" && isSeller && (
-                <Button
-                  onClick={() => {
-                    setEditingProduct(undefined);
-                    handleTabChange("add-item");
-                  }}
-                >
-                  + {t("myItems.addButton", { ns: "profile" })}
-                </Button>
-              )}
-            </div>
-          </CardHeader>
+            : t("pageTitle.addItem", { ns: "profile" })}
+          </CardTitle>
+          <div className="flex gap-2">
+            {import.meta.env.DEV && (
+              <Button variant="outline" size="sm" onClick={handleShowTokenInfo}>
+                Token info
+              </Button>
+            )}
+            {activeTab === "my-items" && isSeller && (
+              <Button
+                onClick={() => {
+                  setEditingProduct(undefined);
+                  handleTabChange("add-item");
+                }}
+              >
+                + {t("myItems.addButton", { ns: "profile" })}
+              </Button>
+            )}
+          </div>
+        </div>
+      </CardHeader>
           <CardContent
             className={`space-y-4 ${activeTab === "profile" ? "" : "px-0"}`}
           >

@@ -52,6 +52,7 @@ export function SignupForm({
   const [countryCode, setCountryCode] = useState("+380");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState<"buyer" | "seller">("buyer");
+  const [companyName, setCompanyName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -90,7 +91,7 @@ export function SignupForm({
       toast.error(
         t("authForm.signup.phoneRequired", {
           defaultValue: "Please enter your full phone number.",
-        })
+        }),
       );
       phoneInputRef.current?.focus();
       return;
@@ -101,13 +102,19 @@ export function SignupForm({
       return;
     }
 
+    if (role === "seller" && !companyName.trim()) {
+      toast.error("Please enter your company name.");
+      return;
+    }
+
     mutate(
       {
         username: username.trim(),
         email: email.trim(),
-        phone: `${countryCode} ${phoneNumber.trim()}`,
+        phone: `${countryCode}${phoneNumber.trim()}`,
         country: selectedCountry.code || selectedCountry.dial_code,
         role,
+        company_name: companyName.trim() || undefined,
         password,
         name: {
           firstname: firstName.trim(),
@@ -120,10 +127,14 @@ export function SignupForm({
           onSuccess?.();
           navigate("/profile");
         },
-        onError: () => {
-          toast.error("Signup failed. Please try again.");
+        onError: (error) => {
+          const message =
+            error instanceof Error && error.message
+              ? error.message
+              : "Login failed";
+          toast.error(message);
         },
-      }
+      },
     );
   };
 
@@ -285,6 +296,24 @@ export function SignupForm({
                   </NativeSelectOption>
                 </NativeSelect>
               </Field>
+              {role === "seller" && (
+                <Field>
+                  <FieldLabel htmlFor="company-name">
+                    {t("authForm.fields.company", {
+                      defaultValue: "Company name",
+                    })}
+                  </FieldLabel>
+                  <Input
+                    id="company-name"
+                    type="text"
+                    placeholder="Acme Corp"
+                    required
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    disabled={isPending}
+                  />
+                </Field>
+              )}
               <Field>
                 <FieldLabel htmlFor="password">
                   {t("authForm.signup.password")}
