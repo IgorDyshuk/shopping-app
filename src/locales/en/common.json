@@ -93,6 +93,7 @@
       "separator": "Or continue with",
       "forgot": "Forgot your password?",
       "submit": "Login",
+      "invalidCredentials": "Incorrect email or password",
       "footer": "Don't have an account?",
       "footerLink": "Sign up"
     },

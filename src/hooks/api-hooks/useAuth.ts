@@ -3,7 +3,6 @@ import axios from "axios";
 
 import { authApi } from "@/api/auth";
 import { useAuthStore } from "@/stores/use-auth";
-import { userApi } from "@/api/users";
 import { profileApi } from "@/api/profile";
 import { API_CONFIG } from "@/lib/apiConfig";
 import type {
@@ -11,7 +10,12 @@ import type {
   RegisterClientResponse,
   RegisterSellerPayload,
 } from "@/types/auth";
-import type { ClientProfile, CreateUserPayload, User } from "@/types/user";
+import type {
+  ClientProfile,
+  CreateUserPayload,
+  SellerProfile,
+  User,
+} from "@/types/user";
 
 export const useLogin = () =>
   useMutation<User | null, Error, LoginPayload>({
@@ -26,36 +30,74 @@ export const useLogin = () =>
           refreshToken: data.refresh_token,
         });
 
-        // Try to load current profile from identity service
-        try {
-          const profile: ClientProfile = await profileApi.getClientMe();
-          const profileUser: User = {
-            id: payload.email,
-            username: profile.username ?? payload.email,
-            email: profile.email ?? payload.email,
-            phone: profile.phone,
-            accepts_marketing: profile.accepts_marketing,
-          };
-          authStore.setUser(profileUser);
-          return profileUser;
-        } catch {
-          // ignore and fallback to existing enrichment / minimal user
-        }
+        const roleHint = (data.role_id ?? "").toLowerCase();
+        const roleFromLogin: User["role"] =
+          roleHint.includes("seller") || roleHint.includes("admin")
+            ? "seller"
+            : roleHint.includes("buyer") || roleHint.includes("client")
+              ? "buyer"
+              : undefined;
 
-        // Attempt to enrich user from existing API if available
-        try {
-          const users = await userApi.list();
-          const matched = users.find(
-            (user) =>
-              user.email?.toLowerCase() === payload.email.toLowerCase() ||
-              user.username?.toLowerCase() === payload.email.toLowerCase(),
-          );
-          if (matched) {
-            authStore.setUser(matched);
-            return matched;
+        const tryClientProfile = async () => {
+          try {
+            const profile: ClientProfile = await profileApi.getClientMe();
+            const profileUser: User = {
+              id: payload.email,
+              username: profile.username ?? payload.email,
+              email: profile.email ?? payload.email,
+              phone: profile.phone,
+              role: "buyer",
+              accepts_marketing: profile.accepts_marketing,
+              password: payload.password,
+              name: {
+                firstname: profile.first_name,
+                lastname: profile.last_name,
+              },
+            };
+            authStore.setUser(profileUser);
+            return profileUser;
+          } catch {
+            return null;
           }
-        } catch {
-          // Ignore enrichment failures
+        };
+
+        const trySellerProfile = async () => {
+          try {
+            const profile: SellerProfile = await profileApi.getSellerMe();
+            const profileUser: User = {
+              id: payload.email,
+              username: profile.username ?? payload.email,
+              email: profile.email ?? payload.email,
+              phone: profile.phone,
+              role: "seller",
+              company_name: profile.company_name,
+              bank_details_id: profile.bank_details_id,
+              password: payload.password,
+              name: {
+                firstname: profile.first_name,
+                lastname: profile.last_name,
+              },
+            };
+            authStore.setUser(profileUser);
+            return profileUser;
+          } catch {
+            return null;
+          }
+        };
+
+        const profileOrder: Array<"client" | "seller"> =
+          roleFromLogin === "seller"
+            ? ["seller", "client"]
+            : roleFromLogin === "buyer"
+              ? ["client", "seller"]
+              : ["client", "seller"];
+
+        for (const kind of profileOrder) {
+          const profileUser =
+            kind === "seller"
+              ? await trySellerProfile()
+              : await tryClientProfile();
+          if (profileUser) return profileUser;
         }
 
         // Minimal user fallback
@@ -63,6 +105,8 @@ export const useLogin = () =>
           id: payload.email,
           username: payload.email,
           email: payload.email,
+          role: roleFromLogin,
+          password: payload.password,
         };
         authStore.setUser(fallbackUser);
         return fallbackUser;
@@ -78,6 +122,9 @@ export const useLogin = () =>
             message?: string;
             detail?: unknown;
           };
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            throw new Error("AUTH_INVALID_CREDENTIALS");
+          }
           const detail = Array.isArray(data?.detail)
             ? data.detail
                 .map((item: { msg?: string }) => item.msg)
@@ -150,7 +197,7 @@ export const useRegister = () =>
         localStorage.setItem(API_CONFIG.authTokenKey, token);
         localStorage.setItem(
           API_CONFIG.refreshTokenKey,
-          loginResponse.refresh_token
+          loginResponse.refresh_token,
         );
         authStore.login({
           token,

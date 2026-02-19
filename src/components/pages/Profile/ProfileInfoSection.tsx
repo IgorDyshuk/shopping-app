@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,8 @@ type ProfileInfoSectionProps = {
     phone?: string;
     country?: string;
     role?: string;
+    company_name?: string;
+    bank_details_id?: string | null;
     name?: Name;
     password?: string;
   } | null;
@@ -32,6 +34,8 @@ type ProfileInfoSectionProps = {
   lastNameInput: string;
   emailInput: string;
   passwordInput: string;
+  companyNameInput: string;
+  bankDetailsInput: string;
   countryCode: string;
   phoneInput: string;
   countryInput: string;
@@ -40,10 +44,13 @@ type ProfileInfoSectionProps = {
   onLastNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
+  onCompanyNameChange: (value: string) => void;
+  onBankDetailsChange: (value: string) => void;
   onCountryCodeChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onCountryInputChange: (value: string) => void;
   onLogout: () => void;
+  isLogoutPending?: boolean;
   onStartEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
@@ -56,6 +63,8 @@ type ProfileInfoSectionProps = {
     phone: string;
     country: string;
     role: string;
+    companyName: string;
+    bankDetails: string;
     logout: string;
     edit: string;
     save: string;
@@ -73,6 +82,8 @@ export function ProfileInfoSection({
   lastNameInput,
   emailInput,
   passwordInput,
+  companyNameInput,
+  bankDetailsInput,
   countryCode,
   phoneInput,
   countryInput,
@@ -81,10 +92,13 @@ export function ProfileInfoSection({
   onLastNameChange,
   onEmailChange,
   onPasswordChange,
+  onCompanyNameChange,
+  onBankDetailsChange,
   onCountryCodeChange,
   onPhoneChange,
   onCountryInputChange,
   onLogout,
+  isLogoutPending = false,
   onStartEdit,
   onSave,
   onCancel,
@@ -114,13 +128,16 @@ export function ProfileInfoSection({
         : clean;
     return `${countryCode} ${formatLocalPhone(local)}`.trim();
   };
+  const resolvedCountry =
+    findCountryByCode(user?.country) ??
+    (user?.phone ? findCountryByCode(countryCode) : null);
 
   const handleSave = () => {
     if (phoneInput.trim().length < PHONE_REQUIRED_LENGTH) {
       toast.error(
         t("authForm.signup.phoneRequired", {
           defaultValue: "Please enter your full phone number.",
-        })
+        }),
       );
       phoneInputRef.current?.focus();
       return;
@@ -192,8 +209,8 @@ export function ProfileInfoSection({
               {showPassword
                 ? user?.password || "—"
                 : user?.password
-                ? "••••••••"
-                : "—"}
+                  ? "••••••••"
+                  : "—"}
             </span>
             {user?.password ? (
               <button
@@ -231,6 +248,42 @@ export function ProfileInfoSection({
           </div>
         )}
       </div>
+      {user?.role === "seller" && (
+        <div className="grid gap-2 md:grid-cols-2">
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {labels.companyName}
+            </p>
+            {isEditing ? (
+              <Input
+                placeholder={user?.company_name || "—"}
+                value={companyNameInput}
+                onChange={(e) => onCompanyNameChange(e.target.value)}
+              />
+            ) : (
+              <p className="text-base font-medium">
+                {user?.company_name || "—"}
+              </p>
+            )}
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {labels.bankDetails}
+            </p>
+            {isEditing ? (
+              <Input
+                placeholder={user?.bank_details_id || "—"}
+                value={bankDetailsInput}
+                onChange={(e) => onBankDetailsChange(e.target.value)}
+              />
+            ) : (
+              <p className="text-base font-medium">
+                {user?.bank_details_id || "—"}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
       <div>
         <p className="text-sm text-muted-foreground">{labels.phone}</p>
         {isEditing ? (
@@ -317,7 +370,7 @@ export function ProfileInfoSection({
               </span>
               <span>
                 {findCountryByCode(countryInput)?.name ||
-                  findCountryByCode(user?.country)?.name ||
+                  resolvedCountry?.name ||
                   user?.country ||
                   "—"}
               </span>
@@ -325,14 +378,12 @@ export function ProfileInfoSection({
           </div>
         ) : (
           <p className="text-base font-medium flex items-center gap-2">
-            {findCountryByCode(user?.country)?.emoji && (
+            {resolvedCountry?.emoji && (
               <span className="text-lg leading-none">
-                {findCountryByCode(user?.country)?.emoji}
+                {resolvedCountry?.emoji}
               </span>
             )}
-            <span>
-              {findCountryByCode(user?.country)?.name || user?.country || "—"}
-            </span>
+            <span>{resolvedCountry?.name || user?.country || "—"}</span>
           </p>
         )}
       </div>
@@ -345,8 +396,17 @@ export function ProfileInfoSection({
         </p>
       </div>
       <div className="flex gap-2">
-        <Button variant="destructive" onClick={onLogout}>
-          {labels.logout}
+        <Button
+          variant="destructive"
+          onClick={onLogout}
+          disabled={isLogoutPending}
+          aria-label={labels.logout}
+        >
+          {isLogoutPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            labels.logout
+          )}
         </Button>
         {!isEditing ? (
           <Button onClick={onStartEdit}>{labels.edit}</Button>

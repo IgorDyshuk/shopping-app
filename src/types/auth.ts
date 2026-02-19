@@ -30,6 +30,7 @@ export type RegisterSellerPayload = RegisterClientPayload & {
 export type LoginResponse = {
   access_token: string;
   refresh_token: string;
+  role_id?: string;
 };
 
 export type RefreshPayload = Record<string, unknown>;

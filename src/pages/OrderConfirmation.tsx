@@ -12,7 +12,7 @@ import {
 import { useCartStore } from "@/stores/use-cart";
 import { useAuthStore } from "@/stores/use-auth";
 import { useOrdersStore } from "@/stores/use-orders";
-import { findCountryByCode } from "@/lib/country";
+import { findCountryByCode, parsePhoneWithCountry } from "@/lib/country";
 import { LoginForm } from "@/components/login-form";
 import { ContactDetailsCard } from "@/components/pages/OrderConfirmation/ContactDetailsCard";
 import { OrderCard } from "@/components/pages/OrderConfirmation/OrderCard";
@@ -54,13 +54,7 @@ function OrderConfirmationPage() {
   const addOrder = useOrdersStore((state) => state.addOrder);
 
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
-  const parsePhone = (value?: string) => {
-    const match = value?.match(/^(\+\d+)\s*(.*)$/);
-    return {
-      code: match?.[1] ?? "+380",
-      number: match?.[2]?.replace(/\D/g, "") ?? "",
-    };
-  };
+  const parsePhone = (value?: string) => parsePhoneWithCountry(value, "+380");
   const parsedPhone = parsePhone(user?.phone);
 
   const [countryCode, setCountryCode] = useState(parsedPhone.code);

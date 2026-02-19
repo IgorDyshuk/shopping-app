@@ -93,6 +93,7 @@
       "separator": "Або продовжуйте з",
       "forgot": "Забули пароль?",
       "submit": "Увійти",
+      "invalidCredentials": "Неправильний email або пароль",
       "footer": "Немає аккаунта?",
       "footerLink": "Зареєструватися"
     },

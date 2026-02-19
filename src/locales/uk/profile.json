@@ -60,7 +60,9 @@
     "password": "Пароль",
     "phone": "Телефон",
     "country": "Країна",
-    "role": "Роль"
+    "role": "Роль",
+    "companyName": "Назва компанії",
+    "bankDetails": "Банківські реквізити"
   },
   "actions": {
     "logout": "Вийти",

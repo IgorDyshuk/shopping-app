@@ -58,11 +58,16 @@ export function LoginForm({
         navigate("/profile");
       }
     } catch (error) {
+      const fallbackMessage = "Login failed";
       const message =
-        error instanceof Error && error.message
-          ? error.message
-          : "Login failed";
-      toast.error(message);
+        error instanceof Error && error.message ? error.message : fallbackMessage;
+      const localizedMessage =
+        message === "AUTH_INVALID_CREDENTIALS"
+          ? t("authForm.login.invalidCredentials", {
+              defaultValue: "Incorrect email or password",
+            })
+          : message;
+      toast.error(localizedMessage || fallbackMessage);
     }
   };
 

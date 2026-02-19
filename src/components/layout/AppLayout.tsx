@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
 import { AppSidebar } from "@/components/layout/Header/SideBar/app-sidebar";
@@ -16,17 +16,24 @@ export function AppLayout({ children }: AppLayoutProps) {
   const showSidebar = useMediaQuery("(max-width: 1131px)");
   const { pathname } = useLocation();
   const { closeSidebar } = useSidebar();
+  const prevPathRef = useRef(pathname);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   useEffect(() => {
-    if (!showSidebar) return;
-    if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
+    if (!showSidebar) {
+      prevPathRef.current = pathname;
+      return;
+    }
+    const isAuthPage = (path: string) =>
+      path.startsWith("/login") || path.startsWith("/signup");
+    if (isAuthPage(pathname)) {
       closeSidebar();
     }
-  }, [showSidebar, pathname, closeSidebar]);
+    prevPathRef.current = pathname;
+  }, [pathname, showSidebar, closeSidebar]);
 
   return (
     <>

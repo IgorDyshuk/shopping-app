@@ -9,16 +9,18 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { User, Heart, ShoppingBag, Boxes } from "lucide-react";
+import axios from "axios";
 
 import { useAuthStore } from "@/stores/use-auth";
 import { useOrdersStore } from "@/stores/use-orders";
-import { useFavoritesStore } from "@/stores/use-favorites";
 import countryCodes from "@/constants/CountriesCode.json";
-import { useProducts } from "@/hooks/api-hooks/useProducts";
+import { useProductsNew } from "@/hooks/api-hooks/useProducts";
 import { useLogout } from "@/hooks/api-hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { API_CONFIG } from "@/lib/apiConfig";
+import { findCountryByCode, parsePhoneWithCountry } from "@/lib/country";
 import {
   ProfileSidebar,
   type SidebarItem,
@@ -41,77 +43,97 @@ function ProfilePage() {
   // Redirect unauthenticated users to login
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/login");
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
   const { data: allProducts = [], isLoading: isLoadingProducts } =
-    useProducts();
+    useProductsNew({ offset: 0, limit: 50 });
   const orders = useOrdersStore((state) => state.orders);
-  const favoriteIds = useFavoritesStore((state) => state.ids);
   const isSeller = user?.role === "seller";
 
   const parseTab = (value: string | null): ProfileTab => {
     if (value === "favorites" || value === "orders") return value;
-    if ((value === "my-items" || value === "add-item") && isSeller) return value;
+    if ((value === "my-items" || value === "add-item") && isSeller)
+      return value;
     return "profile";
   };
   const [activeTab, setActiveTab] = useState<ProfileTab>(() =>
-    parseTab(searchParams.get("tab"))
+    parseTab(searchParams.get("tab")),
   );
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
-    undefined
+    undefined,
   );
 
-  const parsePhone = (value?: string) => {
-    const match = value?.match(/^(\+\d+)\s*(.*)$/);
-    return {
-      code: match?.[1] ?? "+380",
-      number: match?.[2]?.replace(/\D/g, "") ?? "",
-    };
-  };
+  const parsePhone = (value?: string) => parsePhoneWithCountry(value, "+380");
   const parsedPhone = parsePhone(user?.phone);
+  const resolveCountryInput = (value?: string, phone?: string) => {
+    const fromCountry = findCountryByCode(value);
+    if (fromCountry?.code) return fromCountry.code;
+    if (phone) {
+      const fromPhone = findCountryByCode(parsePhone(phone).code);
+      if (fromPhone?.code) return fromPhone.code;
+    }
+    return countryCodes[0]?.code ?? "";
+  };
 
   const [usernameInput, setUsernameInput] = useState(user?.username ?? "");
   const [firstNameInput, setFirstNameInput] = useState(
-    user?.name?.firstname ?? ""
+    user?.name?.firstname ?? "",
   );
-  const handleShowTokenInfo = () => {
-    const token = localStorage.getItem("auth_token");
-    if (!token) {
-      toast.error("Access token not found");
-      return;
-    }
+  const handleShowTokenInfo = async () => {
+    const sizes = ["XS"];
+    const token = localStorage.getItem(API_CONFIG.authTokenKey);
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const msToExp = payload.exp * 1000 - Date.now();
-      const expiresAt = new Date(payload.exp * 1000);
-      toast.message("Token info", {
-        description: `exp in ${(msToExp / 1000).toFixed(0)}s (${expiresAt.toLocaleString()})`,
+      const res = await axios.request({
+        url: "/products",
+        method: "get",
+        params: { offset: 0, limit: 20, state: "new", sizes: ["XS"] },
+        data: sizes,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        baseURL: "", // use Vite proxy
       });
-      // also log full payload for debugging
       // eslint-disable-next-line no-console
-      console.log("[auth token payload]", payload);
-    } catch (error) {
-      toast.error("Cannot parse token");
+      console.log(res.data);
+      toast.success("Products fetched", {
+        description: `Получено: ${
+          Array.isArray(res.data) ? res.data.length : 0
+        }`,
+      });
+    } catch (err: any) {
+      const message =
+        err?.response?.data?.detail ??
+        err?.response?.data?.message ??
+        err?.message ??
+        "Failed to fetch products";
+      // eslint-disable-next-line no-console
+      console.error(err?.response?.data || err);
+      toast.error(message);
     }
   };
   const [lastNameInput, setLastNameInput] = useState(
-    user?.name?.lastname ?? ""
+    user?.name?.lastname ?? "",
   );
   const [emailInput, setEmailInput] = useState(user?.email ?? "");
   const [countryCode, setCountryCode] = useState(parsedPhone.code);
   const [phoneInput, setPhoneInput] = useState(parsedPhone.number);
   const [countryInput, setCountryInput] = useState(
-    user?.country ?? countryCodes[0]?.code ?? ""
+    resolveCountryInput(user?.country, user?.phone),
   );
   const [passwordInput, setPasswordInput] = useState(user?.password ?? "");
-
-  const favoriteProducts = useMemo(
-    () => allProducts.filter((p) => favoriteIds.includes(p.id)),
-    [allProducts, favoriteIds]
+  const [companyNameInput, setCompanyNameInput] = useState(
+    user?.company_name ?? "",
   );
+  const [bankDetailsInput, setBankDetailsInput] = useState(
+    user?.bank_details_id ?? "",
+  );
+
+  const favoriteProducts = useMemo(() => allProducts, [allProducts]);
 
   const handleLogOut = () => {
     logoutRequest(undefined, {
@@ -131,8 +153,10 @@ function ProfilePage() {
     const parsed = parsePhone(user?.phone);
     setCountryCode(parsed.code);
     setPhoneInput(parsed.number);
-    setCountryInput(user?.country ?? parsed.code);
+    setCountryInput(resolveCountryInput(user?.country, user?.phone));
     setPasswordInput(user?.password ?? "");
+    setCompanyNameInput(user?.company_name ?? "");
+    setBankDetailsInput(user?.bank_details_id ?? "");
   };
 
   const handleSave = () => {
@@ -148,6 +172,14 @@ function ProfilePage() {
         lastname: lastNameInput || user.name?.lastname,
       },
       password: passwordInput || user.password,
+      company_name:
+        user.role === "seller"
+          ? companyNameInput || user.company_name
+          : user.company_name,
+      bank_details_id:
+        user.role === "seller"
+          ? bankDetailsInput || user.bank_details_id || null
+          : user.bank_details_id,
     };
     setUser(nextUser);
     setIsEditing(false);
@@ -162,40 +194,39 @@ function ProfilePage() {
     const parsed = parsePhone(user?.phone);
     setCountryCode(parsed.code);
     setPhoneInput(parsed.number);
-    setCountryInput(user?.country ?? parsed.code);
+    setCountryInput(resolveCountryInput(user?.country, user?.phone));
     setPasswordInput(user?.password ?? "");
+    setCompanyNameInput(user?.company_name ?? "");
+    setBankDetailsInput(user?.bank_details_id ?? "");
   };
 
-  const sidebarItems = useMemo(
-    () => {
-      const base: SidebarItem[] = [
-        {
-          id: "profile",
-          label: t("tabs.profile", { ns: "profile" }),
-          icon: User,
-        },
-        {
-          id: "favorites",
-          label: t("tabs.favorites", { ns: "profile" }),
-          icon: Heart,
-        },
-        {
-          id: "orders",
-          label: t("tabs.orders", { ns: "profile" }),
-          icon: ShoppingBag,
-        },
-      ];
-      if (isSeller) {
-        base.push({
-          id: "my-items",
-          label: t("tabs.myItems", { ns: "profile" }),
-          icon: Boxes,
-        });
-      }
-      return base;
-    },
-    [t, isSeller]
-  );
+  const sidebarItems = useMemo(() => {
+    const base: SidebarItem[] = [
+      {
+        id: "profile",
+        label: t("tabs.profile", { ns: "profile" }),
+        icon: User,
+      },
+      {
+        id: "favorites",
+        label: t("tabs.favorites", { ns: "profile" }),
+        icon: Heart,
+      },
+      {
+        id: "orders",
+        label: t("tabs.orders", { ns: "profile" }),
+        icon: ShoppingBag,
+      },
+    ];
+    if (isSeller) {
+      base.push({
+        id: "my-items",
+        label: t("tabs.myItems", { ns: "profile" }),
+        icon: Boxes,
+      });
+    }
+    return base;
+  }, [t, isSeller]);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
@@ -264,34 +295,38 @@ function ProfilePage() {
                 {activeTab === "profile"
                   ? t("pageTitle.profile", { ns: "profile" })
                   : activeTab === "favorites"
-                  ? t("pageTitle.favorites", { ns: "profile" })
-                  : activeTab === "orders"
-                  ? t("pageTitle.orders", { ns: "profile" })
-                  : activeTab === "my-items"
-                  ? t("pageTitle.myItems", { ns: "profile" })
-                  : editingProduct
-                  ? t("pageTitle.editItem", { ns: "profile" })
-            : t("pageTitle.addItem", { ns: "profile" })}
-          </CardTitle>
-          <div className="flex gap-2">
-            {import.meta.env.DEV && (
-              <Button variant="outline" size="sm" onClick={handleShowTokenInfo}>
-                Token info
-              </Button>
-            )}
-            {activeTab === "my-items" && isSeller && (
-              <Button
-                onClick={() => {
-                  setEditingProduct(undefined);
-                  handleTabChange("add-item");
-                }}
-              >
-                + {t("myItems.addButton", { ns: "profile" })}
-              </Button>
-            )}
-          </div>
-        </div>
-      </CardHeader>
+                    ? t("pageTitle.favorites", { ns: "profile" })
+                    : activeTab === "orders"
+                      ? t("pageTitle.orders", { ns: "profile" })
+                      : activeTab === "my-items"
+                        ? t("pageTitle.myItems", { ns: "profile" })
+                        : editingProduct
+                          ? t("pageTitle.editItem", { ns: "profile" })
+                          : t("pageTitle.addItem", { ns: "profile" })}
+              </CardTitle>
+              <div className="flex gap-2">
+                {import.meta.env.DEV && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleShowTokenInfo}
+                  >
+                    Token info
+                  </Button>
+                )}
+                {activeTab === "my-items" && isSeller && (
+                  <Button
+                    onClick={() => {
+                      setEditingProduct(undefined);
+                      handleTabChange("add-item");
+                    }}
+                  >
+                    + {t("myItems.addButton", { ns: "profile" })}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardHeader>
           <CardContent
             className={`space-y-4 ${activeTab === "profile" ? "" : "px-0"}`}
           >
@@ -320,6 +355,8 @@ function ProfilePage() {
                 lastNameInput={lastNameInput}
                 emailInput={emailInput}
                 passwordInput={passwordInput}
+                companyNameInput={companyNameInput}
+                bankDetailsInput={bankDetailsInput}
                 countryCode={countryCode}
                 phoneInput={phoneInput}
                 countryInput={countryInput}
@@ -328,10 +365,13 @@ function ProfilePage() {
                 onLastNameChange={setLastNameInput}
                 onEmailChange={setEmailInput}
                 onPasswordChange={setPasswordInput}
+                onCompanyNameChange={setCompanyNameInput}
+                onBankDetailsChange={setBankDetailsInput}
                 onCountryCodeChange={setCountryCode}
                 onPhoneChange={setPhoneInput}
                 onCountryInputChange={setCountryInput}
                 onLogout={handleLogOut}
+                isLogoutPending={isLogoutPending}
                 onStartEdit={startEdit}
                 onSave={handleSave}
                 onCancel={handleCancelEdit}
@@ -344,6 +384,8 @@ function ProfilePage() {
                   phone: t("fields.phone", { ns: "profile" }),
                   country: t("fields.country", { ns: "profile" }),
                   role: t("fields.role", { ns: "profile" }),
+                  companyName: t("fields.companyName", { ns: "profile" }),
+                  bankDetails: t("fields.bankDetails", { ns: "profile" }),
                   logout: t("actions.logout", { ns: "profile" }),
                   edit: t("actions.edit", { ns: "profile" }),
                   save: t("actions.save", { ns: "profile" }),

@@ -14,6 +14,14 @@ type OrdersSectionProps = {
 export function OrdersSection({ orders, t }: OrdersSectionProps) {
   const navigate = useNavigate();
 
+  if (!orders.length) {
+    return (
+      <p className="text-sm text-muted-foreground px-1">
+        {t("orders.empty", { ns: "profile", defaultValue: "No orders." })}
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {orders.map((order) => {
@@ -24,7 +32,7 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
         const createdDate = new Date(order.createdAt).toLocaleDateString();
         const itemsTotal = order.items.reduce(
           (sum, item) => sum + (item.product.price ?? 0) * item.quantity,
-          0
+          0,
         );
 
         return (
@@ -158,9 +166,9 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                 <div className="space-y-3">
                   {order.items.map((item) => {
                     const productUrl = `/category/${encodeURIComponent(
-                      item.product.category
+                      item.product.category,
                     )}/${item.product.id}?size=${encodeURIComponent(
-                      item.size ?? ""
+                      item.size ?? "",
                     )}`;
 
                     return (
@@ -193,7 +201,7 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
                         <div className="text-sm font-semibold">
                           $
                           {((item.product.price ?? 0) * item.quantity).toFixed(
-                            2
+                            2,
                           )}
                         </div>
                       </div>

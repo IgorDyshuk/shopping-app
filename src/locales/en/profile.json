@@ -60,7 +60,9 @@
     "password": "Password",
     "phone": "Phone",
     "country": "Country",
-    "role": "Role"
+    "role": "Role",
+    "companyName": "Company name",
+    "bankDetails": "Bank details"
   },
   "actions": {
     "logout": "Logout",

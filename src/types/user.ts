@@ -9,6 +9,7 @@ export type User = {
   country?: string;
   role?: "seller" | "buyer";
   company_name?: string;
+  bank_details_id?: string | null;
   accepts_marketing?: boolean;
   name?: {
     firstname?: string;
@@ -20,7 +21,20 @@ export type ClientProfile = {
   email: string;
   username: string;
   phone: string;
+  first_name: string;
+  last_name: string;
   accepts_marketing: boolean;
+};
+
+export type SellerProfile = {
+  email: string;
+  username: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  company_name: string;
+  bank_details_id: string | null;
+  is_verified: boolean;
 };
 
 export type CreateUserPayload = {

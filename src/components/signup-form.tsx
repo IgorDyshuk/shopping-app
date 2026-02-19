@@ -26,7 +26,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@/components/ui/native-select";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { findCountryByCode } from "@/lib/country";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
@@ -114,7 +114,7 @@ export function SignupForm({
         phone: `${countryCode}${phoneNumber.trim()}`,
         country: selectedCountry.code || selectedCountry.dial_code,
         role,
-        company_name: companyName.trim() || undefined,
+        company_name: role === "seller" ? companyName.trim() : undefined,
         password,
         name: {
           firstname: firstName.trim(),
@@ -123,7 +123,7 @@ export function SignupForm({
       },
       {
         onSuccess: () => {
-          toast.message("Account created");
+          toast.success("Account created");
           onSuccess?.();
           navigate("/profile");
         },
@@ -149,6 +149,49 @@ export function SignupForm({
         </CardHeader>
         <CardContent className="px-3 sm:px-6">
           <form onSubmit={handleSubmit}>
+            <div className="mb-5">
+              <div className="relative flex rounded-full bg-muted p-1">
+                <div
+                  className={cn(
+                    "absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-background shadow transition-transform duration-200",
+                    role === "seller" && "translate-x-full",
+                  )}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRole("buyer");
+                    setCompanyName("");
+                  }}
+                  className={cn(
+                    "relative z-10 flex-1 rounded-full px-3 py-1.25 text-sm font-medium transition-colors",
+                    role === "buyer"
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                  aria-pressed={role === "buyer"}
+                >
+                  {t("authForm.fields.roles.buyer", {
+                    defaultValue: "Buyer",
+                  })}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole("seller")}
+                  className={cn(
+                    "relative z-10 flex-1 rounded-full px-3 py-1.25 text-sm font-medium transition-colors",
+                    role === "seller"
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                  aria-pressed={role === "seller"}
+                >
+                  {t("authForm.fields.roles.seller", {
+                    defaultValue: "Seller",
+                  })}
+                </button>
+              </div>
+            </div>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="first-name">
@@ -272,30 +315,6 @@ export function SignupForm({
                   />
                 </div>
               </Field>
-              <Field>
-                <FieldLabel htmlFor="role">
-                  {t("authForm.fields.role", { defaultValue: "Role" })}
-                </FieldLabel>
-                <NativeSelect
-                  id="role"
-                  value={role}
-                  onChange={(e) =>
-                    setRole(e.target.value as "buyer" | "seller")
-                  }
-                  className="w-full"
-                >
-                  <NativeSelectOption value="buyer">
-                    {t("authForm.fields.roles.buyer", {
-                      defaultValue: "Buyer",
-                    })}
-                  </NativeSelectOption>
-                  <NativeSelectOption value="seller">
-                    {t("authForm.fields.roles.seller", {
-                      defaultValue: "Seller",
-                    })}
-                  </NativeSelectOption>
-                </NativeSelect>
-              </Field>
               {role === "seller" && (
                 <Field>
                   <FieldLabel htmlFor="company-name">
@@ -406,9 +425,11 @@ export function SignupForm({
               </Field>
               <Field>
                 <Button type="submit" disabled={isPending}>
-                  {isPending
-                    ? t("search.loading")
-                    : t("authForm.signup.submit")}
+                  {isPending ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    t("authForm.signup.submit")
+                  )}
                 </Button>
                 <FieldDescription className="text-center">
                   {t("authForm.signup.footer")}{" "}

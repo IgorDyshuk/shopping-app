@@ -139,10 +139,10 @@ export function NavUser({
                 logoutRequest(undefined, {
                   onSettled: () => {
                     storeLogout();
-                    closeSidebar();
                     navigate("/");
                   },
                 });
+                closeSidebar();
               }}
             >
               <LogOut />
