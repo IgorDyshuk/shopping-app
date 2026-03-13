@@ -1,10 +1,15 @@
 import { api } from "./client";
 import { API_CONFIG } from "@/lib/apiConfig";
-import type { ClientProfile, SellerProfile } from "@/types/user";
+import type {
+  ClientProfile,
+  SellerBankDetailsPayload,
+  SellerProfile,
+} from "@/types/user";
 
 const identityBase = API_CONFIG.identityBaseURL.replace(/\/+$/, "");
 const clientProfilePath = "/profiles/client/me";
 const sellerProfilePath = "/profiles/seller/me";
+const sellerBankDetailsPath = "/profiles/seller/me/bank-details";
 const useProxy =
   import.meta.env.VITE_IDENTITY_USE_PROXY !== undefined
     ? import.meta.env.VITE_IDENTITY_USE_PROXY === "true"
@@ -29,6 +34,20 @@ export const profileApi = {
       timeout: API_CONFIG.timeoutMs,
       ...(useProxy ? { baseURL: "" } : {}),
       headers: NGROK_SKIP_HEADER,
+    });
+    return response.data;
+  },
+  createSellerBankDetails: async (payload: SellerBankDetailsPayload) => {
+    const url = useProxy
+      ? sellerBankDetailsPath
+      : `${identityBase}${sellerBankDetailsPath}`;
+    const response = await api.post<string>(url, payload, {
+      timeout: API_CONFIG.timeoutMs,
+      ...(useProxy ? { baseURL: "" } : {}),
+      headers: {
+        ...NGROK_SKIP_HEADER,
+        "Content-Type": "application/json",
+      },
     });
     return response.data;
   },

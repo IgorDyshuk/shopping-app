@@ -37,6 +37,8 @@
     "selectOption": "Select",
     "images": "Product photos",
     "selectedImages": "{{count}} file(s) selected",
+    "imageAlt": "Image alt text (optional)",
+    "imageAltPlaceholder": "If empty, the title will be used",
     "brand": "Brand",
     "material": "Material",
     "size": "Size (select all that apply)",
@@ -63,6 +65,21 @@
     "role": "Role",
     "companyName": "Company name",
     "bankDetails": "Bank details"
+  },
+  "bankDetailsForm": {
+    "title": "Send bank details",
+    "view": "View bank details",
+    "update": "Update bank details",
+    "accountNumber": "Account number",
+    "bik": "BIK",
+    "bankName": "Bank name",
+    "inn": "INN",
+    "submit": "Submit bank details",
+    "success": "Bank details sent successfully",
+    "error": "Failed to send bank details",
+    "validation": {
+      "required": "Fill in all bank details fields"
+    }
   },
   "actions": {
     "logout": "Logout",

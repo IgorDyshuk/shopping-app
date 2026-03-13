@@ -16,6 +16,7 @@ import { useOrdersStore } from "@/stores/use-orders";
 import countryCodes from "@/constants/CountriesCode.json";
 import { useProductsNew } from "@/hooks/api-hooks/useProducts";
 import { useLogout } from "@/hooks/api-hooks/useAuth";
+import { useCreateSellerBankDetails } from "@/hooks/api-hooks/useProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -40,14 +41,16 @@ function ProfilePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated, logout, setUser } = useAuthStore();
   const { mutate: logoutRequest, isPending: isLogoutPending } = useLogout();
+  const {
+    mutateAsync: createBankDetails,
+    isPending: isSubmittingBankDetails,
+  } = useCreateSellerBankDetails();
   // Redirect unauthenticated users to login
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  const { data: allProducts = [], isLoading: isLoadingProducts } =
-    useProductsNew({ offset: 0, limit: 50 });
   const orders = useOrdersStore((state) => state.orders);
   const isSeller = user?.role === "seller";
 
@@ -60,6 +63,11 @@ function ProfilePage() {
   const [activeTab, setActiveTab] = useState<ProfileTab>(() =>
     parseTab(searchParams.get("tab")),
   );
+  const { data: allProducts = [], isLoading: isLoadingProducts } =
+    useProductsNew(
+      { offset: 0, limit: 20, state: "new", size: ["XS"] },
+      { enabled: activeTab === "my-items" },
+    );
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
@@ -83,20 +91,19 @@ function ProfilePage() {
     user?.name?.firstname ?? "",
   );
   const handleShowTokenInfo = async () => {
-    const sizes = ["XS"];
     const token = localStorage.getItem(API_CONFIG.authTokenKey);
     try {
-      const res = await axios.request({
-        url: "/products",
-        method: "get",
-        params: { offset: 0, limit: 20, state: "new", sizes: ["XS"] },
-        data: sizes,
+      const res = await axios.get("/products", {
+        params: { offset: 0, limit: 20, state: "new", size: ["XS"] },
+        paramsSerializer: {
+          indexes: null,
+        },
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        baseURL: "", // use Vite proxy
       });
       // eslint-disable-next-line no-console
       console.log(res.data);
@@ -129,9 +136,10 @@ function ProfilePage() {
   const [companyNameInput, setCompanyNameInput] = useState(
     user?.company_name ?? "",
   );
-  const [bankDetailsInput, setBankDetailsInput] = useState(
-    user?.bank_details_id ?? "",
-  );
+  const [bankAccountNumberInput, setBankAccountNumberInput] = useState("");
+  const [bankBikInput, setBankBikInput] = useState("");
+  const [bankNameInput, setBankNameInput] = useState("");
+  const [bankInnInput, setBankInnInput] = useState("");
 
   const favoriteProducts = useMemo(() => allProducts, [allProducts]);
 
@@ -156,7 +164,6 @@ function ProfilePage() {
     setCountryInput(resolveCountryInput(user?.country, user?.phone));
     setPasswordInput(user?.password ?? "");
     setCompanyNameInput(user?.company_name ?? "");
-    setBankDetailsInput(user?.bank_details_id ?? "");
   };
 
   const handleSave = () => {
@@ -176,10 +183,7 @@ function ProfilePage() {
         user.role === "seller"
           ? companyNameInput || user.company_name
           : user.company_name,
-      bank_details_id:
-        user.role === "seller"
-          ? bankDetailsInput || user.bank_details_id || null
-          : user.bank_details_id,
+      bank_details_id: user.bank_details_id,
     };
     setUser(nextUser);
     setIsEditing(false);
@@ -197,7 +201,46 @@ function ProfilePage() {
     setCountryInput(resolveCountryInput(user?.country, user?.phone));
     setPasswordInput(user?.password ?? "");
     setCompanyNameInput(user?.company_name ?? "");
-    setBankDetailsInput(user?.bank_details_id ?? "");
+  };
+
+  const handleSubmitBankDetails = async () => {
+    if (!user || user.role !== "seller") return false;
+
+    const account_number = bankAccountNumberInput.trim();
+    const bik = bankBikInput.trim();
+    const bank_name = bankNameInput.trim();
+    const inn = bankInnInput.trim();
+
+    if (!account_number || !bik || !bank_name || !inn) {
+      toast.error(t("bankDetailsForm.validation.required", { ns: "profile" }));
+      return false;
+    }
+
+    try {
+      const response = await createBankDetails({
+        account_number,
+        bik,
+        bank_name,
+        inn,
+      });
+      const nextBankDetailsId =
+        typeof response === "string" && response.trim().length > 0
+          ? response.trim()
+          : user.bank_details_id ?? null;
+      setUser({
+        ...user,
+        bank_details_id: nextBankDetailsId,
+      });
+      toast.success(t("bankDetailsForm.success", { ns: "profile" }));
+      return true;
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : t("bankDetailsForm.error", { ns: "profile" });
+      toast.error(message || t("bankDetailsForm.error", { ns: "profile" }));
+      return false;
+    }
   };
 
   const sidebarItems = useMemo(() => {
@@ -356,7 +399,10 @@ function ProfilePage() {
                 emailInput={emailInput}
                 passwordInput={passwordInput}
                 companyNameInput={companyNameInput}
-                bankDetailsInput={bankDetailsInput}
+                bankAccountNumberInput={bankAccountNumberInput}
+                bankBikInput={bankBikInput}
+                bankNameInput={bankNameInput}
+                bankInnInput={bankInnInput}
                 countryCode={countryCode}
                 phoneInput={phoneInput}
                 countryInput={countryInput}
@@ -366,7 +412,10 @@ function ProfilePage() {
                 onEmailChange={setEmailInput}
                 onPasswordChange={setPasswordInput}
                 onCompanyNameChange={setCompanyNameInput}
-                onBankDetailsChange={setBankDetailsInput}
+                onBankAccountNumberChange={setBankAccountNumberInput}
+                onBankBikChange={setBankBikInput}
+                onBankNameChange={setBankNameInput}
+                onBankInnChange={setBankInnInput}
                 onCountryCodeChange={setCountryCode}
                 onPhoneChange={setPhoneInput}
                 onCountryInputChange={setCountryInput}
@@ -375,6 +424,8 @@ function ProfilePage() {
                 onStartEdit={startEdit}
                 onSave={handleSave}
                 onCancel={handleCancelEdit}
+                onSubmitBankDetails={handleSubmitBankDetails}
+                isBankDetailsSubmitting={isSubmittingBankDetails}
                 labels={{
                   username: t("fields.username", { ns: "profile" }),
                   firstName: t("fields.firstName", { ns: "profile" }),
@@ -386,6 +437,24 @@ function ProfilePage() {
                   role: t("fields.role", { ns: "profile" }),
                   companyName: t("fields.companyName", { ns: "profile" }),
                   bankDetails: t("fields.bankDetails", { ns: "profile" }),
+                  bankDetailsFormTitle: t("bankDetailsForm.title", {
+                    ns: "profile",
+                  }),
+                  bankAccountNumber: t("bankDetailsForm.accountNumber", {
+                    ns: "profile",
+                  }),
+                  bankBik: t("bankDetailsForm.bik", { ns: "profile" }),
+                  bankName: t("bankDetailsForm.bankName", { ns: "profile" }),
+                  bankInn: t("bankDetailsForm.inn", { ns: "profile" }),
+                  viewBankDetailsLabel: t("bankDetailsForm.view", {
+                    ns: "profile",
+                  }),
+                  updateBankDetailsLabel: t("bankDetailsForm.update", {
+                    ns: "profile",
+                  }),
+                  submitBankDetails: t("bankDetailsForm.submit", {
+                    ns: "profile",
+                  }),
                   logout: t("actions.logout", { ns: "profile" }),
                   edit: t("actions.edit", { ns: "profile" }),
                   save: t("actions.save", { ns: "profile" }),

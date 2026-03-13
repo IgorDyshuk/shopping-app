@@ -1,9 +1,17 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -35,7 +43,10 @@ type ProfileInfoSectionProps = {
   emailInput: string;
   passwordInput: string;
   companyNameInput: string;
-  bankDetailsInput: string;
+  bankAccountNumberInput: string;
+  bankBikInput: string;
+  bankNameInput: string;
+  bankInnInput: string;
   countryCode: string;
   phoneInput: string;
   countryInput: string;
@@ -45,7 +56,10 @@ type ProfileInfoSectionProps = {
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onCompanyNameChange: (value: string) => void;
-  onBankDetailsChange: (value: string) => void;
+  onBankAccountNumberChange: (value: string) => void;
+  onBankBikChange: (value: string) => void;
+  onBankNameChange: (value: string) => void;
+  onBankInnChange: (value: string) => void;
   onCountryCodeChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onCountryInputChange: (value: string) => void;
@@ -54,6 +68,8 @@ type ProfileInfoSectionProps = {
   onStartEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
+  onSubmitBankDetails: () => Promise<boolean> | boolean;
+  isBankDetailsSubmitting?: boolean;
   labels: {
     username: string;
     firstName: string;
@@ -65,6 +81,14 @@ type ProfileInfoSectionProps = {
     role: string;
     companyName: string;
     bankDetails: string;
+    bankDetailsFormTitle: string;
+    bankAccountNumber: string;
+    bankBik: string;
+    bankName: string;
+    bankInn: string;
+    viewBankDetailsLabel: string;
+    updateBankDetailsLabel: string;
+    submitBankDetails: string;
     logout: string;
     edit: string;
     save: string;
@@ -83,7 +107,10 @@ export function ProfileInfoSection({
   emailInput,
   passwordInput,
   companyNameInput,
-  bankDetailsInput,
+  bankAccountNumberInput,
+  bankBikInput,
+  bankNameInput,
+  bankInnInput,
   countryCode,
   phoneInput,
   countryInput,
@@ -93,7 +120,10 @@ export function ProfileInfoSection({
   onEmailChange,
   onPasswordChange,
   onCompanyNameChange,
-  onBankDetailsChange,
+  onBankAccountNumberChange,
+  onBankBikChange,
+  onBankNameChange,
+  onBankInnChange,
   onCountryCodeChange,
   onPhoneChange,
   onCountryInputChange,
@@ -102,10 +132,15 @@ export function ProfileInfoSection({
   onStartEdit,
   onSave,
   onCancel,
+  onSubmitBankDetails,
+  isBankDetailsSubmitting = false,
   labels,
 }: ProfileInfoSectionProps) {
   const { t } = useTranslation();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const [isBankDetailsViewDialogOpen, setIsBankDetailsViewDialogOpen] =
+    useState(false);
+  const [isBankDetailsDialogOpen, setIsBankDetailsDialogOpen] = useState(false);
   const PHONE_REQUIRED_LENGTH = 9;
 
   const formatLocalPhone = (digits: string) => {
@@ -143,6 +178,19 @@ export function ProfileInfoSection({
       return;
     }
     onSave();
+  };
+
+  const handleBankDetailsSubmit = async () => {
+    const isSuccess = await onSubmitBankDetails();
+    if (isSuccess) {
+      setIsBankDetailsDialogOpen(false);
+      setIsBankDetailsViewDialogOpen(true);
+    }
+  };
+
+  const handleOpenSubmitDialog = () => {
+    setIsBankDetailsViewDialogOpen(false);
+    setIsBankDetailsDialogOpen(true);
   };
 
   return (
@@ -250,7 +298,7 @@ export function ProfileInfoSection({
       </div>
       {user?.role === "seller" && (
         <div className="grid gap-2 md:grid-cols-2">
-          <div>
+          <div className="">
             <p className="text-sm text-muted-foreground">
               {labels.companyName}
             </p>
@@ -266,22 +314,145 @@ export function ProfileInfoSection({
               </p>
             )}
           </div>
-          <div>
-            <p className="text-sm text-muted-foreground">
-              {labels.bankDetails}
-            </p>
-            {isEditing ? (
-              <Input
-                placeholder={user?.bank_details_id || "—"}
-                value={bankDetailsInput}
-                onChange={(e) => onBankDetailsChange(e.target.value)}
-              />
-            ) : (
-              <p className="text-base font-medium">
-                {user?.bank_details_id || "—"}
-              </p>
-            )}
-          </div>
+
+          <Dialog
+            open={isBankDetailsViewDialogOpen}
+            onOpenChange={setIsBankDetailsViewDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  {labels.bankDetails}
+                </p>
+                <Button variant="outline" size="sm" className="w-fit">
+                  {labels.viewBankDetailsLabel}
+                </Button>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{labels.bankDetails}</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankAccountNumber}
+                  </p>
+                  <p className="border rounded-sm py-0.5 px-2">
+                    {bankAccountNumberInput ? bankAccountNumberInput : "-"}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankInn}
+                  </p>
+                  <p className="border rounded-sm  py-0.5 px-2">
+                    {bankInnInput ? bankInnInput : "-"}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankName}
+                  </p>
+                  <p className="border rounded-sm py-0.5 px-2">
+                    {bankNameInput ? bankNameInput : "-"}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankBik}
+                  </p>
+                  <p className="border rounded-sm py-0.5 px-2">
+                    {bankBikInput ? bankBikInput : "-"}
+                  </p>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsBankDetailsViewDialogOpen(false)}
+                >
+                  {labels.cancel}
+                </Button>
+                <Button onClick={handleOpenSubmitDialog}>
+                  {labels.updateBankDetailsLabel}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog
+            open={isBankDetailsDialogOpen}
+            onOpenChange={setIsBankDetailsDialogOpen}
+          >
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{labels.bankDetailsFormTitle}</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 md:grid-cols-2">
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankAccountNumber}
+                  </p>
+                  <Input
+                    placeholder={labels.bankAccountNumber}
+                    value={bankAccountNumberInput}
+                    onChange={(e) => onBankAccountNumberChange(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankBik}
+                  </p>
+                  <Input
+                    placeholder={labels.bankBik}
+                    value={bankBikInput}
+                    onChange={(e) => onBankBikChange(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankName}
+                  </p>
+                  <Input
+                    placeholder={labels.bankName}
+                    value={bankNameInput}
+                    onChange={(e) => onBankNameChange(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {labels.bankInn}
+                  </p>
+                  <Input
+                    placeholder={labels.bankInn}
+                    value={bankInnInput}
+                    onChange={(e) => onBankInnChange(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsBankDetailsDialogOpen(false)}
+                  disabled={isBankDetailsSubmitting}
+                >
+                  {labels.cancel}
+                </Button>
+                <Button
+                  onClick={handleBankDetailsSubmit}
+                  disabled={isBankDetailsSubmitting}
+                >
+                  {isBankDetailsSubmitting ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    labels.submitBankDetails
+                  )}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       )}
       <div>

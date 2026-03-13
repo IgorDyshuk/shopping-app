@@ -37,6 +37,13 @@ export type SellerProfile = {
   is_verified: boolean;
 };
 
+export type SellerBankDetailsPayload = {
+  account_number: string;
+  bik: string;
+  bank_name: string;
+  inn: string;
+};
+
 export type CreateUserPayload = {
   username: string;
   email: string;
