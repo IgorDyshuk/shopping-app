@@ -1,22 +1,43 @@
 import axios from "axios";
+import { toast } from "sonner";
 
+import { authApi } from "@/api/auth";
 import { API_CONFIG } from "@/lib/apiConfig";
+import i18n from "@/i18n";
+import { useAuthStore } from "@/stores/use-auth";
+import type { User } from "@/types/user";
 
 export const api = axios.create({
   baseURL: API_CONFIG.baseURL,
   timeout: API_CONFIG.timeoutMs,
 });
 
-const identityBase = (API_CONFIG.identityBaseURL ?? "").replace(/\/+$/, "");
 const refreshPath = "/identity/refresh";
-const useProxy =
-  import.meta.env.VITE_IDENTITY_USE_PROXY !== undefined
-    ? import.meta.env.VITE_IDENTITY_USE_PROXY === "true"
-    : import.meta.env.DEV;
-const NGROK_SKIP_HEADER = { "ngrok-skip-browser-warning": "true" };
 
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
+let lastUnauthorizedToastAt = 0;
+const UNAUTHORIZED_TOAST_COOLDOWN_MS = 5000;
+
+const notifyUnauthorized = () => {
+  const now = Date.now();
+  if (now - lastUnauthorizedToastAt > UNAUTHORIZED_TOAST_COOLDOWN_MS) {
+    lastUnauthorizedToastAt = now;
+    toast.error(
+      i18n.t("auth.sessionExpired", {
+        defaultValue: "Session expired. Please log in again.",
+      }),
+    );
+  }
+  useAuthStore.getState().logout();
+};
+
+const mapRoleIdToUserRole = (roleId?: string): User["role"] => {
+  const roleHint = (roleId ?? "").toLowerCase();
+  if (roleHint.includes("seller") || roleHint.includes("admin")) return "seller";
+  if (roleHint.includes("buyer") || roleHint.includes("client")) return "buyer";
+  return undefined;
+};
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem(API_CONFIG.authTokenKey);
@@ -71,27 +92,24 @@ api.interceptors.response.use(
         }
 
         isRefreshing = true;
-        const refreshUrl = useProxy
-          ? refreshPath
-          : `${identityBase}${refreshPath}`;
 
-        refreshPromise = axios
-          .post<{ access_token: string; refresh_token: string }>(
-            refreshUrl,
-            { refresh_token: refreshToken },
-            {
-              baseURL: useProxy ? "" : undefined,
-              timeout: API_CONFIG.timeoutMs,
-              headers: {
-                ...NGROK_SKIP_HEADER,
-                Authorization: `Bearer ${refreshToken}`,
-              },
-            }
-          )
+        refreshPromise = authApi
+          .refresh({ refresh_token: refreshToken })
           .then((res) => {
-            const { access_token, refresh_token } = res.data;
-            localStorage.setItem(API_CONFIG.authTokenKey, access_token);
-            localStorage.setItem(API_CONFIG.refreshTokenKey, refresh_token);
+            const { access_token, refresh_token, role_id } = res;
+            const authStore = useAuthStore.getState();
+            const currentUser = authStore.user;
+            const roleFromRefresh = mapRoleIdToUserRole(role_id);
+            const nextUser =
+              currentUser && roleFromRefresh
+                ? { ...currentUser, role: roleFromRefresh }
+                : currentUser;
+
+            authStore.login({
+              token: access_token,
+              refreshToken: refresh_token,
+              user: nextUser ?? null,
+            });
             return access_token;
           })
           .catch(() => null)
@@ -105,6 +123,7 @@ api.interceptors.response.use(
 
       return tryRefresh().then((newToken) => {
         if (!newToken) {
+          notifyUnauthorized();
           return Promise.reject(error);
         }
         // retry original request with new token
@@ -112,6 +131,10 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api(originalRequest);
       });
+    }
+
+    if (error.response?.status === 401 && !isAuthRoute) {
+      notifyUnauthorized();
     }
 
     return Promise.reject(error);

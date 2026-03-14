@@ -52,7 +52,8 @@
   "auth": {
     "login": "Log in",
     "signup": "Sign up",
-    "authorization": "Authorization"
+    "authorization": "Authorization",
+    "sessionExpired": "Session expired. Please log in again."
   },
   "usersPage": {
     "title": "Users",

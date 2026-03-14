@@ -56,12 +56,15 @@ export const authApi = {
       })
       .then((res) => res.data);
   },
-  refresh: async (payload: RefreshPayload = {}) => {
+  refresh: async (payload: RefreshPayload) => {
     const url = useProxy ? refreshPath : `${identityBase}${refreshPath}`;
     return axios
       .post<RefreshResponse>(url, payload, {
         timeout: API_CONFIG.timeoutMs,
-        headers: NGROK_SKIP_HEADER,
+        headers: {
+          ...NGROK_SKIP_HEADER,
+          Authorization: `Bearer ${payload.refresh_token}`,
+        },
       })
       .then((res) => res.data);
   },

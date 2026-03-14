@@ -72,6 +72,7 @@ export const useLogin = () =>
               role: "seller",
               company_name: profile.company_name,
               bank_details_id: profile.bank_details_id,
+              is_verified: profile.is_verified,
               password: payload.password,
               name: {
                 firstname: profile.first_name,

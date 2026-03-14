@@ -52,7 +52,8 @@
   "auth": {
     "login": "Увійти",
     "signup": "Реєстрація",
-    "authorization": "Авторизація"
+    "authorization": "Авторизація",
+    "sessionExpired": "Сесія закінчилась. Увійдіть знову."
   },
   "usersPage": {
     "title": "Користувачі",

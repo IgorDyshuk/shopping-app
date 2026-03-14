@@ -33,11 +33,14 @@ export type LoginResponse = {
   role_id?: string;
 };
 
-export type RefreshPayload = Record<string, unknown>;
+export type RefreshPayload = {
+  refresh_token: string;
+};
 
 export type RefreshResponse = {
   access_token: string;
   refresh_token: string;
+  role_id?: string;
 };
 
 export type LogoutResponse = string;
