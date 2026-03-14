@@ -16,7 +16,11 @@ import { useOrdersStore } from "@/stores/use-orders";
 import countryCodes from "@/constants/CountriesCode.json";
 import { useProductsNew } from "@/hooks/api-hooks/useProducts";
 import { useLogout } from "@/hooks/api-hooks/useAuth";
-import { useCreateSellerBankDetails } from "@/hooks/api-hooks/useProfile";
+import {
+  useCreateSellerBankDetails,
+  useUpdateClientProfile,
+  useUpdateSellerProfile,
+} from "@/hooks/api-hooks/useProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -45,6 +49,8 @@ function ProfilePage() {
     mutateAsync: createBankDetails,
     isPending: isSubmittingBankDetails,
   } = useCreateSellerBankDetails();
+  const { mutateAsync: updateClientProfile } = useUpdateClientProfile();
+  const { mutateAsync: updateSellerProfile } = useUpdateSellerProfile();
   // Redirect unauthenticated users to login
   useEffect(() => {
     if (!isAuthenticated) {
@@ -166,8 +172,134 @@ function ProfilePage() {
     setCompanyNameInput(user?.company_name ?? "");
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user) return;
+
+    if (user.role === "buyer") {
+      const payload = {
+        username: usernameInput.trim(),
+        email: emailInput.trim(),
+        phone: `${countryCode} ${phoneInput}`.trim(),
+        first_name: firstNameInput.trim(),
+        last_name: lastNameInput.trim(),
+      };
+
+      const parsedCurrentPhone = parsePhone(user?.phone);
+      const currentPayload = {
+        username: (user.username ?? "").trim(),
+        email: (user.email ?? "").trim(),
+        phone: `${parsedCurrentPhone.code} ${parsedCurrentPhone.number}`.trim(),
+        first_name: (user.name?.firstname ?? "").trim(),
+        last_name: (user.name?.lastname ?? "").trim(),
+      };
+
+      const hasPatchChanges =
+        payload.username !== currentPayload.username ||
+        payload.email !== currentPayload.email ||
+        payload.phone !== currentPayload.phone ||
+        payload.first_name !== currentPayload.first_name ||
+        payload.last_name !== currentPayload.last_name;
+
+      if (!hasPatchChanges) {
+        setIsEditing(false);
+        return;
+      }
+
+      try {
+        const updated = await updateClientProfile(payload);
+        const parsedUpdatedPhone = parsePhone(updated.phone);
+        const countryFromPhone =
+          findCountryByCode(parsedUpdatedPhone.code)?.code ??
+          findCountryByCode(countryCode)?.code ??
+          user.country;
+
+        setUser({
+          ...user,
+          username: updated.username,
+          email: updated.email,
+          phone: updated.phone,
+          country: countryFromPhone,
+          name: {
+            firstname: updated.first_name,
+            lastname: updated.last_name,
+          },
+          accepts_marketing: updated.accepts_marketing,
+          password: user.password,
+        });
+        setIsEditing(false);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to update profile";
+        toast.error(message);
+      }
+      return;
+    }
+
+    if (user.role === "seller") {
+      const payload = {
+        username: usernameInput.trim(),
+        email: emailInput.trim(),
+        phone: `${countryCode} ${phoneInput}`.trim(),
+        first_name: firstNameInput.trim(),
+        last_name: lastNameInput.trim(),
+        company_name: companyNameInput.trim(),
+      };
+
+      const parsedCurrentPhone = parsePhone(user?.phone);
+      const currentPayload = {
+        username: (user.username ?? "").trim(),
+        email: (user.email ?? "").trim(),
+        phone: `${parsedCurrentPhone.code} ${parsedCurrentPhone.number}`.trim(),
+        first_name: (user.name?.firstname ?? "").trim(),
+        last_name: (user.name?.lastname ?? "").trim(),
+        company_name: (user.company_name ?? "").trim(),
+      };
+
+      const hasPatchChanges =
+        payload.username !== currentPayload.username ||
+        payload.email !== currentPayload.email ||
+        payload.phone !== currentPayload.phone ||
+        payload.first_name !== currentPayload.first_name ||
+        payload.last_name !== currentPayload.last_name ||
+        payload.company_name !== currentPayload.company_name;
+
+      if (!hasPatchChanges) {
+        setIsEditing(false);
+        return;
+      }
+
+      try {
+        const updated = await updateSellerProfile(payload);
+        const parsedUpdatedPhone = parsePhone(updated.phone);
+        const countryFromPhone =
+          findCountryByCode(parsedUpdatedPhone.code)?.code ??
+          findCountryByCode(countryCode)?.code ??
+          user.country;
+
+        setUser({
+          ...user,
+          username: updated.username,
+          email: updated.email,
+          phone: updated.phone,
+          country: countryFromPhone,
+          company_name: updated.company_name,
+          is_verified: updated.is_verified,
+          name: {
+            firstname: updated.first_name,
+            lastname: updated.last_name,
+          },
+          password: user.password,
+          bank_details_id: user.bank_details_id,
+        });
+        setIsEditing(false);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to update profile";
+        toast.error(message);
+      }
+      return;
+    }
+
     const nextUser = {
       ...user,
       username: usernameInput || user.username,

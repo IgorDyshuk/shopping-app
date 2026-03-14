@@ -4,8 +4,11 @@ import axios from "axios";
 import { profileApi } from "@/api/profile";
 import type {
   ClientProfile,
+  ClientProfileUpdatePayload,
   SellerBankDetailsPayload,
   SellerProfile,
+  SellerProfileUpdatePayload,
+  SellerProfileUpdateResponse,
 } from "@/types/user";
 
 export const useClientProfile = () =>
@@ -55,6 +58,40 @@ export const useCreateSellerBankDetails = () => {
     mutationFn: async (payload) => {
       try {
         return await profileApi.createSellerBankDetails(payload);
+      } catch (error) {
+        throw new Error(parseMutationError(error));
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["seller-profile", "me"] });
+    },
+  });
+};
+
+export const useUpdateClientProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ClientProfile, Error, ClientProfileUpdatePayload>({
+    mutationFn: async (payload) => {
+      try {
+        return await profileApi.updateClientProfile(payload);
+      } catch (error) {
+        throw new Error(parseMutationError(error));
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-profile", "me"] });
+    },
+  });
+};
+
+export const useUpdateSellerProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<SellerProfileUpdateResponse, Error, SellerProfileUpdatePayload>({
+    mutationFn: async (payload) => {
+      try {
+        return await profileApi.updateSellerProfile(payload);
       } catch (error) {
         throw new Error(parseMutationError(error));
       }

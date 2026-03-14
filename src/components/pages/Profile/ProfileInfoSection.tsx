@@ -166,6 +166,13 @@ export function ProfileInfoSection({
   const resolvedCountry =
     findCountryByCode(user?.country) ??
     (user?.phone ? findCountryByCode(countryCode) : null);
+  const isProfilePatchRole = user?.role === "buyer" || user?.role === "seller";
+  const phoneCountry = findCountryByCode(countryCode);
+  const editCountryValue = isProfilePatchRole
+    ? phoneCountry?.code ?? countryInput
+    : countryInput;
+  const editCountryInfo =
+    findCountryByCode(editCountryValue) ?? resolvedCountry ?? phoneCountry;
 
   const handleSave = () => {
     if (phoneInput.trim().length < PHONE_REQUIRED_LENGTH) {
@@ -279,20 +286,26 @@ export function ProfileInfoSection({
             <Input
               type={showPassword ? "text" : "password"}
               value={passwordInput}
-              onChange={(e) => onPasswordChange(e.target.value)}
+              onChange={(e) => {
+                if (!isProfilePatchRole) onPasswordChange(e.target.value);
+              }}
               className="pr-10"
+              disabled={isProfilePatchRole}
+              readOnly={isProfilePatchRole}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
-            >
-              {showPassword ? (
-                <EyeOff className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
+            {!isProfilePatchRole && (
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -517,10 +530,13 @@ export function ProfileInfoSection({
         {isEditing ? (
           <div className="relative">
             <NativeSelect
-              value={countryInput}
-              onChange={(e) => onCountryInputChange(e.target.value)}
+              value={editCountryValue}
+              onChange={(e) => {
+                if (!isProfilePatchRole) onCountryInputChange(e.target.value);
+              }}
               aria-label="Country"
               className="text-transparent bg-muted border rounded-lg"
+              disabled={isProfilePatchRole}
             >
               {(
                 countryCodes as {
@@ -537,11 +553,10 @@ export function ProfileInfoSection({
             </NativeSelect>
             <div className="pointer-events-none absolute inset-0 flex items-center gap-2 px-3 text-sm">
               <span className="text-lg leading-none">
-                {findCountryByCode(countryInput)?.emoji}
+                {editCountryInfo?.emoji}
               </span>
               <span>
-                {findCountryByCode(countryInput)?.name ||
-                  resolvedCountry?.name ||
+                {editCountryInfo?.name ||
                   user?.country ||
                   "—"}
               </span>

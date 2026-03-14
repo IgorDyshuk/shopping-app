@@ -2,13 +2,18 @@ import { api } from "./client";
 import { API_CONFIG } from "@/lib/apiConfig";
 import type {
   ClientProfile,
+  ClientProfileUpdatePayload,
   SellerBankDetailsPayload,
   SellerProfile,
+  SellerProfileUpdatePayload,
+  SellerProfileUpdateResponse,
 } from "@/types/user";
 
 const identityBase = API_CONFIG.identityBaseURL.replace(/\/+$/, "");
 const clientProfilePath = "/profiles/client/me";
+const clientProfileUpdatePath = "/profiles/client";
 const sellerProfilePath = "/profiles/seller/me";
+const sellerProfileUpdatePath = "/profiles/seller";
 const sellerBankDetailsPath = "/profiles/seller/me/bank-details";
 const useProxy =
   import.meta.env.VITE_IDENTITY_USE_PROXY !== undefined
@@ -34,6 +39,34 @@ export const profileApi = {
       timeout: API_CONFIG.timeoutMs,
       ...(useProxy ? { baseURL: "" } : {}),
       headers: NGROK_SKIP_HEADER,
+    });
+    return response.data;
+  },
+  updateClientProfile: async (payload: ClientProfileUpdatePayload) => {
+    const url = useProxy
+      ? clientProfileUpdatePath
+      : `${identityBase}${clientProfileUpdatePath}`;
+    const response = await api.patch<ClientProfile>(url, payload, {
+      timeout: API_CONFIG.timeoutMs,
+      ...(useProxy ? { baseURL: "" } : {}),
+      headers: {
+        ...NGROK_SKIP_HEADER,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  },
+  updateSellerProfile: async (payload: SellerProfileUpdatePayload) => {
+    const url = useProxy
+      ? sellerProfileUpdatePath
+      : `${identityBase}${sellerProfileUpdatePath}`;
+    const response = await api.patch<SellerProfileUpdateResponse>(url, payload, {
+      timeout: API_CONFIG.timeoutMs,
+      ...(useProxy ? { baseURL: "" } : {}),
+      headers: {
+        ...NGROK_SKIP_HEADER,
+        "Content-Type": "application/json",
+      },
     });
     return response.data;
   },

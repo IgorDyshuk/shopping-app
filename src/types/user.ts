@@ -10,6 +10,7 @@ export type User = {
   role?: "seller" | "buyer";
   company_name?: string;
   bank_details_id?: string | null;
+  is_verified?: boolean;
   accepts_marketing?: boolean;
   name?: {
     firstname?: string;
@@ -24,6 +25,34 @@ export type ClientProfile = {
   first_name: string;
   last_name: string;
   accepts_marketing: boolean;
+};
+
+export type ClientProfileUpdatePayload = {
+  username: string;
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+};
+
+export type SellerProfileUpdatePayload = {
+  username: string;
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  company_name: string;
+};
+
+export type SellerProfileUpdateResponse = {
+  email: string;
+  username: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  company_name: string;
+  bank_details: boolean;
+  is_verified: boolean;
 };
 
 export type SellerProfile = {
