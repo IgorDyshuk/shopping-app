@@ -14,7 +14,7 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/use-auth";
 import { useOrdersStore } from "@/stores/use-orders";
 import countryCodes from "@/constants/CountriesCode.json";
-import { useProductsNew } from "@/hooks/api-hooks/useProducts";
+import { useProducts } from "@/hooks/api-hooks/useProducts";
 import { useLogout } from "@/hooks/api-hooks/useAuth";
 import {
   useCreateSellerBankDetails,
@@ -38,6 +38,7 @@ import { ItemForm } from "@/components/pages/Profile/ItemForm";
 import type { Product } from "@/types/product";
 
 type ProfileTab = "profile" | "favorites" | "orders" | "my-items" | "add-item";
+const productsPath = "/products";
 
 function ProfilePage() {
   const { t } = useTranslation(["profile", "common"]);
@@ -45,10 +46,8 @@ function ProfilePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated, logout, setUser } = useAuthStore();
   const { mutate: logoutRequest, isPending: isLogoutPending } = useLogout();
-  const {
-    mutateAsync: createBankDetails,
-    isPending: isSubmittingBankDetails,
-  } = useCreateSellerBankDetails();
+  const { mutateAsync: createBankDetails, isPending: isSubmittingBankDetails } =
+    useCreateSellerBankDetails();
   const { mutateAsync: updateClientProfile } = useUpdateClientProfile();
   const { mutateAsync: updateSellerProfile } = useUpdateSellerProfile();
   // Redirect unauthenticated users to login
@@ -69,11 +68,8 @@ function ProfilePage() {
   const [activeTab, setActiveTab] = useState<ProfileTab>(() =>
     parseTab(searchParams.get("tab")),
   );
-  const { data: allProducts = [], isLoading: isLoadingProducts } =
-    useProductsNew(
-      { offset: 0, limit: 20, state: "new", size: ["XS"] },
-      { enabled: activeTab === "my-items" },
-    );
+  const { data: allProductsData, isLoading: isLoadingProducts } = useProducts();
+  const allProducts = Array.isArray(allProductsData) ? allProductsData : [];
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
@@ -97,17 +93,20 @@ function ProfilePage() {
     user?.name?.firstname ?? "",
   );
   const handleShowTokenInfo = async () => {
+    const url = API_CONFIG.buildIdentityUrl(productsPath);
     const token = localStorage.getItem(API_CONFIG.authTokenKey);
     try {
-      const res = await axios.get("/products", {
+      const res = await axios.get(url, {
         params: { offset: 0, limit: 20, state: "new", size: ["XS"] },
         paramsSerializer: {
           indexes: null,
         },
+        ...API_CONFIG.identityRequestConfig,
+        timeout: API_CONFIG.timeoutMs,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
+          ...API_CONFIG.identityHeaders,
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
@@ -358,7 +357,7 @@ function ProfilePage() {
       const nextBankDetailsId =
         typeof response === "string" && response.trim().length > 0
           ? response.trim()
-          : user.bank_details_id ?? null;
+          : (user.bank_details_id ?? null);
       setUser({
         ...user,
         bank_details_id: nextBankDetailsId,

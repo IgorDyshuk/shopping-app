@@ -59,8 +59,32 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 ## Переключение API
 
 - `VITE_API_URL` — другой бэкенд (по умолчанию `https://fakestoreapi.com`).
+- `VITE_IDENTITY_API_URL` — базовый URL identity API (логин/профиль/товары seller).
+- `VITE_IDENTITY_USE_PROXY` — использовать Vite proxy (`true/false`), по умолчанию `true` в dev и `false` в production.
+- `VITE_INCLUDE_NGROK_SKIP_HEADER` — добавлять заголовок `ngrok-skip-browser-warning` (`true/false`), по умолчанию `false`.
 - `VITE_API_TIMEOUT` — таймаут запросов в мс.
 - `VITE_SPOTIFY_CLIENT_ID` / `VITE_SPOTIFY_CLIENT_SECRET` — client credentials Spotify (для блоков блогеров). Опционально `VITE_SPOTIFY_ACCESS_TOKEN` для заранее полученного токена.
+
+### Важно для GH Pages / production
+
+- Для кросс-доменных запросов backend обязан обрабатывать `OPTIONS` (preflight) и возвращать CORS-заголовки (`Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers`).
+- Без этого браузер заблокирует запросы с `gh-pages` даже при корректном URL фронтенда.
+- Пример для FastAPI:
+
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://igordyshuk.github.io",
+        "http://localhost:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
 
 ## Дополнительно
 
