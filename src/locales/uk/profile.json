@@ -36,6 +36,11 @@
     "gender": "Стать",
     "selectOption": "Виберіть",
     "images": "Фото товару",
+    "imageUrl": "URL зображення",
+    "imageUrlPlaceholder": "https://example.com/image.png",
+    "addImageUrl": "Додати URL",
+    "invalidImageUrl": "Введіть коректний URL зображення",
+    "duplicateImageUrl": "Цей URL зображення вже додано",
     "selectedImages": "{{count}} файл(и) вибрано",
     "imageAlt": "Alt для зображення (необов’язково)",
     "imageAltPlaceholder": "Якщо порожньо — буде використано назву",
@@ -50,9 +55,13 @@
     "ratingRate": "Рейтинг (0-5)",
     "ratingCount": "К-сть голосів",
     "save": "Зберегти",
+    "add": "Додати",
+    "adding": "Додавання...",
+    "saving": "Збереження...",
     "cancel": "Скасувати",
     "fillNumbers": "Заповніть ціну та кількість",
-    "success": "Чернетку товару збережено локально"
+    "success": "Товар успішно створено",
+    "localSuccess": "Чернетку товару збережено локально"
   },
   "fields": {
     "username": "Ім'я користувача",

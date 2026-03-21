@@ -16,7 +16,7 @@ export function OrdersSection({ orders, t }: OrdersSectionProps) {
 
   if (!orders.length) {
     return (
-      <p className="text-sm text-muted-foreground px-1">
+      <p className="text-sm text-muted-foreground px-1.5">
         {t("orders.empty", { ns: "profile", defaultValue: "No orders." })}
       </p>
     );

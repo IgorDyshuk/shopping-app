@@ -25,10 +25,10 @@ export function MyItemsSection({
   return (
     <div className="space-y-3">
       {products.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{emptyText}</p>
+        <p className="text-sm text-muted-foreground px-1.5">{emptyText}</p>
       ) : (
         <div className="grid grid-cols-2 gap-y-5 md:gap-y-7 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
+          {products.slice(0, 3).map((product) => (
             <MyItemCard
               key={product.id}
               product={product}

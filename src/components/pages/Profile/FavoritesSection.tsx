@@ -19,7 +19,7 @@ export function FavoritesSection({
   }
 
   if (!products.length) {
-    return <p className="text-sm text-muted-foreground px-1">{emptyText}</p>;
+    return <p className="text-sm text-muted-foreground px-1.5">{emptyText}</p>;
   }
 
   return (

@@ -36,6 +36,11 @@
     "gender": "Gender",
     "selectOption": "Select",
     "images": "Product photos",
+    "imageUrl": "Image URL",
+    "imageUrlPlaceholder": "https://example.com/image.png",
+    "addImageUrl": "Add URL",
+    "invalidImageUrl": "Enter a valid image URL",
+    "duplicateImageUrl": "This image URL is already added",
     "selectedImages": "{{count}} file(s) selected",
     "imageAlt": "Image alt text (optional)",
     "imageAltPlaceholder": "If empty, the title will be used",
@@ -50,9 +55,13 @@
     "ratingRate": "Rating (0-5)",
     "ratingCount": "Rating count",
     "save": "Save",
+    "add": "Add",
+    "adding": "Adding...",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "fillNumbers": "Fill price and quantity",
-    "success": "Product draft saved locally"
+    "success": "Product created successfully",
+    "localSuccess": "Product draft saved locally"
   },
   "fields": {
     "username": "Username",

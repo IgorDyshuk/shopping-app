@@ -4,6 +4,7 @@ import { API_CONFIG } from "@/lib/apiConfig";
 import type {
   Product,
   ProductCreatePayload,
+  ProductCreateResponse,
   ProductUpdatePayload,
 } from "@/types/product";
 
@@ -132,9 +133,12 @@ export const productApi = {
       }),
   create: async (payload: ProductCreatePayload) =>
     api
-      .post<Product>(getIdentityProductUrl(), payload, {
+      .post<ProductCreateResponse>(getIdentityProductUrl(), payload, {
         ...identityRequestConfig,
-        headers: API_CONFIG.identityHeaders,
+        headers: {
+          ...API_CONFIG.identityHeaders,
+          "Content-Type": "application/json",
+        },
       })
       .then((res) => res.data),
   update: async ({ id, ...payload }: ProductUpdatePayload) =>
@@ -144,7 +148,7 @@ export const productApi = {
         headers: API_CONFIG.identityHeaders,
       })
       .then((res) => res.data),
-  remove: async (id: number) =>
+  remove: async (id: string | number) =>
     api
       .delete<Product>(`${getIdentityProductUrl()}/${id}`, {
         ...identityRequestConfig,

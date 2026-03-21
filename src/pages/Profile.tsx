@@ -5,7 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { User, Heart, ShoppingBag, Boxes } from "lucide-react";
@@ -92,17 +92,24 @@ function ProfilePage() {
   const [firstNameInput, setFirstNameInput] = useState(
     user?.name?.firstname ?? "",
   );
-  const handleShowTokenInfo = async () => {
+  const handleShowTokenInfo = useCallback(async () => {
     const url = API_CONFIG.buildIdentityUrl(productsPath);
     const token = localStorage.getItem(API_CONFIG.authTokenKey);
+    const queryParams = {
+      offset: 0,
+      limit: 20,
+      sort_by: "price",
+      sort_order: "desc",
+      state: "new",
+    } as const;
+
     try {
-      const res = await axios.get(url, {
-        params: { offset: 0, limit: 20, state: "new", size: ["XS"] },
-        paramsSerializer: {
-          indexes: null,
-        },
+      const res = await axios.request({
+        method: "GET",
+        url,
         ...API_CONFIG.identityRequestConfig,
         timeout: API_CONFIG.timeoutMs,
+        params: queryParams,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -111,23 +118,52 @@ function ProfilePage() {
         },
       });
       // eslint-disable-next-line no-console
-      console.log(res.data);
+      console.log("[products/info]", {
+        params: queryParams,
+        data: res.data,
+      });
       toast.success("Products fetched", {
         description: `Получено: ${
           Array.isArray(res.data) ? res.data.length : 0
         }`,
       });
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.detail ??
-        err?.response?.data?.message ??
-        err?.message ??
-        "Failed to fetch products";
+    } catch (error) {
+      let message = "Failed to fetch products";
+      if (axios.isAxiosError(error)) {
+        const responseData = error.response?.data as
+          | {
+              detail?: Array<{ msg?: string }> | string;
+              message?: string;
+            }
+          | undefined;
+        if (Array.isArray(responseData?.detail)) {
+          const detailMessages = responseData.detail
+            .map((entry) => entry?.msg)
+            .filter(Boolean)
+            .join("; ");
+          if (detailMessages) {
+            message = detailMessages;
+          }
+        } else if (typeof responseData?.detail === "string") {
+          message = responseData.detail;
+        } else if (typeof responseData?.message === "string") {
+          message = responseData.message;
+        } else if (error.message) {
+          message = error.message;
+        }
+      } else if (error instanceof Error && error.message) {
+        message = error.message;
+      }
       // eslint-disable-next-line no-console
-      console.error(err?.response?.data || err);
+      console.error(error);
       toast.error(message);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (activeTab !== "my-items" || !isSeller) return;
+    void handleShowTokenInfo();
+  }, [activeTab, isSeller, handleShowTokenInfo]);
   const [lastNameInput, setLastNameInput] = useState(
     user?.name?.lastname ?? "",
   );
@@ -485,7 +521,7 @@ function ProfilePage() {
                     size="sm"
                     onClick={handleShowTokenInfo}
                   >
-                    Token info
+                    Products info
                   </Button>
                 )}
                 {activeTab === "my-items" && isSeller && (

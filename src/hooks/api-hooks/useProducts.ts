@@ -1,7 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { productApi } from "@/api/products";
-import type { Product } from "@/types/product";
+import type {
+  Product,
+  ProductCreatePayload,
+  ProductCreateResponse,
+} from "@/types/product";
 
 export const useProducts = () =>
   useQuery<Product[]>({
@@ -35,6 +39,17 @@ export const useFilteredProduct = (filter?: string) => {
           ).test(haystack)
         );
       });
+    },
+  });
+};
+
+export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ProductCreateResponse, Error, ProductCreatePayload>({
+    mutationFn: (payload) => productApi.create(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 };

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,8 +22,9 @@ import {
   sneakerSizeOptions,
   accessorySizeOptions,
 } from "@/constants/filters-presets";
+import { useCreateProduct } from "@/hooks/api-hooks/useProducts";
 import { ChevronDown } from "lucide-react";
-import type { Product } from "@/types/product";
+import type { Product, ProductCreatePayload } from "@/types/product";
 
 type ItemFormProps = {
   onCancel: () => void;
@@ -34,7 +36,6 @@ type ProductDraft = {
   title: string;
   price: number | "";
   description: string;
-  images: File[];
   existingImages: string[];
   category: {
     mainCategory: string;
@@ -55,7 +56,6 @@ const createDefaultDraft = (): ProductDraft => ({
   title: "",
   price: "",
   description: "",
-  images: [],
   existingImages: [],
   category: { mainCategory: "", subCategory: "" },
   gender: "",
@@ -69,25 +69,64 @@ const createDefaultDraft = (): ProductDraft => ({
   },
 });
 
+const isValidImageUrl = (value: string): boolean => {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data as
+      | { message?: string; detail?: unknown }
+      | undefined;
+    if (Array.isArray(data?.detail)) {
+      const detailMessage = data.detail
+        .map((entry) =>
+          entry && typeof entry === "object" && "msg" in entry
+            ? String((entry as { msg?: unknown }).msg ?? "")
+            : "",
+        )
+        .filter(Boolean)
+        .join("; ");
+      if (detailMessage) return detailMessage;
+    }
+    if (typeof data?.detail === "string" && data.detail.trim()) {
+      return data.detail;
+    }
+    if (typeof data?.message === "string" && data.message.trim()) {
+      return data.message;
+    }
+    return error.message || "Failed to create product";
+  }
+  if (error instanceof Error && error.message) return error.message;
+  return "Failed to create product";
+};
+
 export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
   const { t } = useTranslation("profile");
+  const { mutateAsync: createProduct, isPending: isCreatingProduct } =
+    useCreateProduct();
   const [draft, setDraft] = useState<ProductDraft>(createDefaultDraft());
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [sizeMenuOpen, setSizeMenuOpen] = useState(false);
   const [tempSizes, setTempSizes] = useState<string[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState("");
   const mainCategories = useMemo(
     () => [
       { id: "clothing", label: "Clothing" },
       { id: "sneakers", label: "Sneakers" },
       { id: "accessories", label: "Accessories" },
     ],
-    []
+    [],
   );
 
   const subCategories = useMemo(
     () => presetCategoryOptions[draft.category.mainCategory] ?? [],
 
-    [draft.category.mainCategory]
+    [draft.category.mainCategory],
   );
 
   const sizeOptions = useMemo(() => {
@@ -104,7 +143,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
         acc[opt.id] = opt.label;
         return acc;
       }, {}),
-    [sizeOptions]
+    [sizeOptions],
   );
 
   const selectedSizeLabels = useMemo(
@@ -113,7 +152,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
         .map((id) => sizeLabelMap[id])
         .filter(Boolean)
         .join(", "),
-    [draft.characteristics.sizes, sizeLabelMap, sizeMenuOpen, tempSizes]
+    [draft.characteristics.sizes, sizeLabelMap, sizeMenuOpen, tempSizes],
   );
 
   const genderOptions = [
@@ -134,7 +173,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
         const found = presetCategoryOptions[key]?.find(
           (opt) =>
             opt.id.toLowerCase() === product.category.toLowerCase() ||
-            opt.label.toLowerCase() === product.category.toLowerCase()
+            opt.label.toLowerCase() === product.category.toLowerCase(),
         );
         if (found) {
           mainCategory = key;
@@ -156,14 +195,13 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
     const initialImages: string[] = Array.isArray((product as any).images)
       ? ((product as any).images as string[]).filter(Boolean)
       : product.image
-      ? [product.image]
-      : [];
+        ? [product.image]
+        : [];
 
     return {
       title: product.title ?? "",
       price: product.price ?? "",
       description: product.description ?? "",
-      images: [],
       existingImages: initialImages,
       category: { mainCategory, subCategory },
       gender: "",
@@ -183,24 +221,26 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       const next = productToDraft(initialProduct);
       setDraft(next);
       setTempSizes(next.characteristics.sizes);
+      setImageUrlInput("");
     } else {
       setDraft(createDefaultDraft());
       setTempSizes([]);
+      setImageUrlInput("");
     }
   }, [initialProduct]);
 
   const handleChange = <K extends keyof ProductDraft>(
     key: K,
-    value: ProductDraft[K]
+    value: ProductDraft[K],
   ) => {
     setDraft((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleCharacteristicChange = <
-    K extends keyof ProductDraft["characteristics"]
+    K extends keyof ProductDraft["characteristics"],
   >(
     key: K,
-    value: ProductDraft["characteristics"][K]
+    value: ProductDraft["characteristics"][K],
   ) => {
     setDraft((prev) => ({
       ...prev,
@@ -210,7 +250,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
 
   const handleCategoryChange = <K extends keyof ProductDraft["category"]>(
     key: K,
-    value: ProductDraft["category"][K]
+    value: ProductDraft["category"][K],
   ) => {
     setDraft((prev) => {
       const nextCategory =
@@ -232,13 +272,13 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (draft.images.length === 0 && draft.existingImages.length === 0) {
+    if (draft.existingImages.length === 0) {
       toast.error(
         t("addItem.imagesRequired", {
           defaultValue: "Add at least one product photo",
-        })
+        }),
       );
       return;
     }
@@ -246,7 +286,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       toast.error(
         t("addItem.selectMainFirst", {
           defaultValue: "Select a main category first",
-        })
+        }),
       );
       return;
     }
@@ -254,7 +294,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       toast.error(
         t("addItem.selectSubCategory", {
           defaultValue: "Select a sub category",
-        })
+        }),
       );
       return;
     }
@@ -262,7 +302,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       toast.error(
         t("addItem.selectState", {
           defaultValue: "Select product condition",
-        })
+        }),
       );
       return;
     }
@@ -270,60 +310,150 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       toast.error(
         t("addItem.selectSize", {
           defaultValue: "Select at least one size",
-        })
+        }),
       );
       return;
     }
     if (draft.price === "" || draft.characteristics.quantity === "") {
       toast.error(
-        t("addItem.fillNumbers", { defaultValue: "Fill price and quantity" })
+        t("addItem.fillNumbers", { defaultValue: "Fill price and quantity" }),
       );
       return;
     }
-    toast.success(
-      t("addItem.success", { defaultValue: "Product draft saved locally" })
-    );
-    onSaved?.();
+
+    if (initialProduct) {
+      toast.success(
+        t("addItem.localSuccess", {
+          defaultValue: "Product draft saved locally",
+        }),
+      );
+      onSaved?.();
+      return;
+    }
+
+    try {
+      const title = draft.title.trim();
+      const description = draft.description.trim();
+      const brand = draft.characteristics.brand.trim();
+      const material = draft.characteristics.material.trim();
+
+      const existingImagePayload = draft.existingImages
+        .filter(Boolean)
+        .map((url) => ({
+          url,
+          alt: title || "Product image",
+        }));
+
+      const payload: ProductCreatePayload = {
+        title,
+        description,
+        price: Number(draft.price),
+        images: existingImagePayload,
+        category: {
+          main_category: draft.category.mainCategory,
+          sub_category: draft.category.subCategory,
+        },
+        characteristics: {
+          brand,
+          state: draft.characteristics.state,
+          material,
+          size: draft.characteristics.sizes,
+          quantity: Number(draft.characteristics.quantity),
+          is_new_arrival: draft.characteristics.isNewArrival,
+        },
+      };
+
+      await createProduct(payload);
+
+      toast.success(
+        t("addItem.success", { defaultValue: "Product created successfully" }),
+      );
+      setDraft(createDefaultDraft());
+      setTempSizes([]);
+      setImageUrlInput("");
+      onSaved?.();
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   const toggleSize = (id: string) => {
     setTempSizes((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id],
     );
+  };
+
+  const handleAddImageUrl = () => {
+    const normalized = imageUrlInput.trim();
+    if (!normalized) {
+      toast.error(
+        t("addItem.invalidImageUrl", {
+          defaultValue: "Enter a valid image URL",
+        }),
+      );
+      return;
+    }
+    if (!isValidImageUrl(normalized)) {
+      toast.error(
+        t("addItem.invalidImageUrl", {
+          defaultValue: "Enter a valid image URL",
+        }),
+      );
+      return;
+    }
+    if (draft.existingImages.includes(normalized)) {
+      toast.error(
+        t("addItem.duplicateImageUrl", {
+          defaultValue: "This image URL is already added",
+        }),
+      );
+      return;
+    }
+    setDraft((prev) => ({
+      ...prev,
+      existingImages: [...prev.existingImages, normalized],
+    }));
+    setImageUrlInput("");
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="space-y-3">
-        <label className="text-sm text-muted-foreground">
-          {t("addItem.images")}
-        </label>
-        <div className="flex items-center gap-3">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => {
-              const files = Array.from(e.target.files ?? []);
-              setDraft((prev) => ({ ...prev, images: files }));
-              if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-              }
-            }}
-            className="sr-only"
-            id="product-images-input"
-          />
-          <Button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="max-w-xs"
-          >
-            {t("addItem.browse", { defaultValue: "Browse..." })}
-          </Button>
+        <div className="space-y-1">
+          <label className="text-sm text-muted-foreground">
+            {t("addItem.imageUrl", { defaultValue: "Image URL" })}
+          </label>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Input
+              type="url"
+              value={imageUrlInput}
+              onChange={(e) => setImageUrlInput(e.target.value)}
+              placeholder={t("addItem.imageUrlPlaceholder", {
+                defaultValue: "https://example.com/image.png",
+              })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddImageUrl();
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleAddImageUrl}
+              disabled={isCreatingProduct}
+              className="sm:w-auto"
+            >
+              {t("addItem.addImageUrl", { defaultValue: "Add URL" })}
+            </Button>
+          </div>
         </div>
-        {(draft.images.length > 0 || draft.existingImages.length > 0) && (
+        {draft.existingImages.length > 0 && (
           <div className="space-y-1">
+            <label className="text-sm text-muted-foreground">
+              {t("addItem.images")}
+            </label>
             <div className="flex flex-wrap gap-2">
               {draft.existingImages.map((url, idx) => (
                 <div
@@ -342,7 +472,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
                       setDraft((prev) => ({
                         ...prev,
                         existingImages: prev.existingImages.filter(
-                          (_, i) => i !== idx
+                          (_, i) => i !== idx,
                         ),
                       }))
                     }
@@ -351,34 +481,6 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
                   </button>
                 </div>
               ))}
-              {draft.images.map((file, idx) => {
-                const url = URL.createObjectURL(file);
-                return (
-                  <div
-                    key={`${file.name}-${idx}`}
-                    className="relative size-20 rounded-md overflow-hidden border bg-muted/30 flex items-center justify-center"
-                  >
-                    <img
-                      src={url}
-                      alt={file.name}
-                      className="h-full w-full object-cover"
-                      onLoad={() => URL.revokeObjectURL(url)}
-                    />
-                    <button
-                      type="button"
-                      className="absolute top-1 right-1 rounded-full flex items-center justify-center bg-white/80 px-1 pb-px sm:pb-0.5 text-xs font-semibold leading-none text-destructive shadow hover:bg-white"
-                      onClick={() =>
-                        setDraft((prev) => ({
-                          ...prev,
-                          images: prev.images.filter((_, i) => i !== idx),
-                        }))
-                      }
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
             </div>
           </div>
         )}
@@ -423,7 +525,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
               const val = e.target.value;
               handleCharacteristicChange(
                 "quantity",
-                val === "" ? "" : Number(val)
+                val === "" ? "" : Number(val),
               );
             }}
             required
@@ -482,7 +584,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
                 : toast.error(
                     t("addItem.selectMainFirst", {
                       defaultValue: "Select a main category first",
-                    })
+                    }),
                   )
             }
             onMouseDown={(e) => {
@@ -491,7 +593,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
                 toast.error(
                   t("addItem.selectMainFirst", {
                     defaultValue: "Select a main category first",
-                  })
+                  }),
                 );
               }
             }}
@@ -539,7 +641,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
             onChange={(e) =>
               handleCharacteristicChange(
                 "state",
-                e.target.value as ProductDraft["characteristics"]["state"]
+                e.target.value as ProductDraft["characteristics"]["state"],
               )
             }
           >
@@ -592,7 +694,7 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
                 toast.error(
                   t("addItem.selectMainFirst", {
                     defaultValue: "Select a main category first",
-                  })
+                  }),
                 );
                 setSizeMenuOpen(false);
                 return;
@@ -665,8 +767,17 @@ export function ItemForm({ onCancel, onSaved, initialProduct }: ItemFormProps) {
       </div>
 
       <div className="flex gap-2">
-        <Button type="submit">{t("addItem.save")}</Button>
-        <Button variant="ghost" type="button" onClick={onCancel}>
+        <Button type="submit" disabled={isCreatingProduct}>
+          {isCreatingProduct
+            ? t("addItem.adding", { defaultValue: "Adding..." })
+            : t("addItem.add", { defaultValue: "Add" })}
+        </Button>
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={onCancel}
+          disabled={isCreatingProduct}
+        >
           {t("addItem.cancel")}
         </Button>
       </div>

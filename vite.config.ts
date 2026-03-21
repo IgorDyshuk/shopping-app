@@ -32,6 +32,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
+      "/products": {
+        target: identityTarget,
+        changeOrigin: true,
+        secure: true,
+      },
       "/shopping-app/identity": {
         target: identityTarget,
         changeOrigin: true,
@@ -39,6 +44,12 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/shopping-app/, ""),
       },
       "/shopping-app/profiles": {
+        target: identityTarget,
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/shopping-app/, ""),
+      },
+      "/shopping-app/products": {
         target: identityTarget,
         changeOrigin: true,
         secure: true,
