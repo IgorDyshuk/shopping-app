@@ -59,9 +59,10 @@ React + TypeScript + Vite проект: i18n, API-слой на axios/TanStack Q
 ## Переключение API
 
 - `VITE_API_URL` — другой бэкенд (по умолчанию `https://fakestoreapi.com`).
+- `VITE_CATALOG_API_URL` — URL каталога (по умолчанию `https://fakestoreapi.com`), используется для `GET /products`.
 - `VITE_IDENTITY_API_URL` — базовый URL identity API (логин/профиль/товары seller).
 - `VITE_IDENTITY_USE_PROXY` — использовать Vite proxy (`true/false`), по умолчанию `true` в dev и `false` в production.
-- `VITE_INCLUDE_NGROK_SKIP_HEADER` — добавлять заголовок `ngrok-skip-browser-warning` (`true/false`), по умолчанию `false`.
+- `VITE_INCLUDE_NGROK_SKIP_HEADER` — добавлять заголовок `ngrok-skip-browser-warning` (`true/false`); если не задано, автоматически включается для `*.ngrok-free.app`, `*.ngrok.app`, `*.ngrok.io`.
 - `VITE_API_TIMEOUT` — таймаут запросов в мс.
 - `VITE_SPOTIFY_CLIENT_ID` / `VITE_SPOTIFY_CLIENT_SECRET` — client credentials Spotify (для блоков блогеров). Опционально `VITE_SPOTIFY_ACCESS_TOKEN` для заранее полученного токена.
 

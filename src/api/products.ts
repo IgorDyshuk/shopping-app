@@ -1,4 +1,5 @@
 import { api } from "./client";
+import axios from "axios";
 import { API_CONFIG } from "@/lib/apiConfig";
 import type {
   Product,
@@ -8,6 +9,8 @@ import type {
 
 const basePath = "/products";
 const getIdentityProductUrl = () => API_CONFIG.buildIdentityUrl(basePath);
+const catalogBase = API_CONFIG.catalogBaseURL.replace(/\/+$/, "");
+const getCatalogProductUrl = (path = "") => `${catalogBase}${basePath}${path}`;
 const identityRequestConfig = API_CONFIG.identityRequestConfig;
 
 const toNumber = (value: unknown) => {
@@ -106,16 +109,20 @@ const extractProductList = (payload: unknown): unknown[] => {
 
 export const productApi = {
   list: async () =>
-    api
-      .get<unknown>(basePath)
+    axios
+      .get<unknown>(getCatalogProductUrl(), {
+        timeout: API_CONFIG.timeoutMs,
+      })
       .then((res) =>
         extractProductList(res.data)
           .map((item, index) => normalizeProduct(item, index + 1))
           .filter((item): item is Product => Boolean(item)),
       ),
   getById: async (id: number) =>
-    api
-      .get<unknown>(`${basePath}/${id}`)
+    axios
+      .get<unknown>(getCatalogProductUrl(`/${id}`), {
+        timeout: API_CONFIG.timeoutMs,
+      })
       .then((res) => {
         const normalized = normalizeProduct(res.data, id);
         if (!normalized) {
