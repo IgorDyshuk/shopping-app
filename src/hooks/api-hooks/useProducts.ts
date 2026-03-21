@@ -49,7 +49,10 @@ export const useCreateProduct = () => {
   return useMutation<ProductCreateResponse, Error, ProductCreatePayload>({
     mutationFn: (payload) => productApi.create(payload),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({
+        predicate: (query) =>
+          Array.isArray(query.queryKey) && query.queryKey[0] === "products",
+      });
     },
   });
 };

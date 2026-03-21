@@ -515,15 +515,13 @@ function ProfilePage() {
                           : t("pageTitle.addItem", { ns: "profile" })}
               </CardTitle>
               <div className="flex gap-2">
-                {import.meta.env.DEV && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleShowTokenInfo}
-                  >
-                    Products info
-                  </Button>
-                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShowTokenInfo}
+                >
+                  get products
+                </Button>
                 {activeTab === "my-items" && isSeller && (
                   <Button
                     onClick={() => {

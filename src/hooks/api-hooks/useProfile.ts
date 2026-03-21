@@ -79,8 +79,14 @@ export const useUpdateClientProfile = () => {
         throw new Error(parseMutationError(error));
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["client-profile", "me"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["client-profile", "me"] }),
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            Array.isArray(query.queryKey) && query.queryKey[0] === "products",
+        }),
+      ]);
     },
   });
 };
@@ -96,8 +102,14 @@ export const useUpdateSellerProfile = () => {
         throw new Error(parseMutationError(error));
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seller-profile", "me"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["seller-profile", "me"] }),
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            Array.isArray(query.queryKey) && query.queryKey[0] === "products",
+        }),
+      ]);
     },
   });
 };
